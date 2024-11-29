@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SkyReserves.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241129012808_Inicial")]
+    [Migration("20241129015859_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -337,7 +337,7 @@ namespace SkyReserves.Migrations
                             Id = 1,
                             Password = "Arajet",
                             Role = "Admin",
-                            UserName = "Araject@gmail.com"
+                            UserName = "Arajet@gmail.com"
                         },
                         new
                         {
