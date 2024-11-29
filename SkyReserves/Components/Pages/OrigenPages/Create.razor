@@ -1,10 +1,10 @@
 ﻿@page "/Origen/Create"
-@inject DestinoService destinoService
+@inject OrigenService origenService
 @inject NavigationManager navigation
 
 
-<PageTitle>Crear vuelo de Destino </PageTitle>
-<EditForm Model="Destino" OnValidSubmit="Crear">
+<PageTitle>Crear vuelo de Origen </PageTitle>
+<EditForm Model="Origen" OnValidSubmit="Crear">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="container">
@@ -15,12 +15,12 @@
             <div class="card-body">
 
                 <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
-                <InputNumber id="OrigenId" class="form-control" @bind-Value="Destino.DestinoId" readonly></InputNumber>
+                <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly></InputNumber>
 
 
                 <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
-                <InputText id="Fecha" class="form-control" @bind-Value="Destino.destino"></InputText>
-                <ValidationMessage For="@(() => Destino.destino)" />
+                <InputText id="Fecha" class="form-control" @bind-Value="Origen.origen"></InputText>
+                <ValidationMessage For="@(() => Origen.origen)" />
 
             </div>
 
@@ -37,33 +37,33 @@
 @code {
 
 
-    public Destino Destino { get; set; } = new Destino();
-    public List<Destino> destinoList { get; set; } = new List<Destino>();
+    public Origen Origen { get; set; } = new Origen();
+    public List<Origen> origenList { get; set; } = new List<Origen>();
     public string Mensaje { get; set; } = string.Empty;
     //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
 
 
     protected override async Task OnInitializedAsync()
     {
-        var origen = await destinoService.Listar(o => o.DestinoId > 0);
+        var origen = await origenService.Listar(o => o.OrigenId > 0);
 
     }
 
 
     private async Task Crear()
     {
-        var destino = new Destino
+        var origen = new Origen
             {
-                DestinoId = Destino.DestinoId,
-                destino = Destino.destino
+                OrigenId = Origen.OrigenId,
+                origen = Origen.origen
 
             };
 
-        var crear = await destinoService.Guardar(destino);
+        var crear = await origenService.Guardar(origen);
 
         if (crear)
         {
-            Destino = new Destino();
+            Origen = new Origen();
             navigation.NavigateTo("/Origen/Index");
         }
         else
@@ -71,8 +71,6 @@
             Mensaje = "No se ha creado correctamente la cotización";
         }
     }
-
-
 
 
     public void Volver()
