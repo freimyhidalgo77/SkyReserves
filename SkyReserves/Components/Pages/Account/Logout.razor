@@ -1,0 +1,39 @@
+﻿@page "/logout"
+@using Microsoft.AspNetCore.Authentication
+<link rel="stylesheet" href="/Estilos/Login.css" />
+<link rel="stylesheet" href="/Estilos/Homes.css
+" />
+
+@inject NavigationManager navigationManager
+
+<div class="row justify-content-start align-items-center">
+    <div class="col-12">
+        <div class="card bg-transparent border-0">
+            <div class="card-body d-flex flex-column align-items-start">
+                <div class="corner-container">
+                    <img src="/Imagenes/Arajet_Logo.png" class="corner-logo" />
+                    <span class="corner-label">
+                        Has cerrado sesi&oacute;n con &eacute;xito en la aplicaci&oacute;n.
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@code {
+    [CascadingParameter]
+    public HttpContext HttpContext { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        if (HttpContext.User.Identity.IsAuthenticated)
+        {
+            await HttpContext.SignOutAsync();
+            navigationManager.NavigateTo("/logout", true);
+        }
+    }
+}
