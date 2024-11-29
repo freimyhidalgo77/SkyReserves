@@ -1,24 +1,25 @@
-﻿@page "/Accesibilidad/Create"
+﻿@page "/Accesibilidad/Edit{AccesibilidadId:int}"
 @inject AccesibilidadService accesibilidadService
 @inject NavigationManager navigation
 
-<PageTitle>Crear Accesibilidad </PageTitle>
+
+<PageTitle>Modificar vuelo de Destino </PageTitle>
 <EditForm Model="Accesibilidad" OnValidSubmit="Crear">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <h1><strong>Crear Accesibilidad</strong></h1>
+                <h1><strong>Crear Vuelo</strong></h1>
             </div>
             <div class="card-body">
 
-                <label class="form-label" for="accesibilidadId"><strong>Accesibilidad ID:</strong></label>
-                <InputNumber id="AccesibilidadId" class="form-control" @bind-Value="Accesibilidad.AccesibilidadId" readonly></InputNumber>
+                <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
+                <InputNumber id="OrigenId" class="form-control" @bind-Value="Accesibilidad.AccesibilidadId" readonly></InputNumber>
 
 
-                <label class="form-label" for="Fecha"><strong>Descripcion </strong></label>
-                <InputText id="descripcion" class="form-control" @bind-Value="Accesibilidad.Descripcion"></InputText>
+                <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
+                <InputText id="Fecha" class="form-control" @bind-Value="Accesibilidad.Descripcion"></InputText>
                 <ValidationMessage For="@(() => Accesibilidad.Descripcion)" />
 
             </div>
@@ -34,15 +35,17 @@
 
 @code {
 
+    [Parameter]
+    public int AccesibilidadId { get; set; }
     public Accesibilidad Accesibilidad { get; set; } = new Accesibilidad();
-    public List<Accesibilidad> accesibilidadList { get; set; } = new List<Accesibilidad>();
+    public List<Destino> destinoList { get; set; } = new List<Destino>();
     public string Mensaje { get; set; } = string.Empty;
     //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
 
 
     protected override async Task OnInitializedAsync()
     {
-        var accesibilidad = await accesibilidadService.Listar(o => o.AccesibilidadId > 0);
+        var accesibilidad = await accesibilidadService.Buscar(AccesibilidadId);
 
     }
 
@@ -65,21 +68,17 @@
         }
         else
         {
-            Mensaje = "No se ha creado correctamente la descripcion de la accesibilidad";
+            Mensaje = "No se ha creado correctamente la cotización";
         }
     }
+
+
 
 
     public void Volver()
     {
         // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
-        navigation.NavigateTo("/Accesibilidad/Index");
-
+        navigation.NavigateTo("/Reserva/Index");
     }
 
-
 }
-
-
-
-

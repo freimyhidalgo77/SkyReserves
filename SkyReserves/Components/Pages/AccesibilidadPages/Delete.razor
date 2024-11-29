@@ -1,0 +1,70 @@
+﻿@page "/Accesibilidad/Delete"
+@rendermode InteractiveServer
+@inject DestinoService destinoService
+@inject NavigationManager navigation
+
+
+<PageTitle>Destino de vuelo</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		<div class="card-header">
+			<h3><strong>Eliminar destino de vuelos</strong></h3>
+		</div>
+		<div class="card-body">
+			<h5><strong>Est&aacute;s seguro que deseas eliminar este vuelo destino de vuelo?</strong></h5>
+			<div class="mb-1">
+				<p><strong>Destino vuelo ID:</strong>@destino?.DestinoId</p>
+			</div>
+			<div class="mb-1">
+				<p><strong>Destino:</strong>@destino?.destino</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="card-footer">
+		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarCliente">Eliminar</button>
+		<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
+	</div>
+</div>
+
+
+
+@code {
+
+
+	[Parameter]
+	public int DestinoId { get; set; }
+	public List<Destino> destinoList { get; set; } = new List<Destino>();
+	public Destino? destino;
+	public string mensaje { get; set; } = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		var destino = await destinoService.Buscar(DestinoId);
+	}
+
+
+
+	public async Task ElimnarCliente()
+	{
+		if (destino != null)
+		{
+			var eliminado = await destinoService.Eliminar(DestinoId);
+			if (eliminado)
+			{
+				navigation.NavigateTo("/Clientes/Index");
+				//toastService.Notify(new(ToastType.Danger, "Cliente eliminado con exito!"));
+			}
+			else
+			{
+				mensaje = "No se pudo eliminar el cliente";
+			}
+		}
+
+	}
+
+	public void Volver()
+	{
+		navigation.NavigateTo("/Clientes/Index");
+	}
+}
