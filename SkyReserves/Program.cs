@@ -1,7 +1,9 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using SkyReserves.Models;
 using SkyReserves.Components;
 using SkyReserves.Service;
+using SkyReserves.DAL;
 
 var builder = WebApplication.CreateBuilder(args);
 
