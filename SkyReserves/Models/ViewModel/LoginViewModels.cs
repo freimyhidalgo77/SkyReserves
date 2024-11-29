@@ -2,7 +2,7 @@
 
 namespace SkyReserves.Models.ViewModel
 {
-    public class LoginView
+    public class LoginViewModels
     {
 
         [Required(AllowEmptyStrings = false, ErrorMessage = "Por Favor Ingrese el Nombre de Usuario")]
