@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection.Emit;
 using Microsoft.EntityFrameworkCore;
 
+namespace SkyReserves.DAL;
 public class Context : DbContext
 {
     public Context(DbContextOptions<Context> options) : base(options) { }
