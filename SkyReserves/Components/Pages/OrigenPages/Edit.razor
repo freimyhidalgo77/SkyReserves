@@ -1,0 +1,83 @@
+﻿@page "/Origen/Edit{OrigenId:int}"
+@inject OrigenService origenService
+@inject NavigationManager navigation
+
+
+<PageTitle>Modificar vuelo de Origen</PageTitle>
+<EditForm Model="origen" OnValidSubmit="Crear">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h1><strong>Crear Vuelo</strong></h1>
+            </div>
+            <div class="card-body">
+
+                <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
+                <InputNumber id="OrigenId" class="form-control" @bind-Value="origen.OrigenId" readonly></InputNumber>
+
+
+                <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
+                <InputText id="Fecha" class="form-control" @bind-Value="origen.origen"></InputText>
+                <ValidationMessage For="@(() => origen.origen)" />
+
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-info text-white bi bi-90deg-left" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill">Crear</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public int OrigenId { get; set; }
+    public Origen origen { get; set; } = new Origen();
+    public List<Origen> origenList { get; set; } = new List<Origen>();
+    public string Mensaje { get; set; } = string.Empty;
+    //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var origen = await origenService.Buscar(OrigenId);
+
+    }
+
+
+    private async Task Crear()
+    {
+        var origenV = new Origen
+            {
+                OrigenId = origen.OrigenId,
+                origen = origen.origen
+
+            };
+
+        var crear = await origenService.Guardar(origenV);
+
+        if (crear)
+        {
+            origen = new Origen();
+            navigation.NavigateTo("/Origen/Index");
+        }
+        else
+        {
+            Mensaje = "No se ha creado correctamente la cotización";
+        }
+    }
+
+
+
+
+    public void Volver()
+    {
+        // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
+        navigation.NavigateTo("/Reserva/Index");
+    }
+}
