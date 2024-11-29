@@ -1,0 +1,245 @@
+﻿@page "/Reserva/Create"
+@inject ReservaService reservaService
+@inject AsientoService asientosService
+@inject ClaseVueloService claseVueloService
+@inject AsientoDetalleService asientoDetalleService
+@inject NavigationManager navigation
+
+
+<PageTitle>Crear Reserva</PageTitle>
+<EditForm Model="Reserva" OnValidSubmit="Crear">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h1><strong>Crear Reserva</strong></h1>
+            </div>
+            <div class="card-body">
+
+                <label class="form-label" for="ReservaId"><strong>Reserva ID:</strong></label>
+                <InputNumber id="Reservaid" class="form-control" @bind-Value="Reserva.ReservaId" readonly></InputNumber>
+
+
+                <label class="form-label" for="Fecha"><strong>Origen</strong></label>
+                <InputSelect id="Fecha" class="form-control" @bind-Value="Reserva.Origen"></InputSelect>
+                <ValidationMessage For="@(() => Reserva.Origen)" />
+
+
+                <label class="form-label" for="Fecha"><strong>Destino</strong></label>
+                <InputSelect id="Fecha" class="form-control" @bind-Value="Reserva.Destino"></InputSelect>
+                <ValidationMessage For="@(() => Reserva.Destino)" />
+
+
+
+                @*HACER COMO UN COUNTER*@
+                <label class="form-label" for="NumeroPasajeros"><strong>Numero Pasajeros</strong></label>
+                <div class="input-group">
+                    <button class="btn btn-outline-secondary" type="button" @onclick="DecrementarPasajeros">-</button>
+                    <InputNumber id="NumeroPasajeros" class="form-control" @bind-Value="Reserva.NumeroPasajeros" min="0" />
+                    <button class="btn btn-outline-secondary" type="button" @onclick="IncrementarPasajeros">+</button>
+                </div>
+                <ValidationMessage For="@(() => Reserva.NumeroPasajeros)" />
+
+
+                @*Aqui PONER INPUTSELECT para seleccionar el origen (se necesita registro de Vuelopara esto)*@
+                @*Aqui PONER INPUTSELECT para seleccionar el Destino*@
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card header text-center">
+                <h5><strong>Detalles del Asiento a seleccionar</strong></h5>
+            </div>
+
+            <div class="border border-success p-3 mt-3">
+                <h3>Asiento Detalles</h3>
+
+                <SeleccionarAsientoPicker AsientoList="AsientosList"
+                AsientoId="AsientoDetalle.AsientoId"
+                AsientoSeleccionado="AgregarAsiento" />
+
+
+                <hr />
+                <table class="table table-light">
+                    <thead class="table table-stripped">
+                        <tr class="text-center">
+                            <th>Asiento ID</th>
+                            <th>Existencia</th>
+                            <th>Estado</th>
+                            <th>Fila</th>
+                            <th>Letra</th>
+                            <th>Remover</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var reserva in Reserva.AsientoDetalle)
+                        {
+                            <tr class="text-center">
+                                <td class="ps-3">@reserva.AsientoId</td>
+                                <td class="ps-3">@reserva.Existencia</td>
+                                <td class="ps-3">@reserva.Fila</td>
+                                <td class="ps-3">@reserva.Letra</td>
+                                <td class="ps-3">
+                                    <button type="button" class="btn btn-outline-danger bi bi-trash"
+                                    @onclick="()=>RemoverDetalle(reserva)">
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-info text-white bi bi-90deg-left" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Guardar Reserva</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+
+    public Reserva Reserva { get; set; } = new Reserva();
+    public List<Reserva> reservaList { get; set; } = new List<Reserva>();
+    public Asiento Asientos { get; set; } = new Asiento();
+    public List<AsientoDetalle> AsientosList { get; set; } = new List<AsientoDetalle>();
+    public AsientoDetalle AsientoDetalle { get; set; } = new AsientoDetalle();
+    public ClaseVuelo ClaseVuelo { get; set; } = new ClaseVuelo();
+    public decimal Total { get; set; }
+    public string mensaje { get; set; } = string.Empty;
+    //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        reservaList = (await reservaService.Listar(c => c.ReservaId > 0));
+        AsientosList = (await asientoDetalleService.Listar(c => c.AsientoId > 0));
+
+
+    }
+
+
+
+
+    private void IncrementarPasajeros()
+    {
+        Reserva.NumeroPasajeros++;
+    }
+
+    private void DecrementarPasajeros()
+    {
+        if (Reserva.NumeroPasajeros > 1)
+        {
+            Reserva.NumeroPasajeros--;
+        }
+
+    }
+
+
+    private async Task AgregarAsiento(AsientoDetalle asientoSeleccionado)
+    {
+        var asientoExiste = Reserva.AsientoDetalle.FirstOrDefault(a => a.AsientoId == asientoSeleccionado.AsientoId);
+        if (asientoExiste != null)
+        {
+            // Si el asiento ya existe, solo mostramos un mensaje
+            mensaje = "Este asiento ya ha sido seleccionado.";
+        }
+        else
+        {
+            var nuevoAsiento = new AsientoDetalle
+                {
+                    AsientoId = asientoSeleccionado.AsientoId,
+                    Existencia = asientoSeleccionado.Existencia, 
+                    Fila = asientoSeleccionado.Fila,              
+                    Letra = asientoSeleccionado.Letra           
+                };
+
+            Reserva.AsientoDetalle.Add(nuevoAsiento);
+            mensaje = "Asiento seleccionado correctamente.";
+        }
+
+        await Task.CompletedTask;
+    }
+
+
+    private async Task Crear()
+    {
+        if (!Reserva.AsientoDetalle.Any())
+        {
+            mensaje = "Debe agregar al menos un asiento";
+            return;
+        }
+
+        var reserva = new Reserva
+            {
+                ReservaId = Reserva.ReservaId,
+                Origen = Reserva.Origen,
+                Destino = Reserva.Destino,
+                NumeroPasajeros = Reserva.NumeroPasajeros,
+                AsientoDetalle = Reserva.AsientoDetalle.Select(a => new AsientoDetalle
+                {
+                    AsientoId = a.AsientoId,
+                    Existencia = a.Existencia,
+                    Fila = a.Fila,
+                    Letra = a.Letra
+                }).ToList()
+            };
+
+     
+        Reserva.AsientoDetalle = reserva.AsientoDetalle.Select(a => new AsientoDetalle
+            {
+                AsientoId = a.AsientoId,
+                Existencia = a.Existencia,
+                Fila = a.Fila,
+                Letra = a.Letra
+            }).ToList();
+
+        var crear = await reservaService.Guardar(reserva);
+
+        if (crear)
+        {
+            Reserva = new Reserva();
+            navigation.NavigateTo("/Clientes/Index");
+        }
+        else
+        {
+            mensaje = "No se ha creado correctamente la reserva";
+        }
+    }
+
+
+
+    public void RemoverDetalle(AsientoDetalle detalle)
+    {
+        Reserva.AsientoDetalle.Remove(detalle);
+      //  Reserva.Asientos = detalle.ReservaId;
+        AsientoDetalle.Existencia = detalle.Existencia;
+        AsientoDetalle.Fila = detalle.Fila;
+        AsientoDetalle.Letra = detalle.Letra;
+    }
+
+    public void Volver()
+    {
+       // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
+        navigation.NavigateTo("/Reserva/Index");
+    }
+}
+
+
+
+
+
+
+
+
+
+
+

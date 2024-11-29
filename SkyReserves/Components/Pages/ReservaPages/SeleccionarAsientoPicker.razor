@@ -1,10 +1,10 @@
 ﻿<div class="col-auto input-group align-items-center">
-    <InputSelect class="form-select" @bind-Value="AsientoId">
+    <InputSelect class="form-select" @bind-Value="AsientoId" @onchange="ElegirAsiento">
         <option disabled value="0">Seleccionar asiento</option>
         @foreach (var asiento in AsientoList)
         {
             <option value="@asiento.AsientoId">
-                -- @asiento.Existencia ----- @asiento.Fila @asiento.Letra
+                @($"ID: {asiento.AsientoId} - Fila: {asiento.Fila} - Letra: {asiento.Letra} - Existencia: {asiento.Existencia}")
             </option>
         }
     </InputSelect>
@@ -31,15 +31,16 @@
     {
         if (AsientoId > 0)
         {
+            // Buscar el asiento completo que corresponde al AsientoId seleccionado
             var asientoElegido = AsientoList.SingleOrDefault(a => a.AsientoId == AsientoId);
             if (asientoElegido != null)
             {
-                // Invoca el callback para pasar el asiento seleccionado
+                // Invoca el callback con el asiento seleccionado
                 await AsientoSeleccionado.InvokeAsync(asientoElegido);
             }
             else
             {
-                mensaje = "Debe seleccionar un asiento.";
+                mensaje = "Debe seleccionar un asiento válido.";
             }
         }
         else
