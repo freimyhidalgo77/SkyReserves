@@ -1,0 +1,69 @@
+﻿@page "/Index"
+
+<PageTitle>Registro</PageTitle>
+<h3><strong>Sky Reserve</strong></h3>
+<div class="card-img-top">
+    <img src="https://revistacontactord.com/wp-content/uploads/2022/05/Screen-Shot-2022-05-17-at-9.31.00-PM.png"
+         alt="Vista aérea"
+         style="width: 100%; height: 300px; object-fit: cover;" />
+</div>
+
+<!-- Header -->
+<div class="row mb-3 align-items-end">
+    <div class="col-md-3">
+        <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+        <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+            <option value="" disabled>Seleccionar</option>
+            <option value="ReservaID">Reserva ID</option>
+            <option value="">Fecha</option>
+
+        </InputSelect>
+    </div>
+
+    <div class="col-md-6">
+        <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
+        <div class="input-group">
+            <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
+            <button @onclick="Buscar" class="btn btn-success" type="button" style="background-color: purple; color: white; border: none;">
+                <span class="bi bi-search"></span> Buscar
+            </button>
+            <a href="/Create" class="btn btn-success bi bi-plus-square ms-2" style="background-color: purple; color: white; border: none;"> Reservar</a>
+        </div>
+    </div>
+</div>
+
+
+<!-- Body -->
+<div class="table-responsive">
+    <table class="table table-light table-bordered">
+        <thead class="table table-striped text-center table-bordered mt-3">
+            <tr>
+                <th>Reserva ID</th>
+                <th>Origen</th>
+                <th>Destino</th>
+                <th>Fecha</th>
+                <th>Editar</th>
+                <th>Eliminar</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+
+
+@code {
+
+
+    public string filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+
+    public void Buscar()
+    {
+
+    }
+
+
+}
