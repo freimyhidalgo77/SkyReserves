@@ -25,7 +25,7 @@ public class Context : DbContext
 	{
 		base.OnModelCreating(modelBuilder);
 		modelBuilder.Entity<UserAccount>().HasData(
-			new UserAccount { Id = 1, UserName = "Araject@gmail.com", Password = "Arajet", Role = "Admin" },
+			new UserAccount { Id = 1, UserName = "Arajet@gmail.com", Password = "Arajet", Role = "Admin" },
 			new UserAccount { Id = 2, UserName = "Cliente@gmail.com", Password = "Cliente", Role = "User" }
 		);
 
