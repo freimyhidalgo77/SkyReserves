@@ -1,19 +1,20 @@
-﻿@page "/Reserva/Create"
+﻿@page "/Reserva/Edit {ReservaId:int}"
 @inject ReservaService reservaService
 @inject OrigenService origenService
 @inject DestinoService destinoService
 @inject AsientoService asientosService
 @inject NavigationManager navigation
 
-<PageTitle>Crear Reserva</PageTitle>
-<EditForm Model="Reserva" OnValidSubmit="Crear">
+
+<PageTitle>Editar Reserva</PageTitle>
+<EditForm Model="Reserva" OnValidSubmit="Modificar">
     <DataAnnotationsValidator />
     <ValidationSummary />
 
     <div class="card-image-top">
         <img src="https://images.prismic.io/arajet-ezycommerce/b93f72da-5043-4605-8682-9b60bfee38dd_Logo_web_Arajet.png"
-             alt="Vista aérea"
-             style="width: 100%; height: 300px; object-fit: cover;" />
+        alt="Vista aérea"
+        style="width: 100%; height: 300px; object-fit: cover;" />
     </div>
 
     <div class="container">
@@ -58,7 +59,7 @@
             </div>
             <div class="card-body">
                 <SeleccionarAsientoPicker ListaAsientos="AsientoList"
-                                          AsientoSeleccionado="AgregarAsiento" />
+                AsientoSeleccionado="AgregarAsiento" />
 
                 <hr />
 
@@ -101,7 +102,13 @@
     </div>
 </EditForm>
 
+
+
+
 @code {
+
+    [Parameter]
+    public int ReservaId { get; set; }
     public Reserva Reserva { get; set; } = new Reserva();
     public List<Origen> OrigenList { get; set; } = new List<Origen>();
     public List<Destino> DestinoList { get; set; } = new List<Destino>();
@@ -110,9 +117,8 @@
 
     protected override async Task OnInitializedAsync()
     {
-        OrigenList = await origenService.Listar(o => o.OrigenId > 0);
-        DestinoList = await destinoService.Listar(o => o.DestinoId > 0);
-        AsientoList = await asientosService.Listar(o => o.AsientoId > 0);
+        Reserva = await reservaService.Buscar(ReservaId);
+      
     }
 
     private void IncrementarPasajeros()
@@ -142,7 +148,7 @@
         AsientosSeleccionados.Remove(asiento);
     }
 
-    private async Task Crear()
+    private async Task Modificar()
     {
         if (!AsientosSeleccionados.Any())
         {
@@ -163,4 +169,7 @@
     {
         navigation.NavigateTo("/Reserva/Index");
     }
+
+
+
 }

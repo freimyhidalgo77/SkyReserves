@@ -1,0 +1,116 @@
+﻿@page "/Reserva/Delete{ReservaId:int}"
+@rendermode InteractiveServer
+@inject ReservaService reservaService
+@inject AsientoService asientoService 
+@inject NavigationManager navigation
+
+
+<PageTitle>Reservas</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		<div class="card-header">
+			<h3><strong>Eliminar reserva</strong></h3>
+		</div>
+		<div class="card-body">
+			<h5><strong>Est&aacute;s seguro que deseas eliminar esta reserva?</strong></h5>
+			<div class="mb-1">
+				<p><strong>Cliente ID:</strong>@reserva?.ReservaId</p>
+			</div>
+			<div class="mb-1">
+				<p><strong>Fecha:</strong>@reserva?.Origen</p>
+			</div>
+			<div class="mb-1">
+				<p><strong>Nombre:</strong>@reserva?.Destino</p>
+			</div>
+		</div>
+
+		<div class="bordered bordered-success pt-3 mt-3">
+			<table class="table table-light table-bordered">
+				<thead class="table table-striped text-center">
+					<tr>
+						<th>Fila</th>
+						<th>Letra</th>
+						<th>Existencia</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var detalle in Asiento )
+					{
+						<td>@detalle.Fila</td>
+						<td>@detalle.Letra</td>
+						<td>@detalle.Existencia</td>
+
+
+					}
+				</tbody>
+			</table>
+		</div>
+
+		<div class="card-footer">
+			<button type="button" class="btn btn-danger bi bi-trash" @onclick="Elimnar">Eliminar</button>
+			<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
+		</div>
+	</div>
+</div>
+
+
+
+@code {
+
+
+	[Parameter]
+	public int ReservaId { get; set; }
+	public Reserva? reserva;
+	public Asiento asiento { get; set; } = new Asiento();
+	public List<Asiento> Asiento { get; set; } = new();
+	public string mensaje { get; set; } = string.Empty;
+
+	protected override Task OnInitializedAsync()
+	{
+		return Cliente();
+	}
+
+	public async Task Cliente()
+	{
+		reserva = await reservaService.Buscar(ReservaId); //Aqui hay que poner el metodo BuscarConDetalle, va en reserva
+		if (reserva != null)
+		{
+			//asiento = Asiento.ToList();
+			//reserva = await asiento.Listar(c => true);
+		}
+
+	}
+
+
+	public async Task Elimnar()
+	{
+		if (reserva != null)
+		{
+			var eliminado = await reservaService.Eliminar(ReservaId);
+			if (eliminado)
+			{
+				navigation.NavigateTo("/Reserva/Index");
+				//toastService.Notify(new(ToastType.Danger, "Cliente eliminado con exito!"));
+			}
+			else
+			{
+				mensaje = "No se pudo eliminar el cliente";
+			}
+		}
+
+	}
+
+	public void Volver()
+	{
+		navigation.NavigateTo("/Reserva/Index");
+	}
+
+
+
+
+
+
+
+
+
+}
