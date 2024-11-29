@@ -26,7 +26,7 @@
                 <InputNumber id="ReservaId" class="form-control" @bind-Value="Reserva.ReservaId" readonly />
 
                 <label class="form-label" for="Origen"><strong>Origen</strong></label>
-                <InputSelect id="Origen" class="form-control" @bind-Value="Reserva.OrigenId">
+                <InputSelect id="Origen" class="form-control" @bind-Value="Reserva.Origen">
                     @foreach (var origen in OrigenList)
                     {
                         <option value="@origen.OrigenId">@origen.origen</option>
@@ -34,7 +34,7 @@
                 </InputSelect>
 
                 <label class="form-label" for="Destino"><strong>Destino</strong></label>
-                <InputSelect id="Destino" class="form-control" @bind-Value="Reserva.DestinoId">
+                <InputSelect id="Destino" class="form-control" @bind-Value="Reserva.Destino">
                     @foreach (var destino in DestinoList)
                     {
                         <option value="@destino.DestinoId">@destino.destino</option>
