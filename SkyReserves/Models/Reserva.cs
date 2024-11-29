@@ -20,6 +20,7 @@ namespace SkyReserves.Models
 
         public int NumeroPasajeros { get; set; }
 
+        [ForeignKey("ReservaId")]  //Relacionn con asiento detalle
         public ICollection<AsientoDetalle> AsientoDetalle { get; set; } = new List<AsientoDetalle>();
 
 
