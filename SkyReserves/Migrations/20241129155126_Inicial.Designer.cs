@@ -5,13 +5,14 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using SkyReserve.DAL;
 
 #nullable disable
 
 namespace SkyReserves.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241129012808_Inicial")]
+    [Migration("20241129155126_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />

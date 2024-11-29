@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SkyReserves.Models;
 
+namespace SkyReserve.DAL;
 public class Context : DbContext
 {
 	public Context(DbContextOptions<Context> options) : base(options) { }

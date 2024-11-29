@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
+using SkyReserve.DAL;
 using SkyReserves.Components;
 using SkyReserves.Service;
 

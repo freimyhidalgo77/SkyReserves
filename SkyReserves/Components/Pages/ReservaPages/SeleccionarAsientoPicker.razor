@@ -1,0 +1,51 @@
+﻿<div class="col-auto input-group align-items-center">
+    <InputSelect class="form-select" @bind-Value="AsientoId">
+        <option disabled value="0">Seleccione un asiento</option>
+        @foreach (var asiento in ListaAsientos)
+        {
+            <option value="@asiento.AsientoId">
+                @($"{asiento.Fila} - {asiento.Letra} ({asiento.Existencia})")
+            </option>
+        }
+    </InputSelect>
+    <button type="button" class="btn btn-success bi bi-plus-square" @onclick="SeleccionarAsiento"></button>
+</div>
+
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="alert alert-danger">@mensaje</div>
+}
+
+@code {
+    [Parameter]
+    public List<Asiento> ListaAsientos { get; set; } = new List<Asiento>();
+
+    [Parameter]
+    public int AsientoId { get; set; }
+
+    [Parameter]
+    public EventCallback<int> AsientoSeleccionado { get; set; }
+
+    public string? mensaje { get; set; } = string.Empty;
+
+    private async Task SeleccionarAsiento()
+    {
+        if (AsientoId > 0)
+        {
+            var asientoSeleccionado = ListaAsientos.SingleOrDefault(a => a.AsientoId == AsientoId);
+            if (asientoSeleccionado != null && asientoSeleccionado.Existencia > 0)
+            {
+                // Llamamos al callback para agregar el asiento seleccionado
+                await AsientoSeleccionado.InvokeAsync(AsientoId);
+            }
+            else
+            {
+                mensaje = "El asiento seleccionado no está disponible o no existe.";
+            }
+        }
+        else
+        {
+            mensaje = "Debe seleccionar un asiento válido.";
+        }
+    }
+}
