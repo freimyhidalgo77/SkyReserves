@@ -1,92 +1,70 @@
 ﻿@page "/Destino/Delete"
+@rendermode InteractiveServer
 @inject DestinoService destinoService
 @inject NavigationManager navigation
 
 
-<PageTitle>Modificar vuelo de Destino </PageTitle>
-<EditForm Model="Destino" OnValidSubmit="Crear">
-    <DataAnnotationsValidator />
-    <ValidationSummary />
-    <div class="container">
-        <div class="card shadow-lg">
-            <div class="card-header text-center">
-                <h1><strong>Crear Vuelo</strong></h1>
-            </div>
-            <div class="card-body">
+<PageTitle>Destino de vuelo</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		<div class="card-header">
+			<h3><strong>Eliminar destino de vuelos</strong></h3>
+		</div>
+		<div class="card-body">
+			<h5><strong>Est&aacute;s seguro que deseas eliminar este vuelo destino de vuelo?</strong></h5>
+			<div class="mb-1">
+				<p><strong>Destino vuelo ID:</strong>@destino?.DestinoId</p>
+			</div>
+			<div class="mb-1">
+				<p><strong>Destino:</strong>@destino?.destino</p>
+			</div>
+		</div>
+	</div>
 
-                <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
-                <InputNumber id="OrigenId" class="form-control" @bind-Value="Destino.DestinoId" readonly></InputNumber>
-
-
-                <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
-                <InputText id="Fecha" class="form-control" @bind-Value="Destino.destino"></InputText>
-                <ValidationMessage For="@(() => Destino.destino)" />
-
-            </div>
-
-            <div class="card-footer">
-                <button type="button" class="btn btn-info text-white bi bi-90deg-left" @onclick="Volver">Volver</button>
-                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill">Crear</button>
-            </div>
-        </div>
-    </div>
-</EditForm>
+	<div class="card-footer">
+		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarDestino">Eliminar</button>
+		<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
+	</div>
+</div>
 
 
 
 @code {
 
 
-    [Parameter]
-    public int DestinoId { get; set; }
-    public Destino Destino { get; set; } = new Destino();
-    public List<Destino> destinoList { get; set; } = new List<Destino>();
-    public string Mensaje { get; set; } = string.Empty;
-    //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
+	[Parameter]
+	public int DestinoId { get; set; }
+	public List<Destino> destinoList { get; set; } = new List<Destino>();
+	public Destino? destino;
+	public string mensaje { get; set; } = string.Empty;
 
-
-    protected override async Task OnInitializedAsync()
-    {
-        var origen = await destinoService.Buscar(DestinoId);
-
-    }
-
-
-    private async Task Crear()
-    {
-        var destino = new Destino
-            {
-                DestinoId = Destino.DestinoId,
-                destino = Destino.destino
-
-            };
-
-        var crear = await destinoService.Guardar(destino);
-
-        if (crear)
-        {
-            Destino = new Destino();
-            navigation.NavigateTo("/Origen/Index");
-        }
-        else
-        {
-            Mensaje = "No se ha creado correctamente la cotización";
-        }
-    }
+	protected override async Task OnInitializedAsync()
+	{
+		var destino = await destinoService.Buscar(DestinoId);
+	}
 
 
 
+	public async Task ElimnarDestino()
+	{
+		if (destino != null)
+		{
+			var eliminado = await destinoService.Eliminar(DestinoId);
+			if (eliminado)
+			{
+				navigation.NavigateTo("/Destino/Index");
+				//toastService.Notify(new(ToastType.Danger, "Cliente eliminado con exito!"));
+			}
+			else
+			{
+				mensaje = "No se pudo eliminar el destino";
+			}
+		}
 
-    public void Volver()
-    {
-        // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
-        navigation.NavigateTo("/Reserva/Index");
-    }
+	}
 
-
-
-
-
-
-
+	public void Volver()
+	{
+		navigation.NavigateTo("/Destino/Index");
+	}
 }
