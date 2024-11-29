@@ -6,7 +6,7 @@
 @inject Context context
 @inject NavigationManager navigationManager
 <link rel="stylesheet" href="/Estilos/Login.css" />
-<link rel="stylesheet" href="/Estilos/Homes.css" />
+
 
 <div class="d-flex justify-content-center align-items-center vh-100">
     <div class="card shadow-lg p-5"
@@ -36,7 +36,7 @@
             </div>
 
             <div class="d-grid">
-                <button class="btn btn-primary btn-lg" type="submit" style="border-radius: 20px;">Iniciar sesión</button>
+                <button class="btn btn-primary btn-lg" type="submit" style="border-radius: 20px;">Iniciar sesi&oacute;n</button>
             </div>
         </EditForm>
     </div>
@@ -54,7 +54,8 @@
     private async Task Authenticate()
     {
         var userAccount = context.UserAccount
-        .Where(x => x.UserName == Model.Username).FirstOrDefault();
+            .Where(x => x.UserName == Model.Username)
+            .FirstOrDefault();
 
         if (userAccount is null || userAccount.Password != Model.Password)
         {
@@ -72,6 +73,15 @@
         var principal = new ClaimsPrincipal(identity);
 
         await HttpContext?.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, principal);
-        navigationManager.NavigateTo("/");
+
+        
+        if (userAccount.Role == "Admin" || userAccount.Role == "User")
+        {
+            navigationManager.NavigateTo("/MenuPrincipal");
+        }
+        else
+        {
+            navigationManager.NavigateTo("/access-denied");
+        }
     }
 }

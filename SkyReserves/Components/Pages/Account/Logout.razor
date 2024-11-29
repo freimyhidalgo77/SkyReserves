@@ -1,8 +1,7 @@
 ﻿@page "/logout"
 @using Microsoft.AspNetCore.Authentication
 <link rel="stylesheet" href="/Estilos/Login.css" />
-<link rel="stylesheet" href="/Estilos/Homes.css
-" />
+<link rel="stylesheet" href="/Estilos/Cierre.css" />
 
 @inject NavigationManager navigationManager
 
@@ -33,7 +32,7 @@
         if (HttpContext.User.Identity.IsAuthenticated)
         {
             await HttpContext.SignOutAsync();
-            navigationManager.NavigateTo("/logout", true);
+            navigationManager.NavigateTo("/login", true);
         }
     }
 }
