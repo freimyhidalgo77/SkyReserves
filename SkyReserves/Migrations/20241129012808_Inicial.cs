@@ -27,6 +27,22 @@ namespace SkyReserves.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Asientos",
+                columns: table => new
+                {
+                    AsientoId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    VueloId = table.Column<int>(type: "int", nullable: false),
+                    Fila = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Letra = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Existencia = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Asientos", x => x.AsientoId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ClaseVuelo",
                 columns: table => new
                 {
@@ -236,54 +252,13 @@ namespace SkyReserves.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Asientos",
-                columns: table => new
-                {
-                    AsientoId = table.Column<int>(type: "int", nullable: false),
-                    ReservaId = table.Column<int>(type: "int", nullable: false),
-                    Fila = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Letra = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Existencia = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Asientos", x => x.AsientoId);
-                    table.ForeignKey(
-                        name: "FK_Asientos_Reserva_AsientoId",
-                        column: x => x.AsientoId,
-                        principalTable: "Reserva",
-                        principalColumn: "ReservaId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Asientos_Reserva_ReservaId",
-                        column: x => x.ReservaId,
-                        principalTable: "Reserva",
-                        principalColumn: "ReservaId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Asientos",
-                columns: new[] { "AsientoId", "Existencia", "Fila", "Letra", "ReservaId" },
+                columns: new[] { "AsientoId", "Existencia", "Fila", "Letra", "VueloId" },
                 values: new object[,]
                 {
-                    { 1, 1, "1", "A", 0 },
-                    { 2, 1, "1", "B", 0 },
-                    { 3, 1, "2", "C", 0 },
-                    { 4, 3, "2", "D", 0 },
-                    { 5, 1, "3", "A", 0 },
-                    { 6, 1, "3", "B", 0 },
-                    { 7, 1, "4", "C", 0 },
-                    { 8, 3, "4", "D", 0 },
-                    { 9, 1, " 5", "A", 0 },
-                    { 10, 1, "5", "B", 0 },
-                    { 11, 1, "6", "C", 0 },
-                    { 12, 3, "6", "D", 0 },
-                    { 13, 1, "7", "A", 0 },
-                    { 14, 1, "7", "B", 0 },
-                    { 15, 1, "8", "C", 0 },
-                    { 16, 3, "8", "D", 0 }
+                    { 1, 5, "1", "A", 1 },
+                    { 2, 5, "2", "B", 1 }
                 });
 
             migrationBuilder.InsertData(
@@ -291,14 +266,9 @@ namespace SkyReserves.Migrations
                 columns: new[] { "Id", "Password", "Role", "UserName" },
                 values: new object[,]
                 {
-                    { 1, "Will04", "Admin", "Wilmer" },
-                    { 2, "Perez05", "User", "Juan" }
+                    { 1, "Arajet", "Admin", "Araject@gmail.com" },
+                    { 2, "Cliente", "User", "Cliente@gmail.com" }
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Asientos_ReservaId",
-                table: "Asientos",
-                column: "ReservaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clientes_AccesibilidadId",
@@ -351,13 +321,13 @@ namespace SkyReserves.Migrations
                 name: "PasaporteDetalles");
 
             migrationBuilder.DropTable(
+                name: "Reserva");
+
+            migrationBuilder.DropTable(
                 name: "UserAccount");
 
             migrationBuilder.DropTable(
                 name: "VuelosEspeciales");
-
-            migrationBuilder.DropTable(
-                name: "Reserva");
 
             migrationBuilder.DropTable(
                 name: "Accesibilidad");

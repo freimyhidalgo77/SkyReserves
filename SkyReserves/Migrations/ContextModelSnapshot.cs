@@ -41,7 +41,10 @@ namespace SkyReserves.Migrations
             modelBuilder.Entity("SkyReserves.Models.Asiento", b =>
                 {
                     b.Property<int>("AsientoId")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AsientoId"));
 
                     b.Property<int>("Existencia")
                         .HasColumnType("int");
@@ -51,14 +54,13 @@ namespace SkyReserves.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Letra")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("ReservaId")
+                    b.Property<int>("VueloId")
                         .HasColumnType("int");
 
                     b.HasKey("AsientoId");
-
-                    b.HasIndex("ReservaId");
 
                     b.ToTable("Asientos");
 
@@ -66,130 +68,18 @@ namespace SkyReserves.Migrations
                         new
                         {
                             AsientoId = 1,
-                            Existencia = 1,
+                            Existencia = 5,
                             Fila = "1",
                             Letra = "A",
-                            ReservaId = 0
+                            VueloId = 1
                         },
                         new
                         {
                             AsientoId = 2,
-                            Existencia = 1,
-                            Fila = "1",
-                            Letra = "B",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 3,
-                            Existencia = 1,
+                            Existencia = 5,
                             Fila = "2",
-                            Letra = "C",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 4,
-                            Existencia = 3,
-                            Fila = "2",
-                            Letra = "D",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 5,
-                            Existencia = 1,
-                            Fila = "3",
-                            Letra = "A",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 6,
-                            Existencia = 1,
-                            Fila = "3",
                             Letra = "B",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 7,
-                            Existencia = 1,
-                            Fila = "4",
-                            Letra = "C",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 8,
-                            Existencia = 3,
-                            Fila = "4",
-                            Letra = "D",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 9,
-                            Existencia = 1,
-                            Fila = " 5",
-                            Letra = "A",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 10,
-                            Existencia = 1,
-                            Fila = "5",
-                            Letra = "B",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 11,
-                            Existencia = 1,
-                            Fila = "6",
-                            Letra = "C",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 12,
-                            Existencia = 3,
-                            Fila = "6",
-                            Letra = "D",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 13,
-                            Existencia = 1,
-                            Fila = "7",
-                            Letra = "A",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 14,
-                            Existencia = 1,
-                            Fila = "7",
-                            Letra = "B",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 15,
-                            Existencia = 1,
-                            Fila = "8",
-                            Letra = "C",
-                            ReservaId = 0
-                        },
-                        new
-                        {
-                            AsientoId = 16,
-                            Existencia = 3,
-                            Fila = "8",
-                            Letra = "D",
-                            ReservaId = 0
+                            VueloId = 1
                         });
                 });
 
@@ -442,16 +332,16 @@ namespace SkyReserves.Migrations
                         new
                         {
                             Id = 1,
-                            Password = "Will04",
+                            Password = "Arajet",
                             Role = "Admin",
-                            UserName = "Wilmer"
+                            UserName = "Araject@gmail.com"
                         },
                         new
                         {
                             Id = 2,
-                            Password = "Perez05",
+                            Password = "Cliente",
                             Role = "User",
-                            UserName = "Juan"
+                            UserName = "Cliente@gmail.com"
                         });
                 });
 
@@ -479,23 +369,6 @@ namespace SkyReserves.Migrations
                     b.HasIndex("OrigenId");
 
                     b.ToTable("VuelosEspeciales");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.Asiento", b =>
-                {
-                    b.HasOne("SkyReserves.Models.Reserva", null)
-                        .WithMany("AsientoDetalle")
-                        .HasForeignKey("AsientoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("SkyReserves.Models.Reserva", "Reserva")
-                        .WithMany()
-                        .HasForeignKey("ReservaId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Reserva");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.Cliente", b =>
@@ -561,11 +434,6 @@ namespace SkyReserves.Migrations
             modelBuilder.Entity("SkyReserves.Models.Pasaporte", b =>
                 {
                     b.Navigation("PasaporteDetalle");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.Reserva", b =>
-                {
-                    b.Navigation("AsientoDetalle");
                 });
 #pragma warning restore 612, 618
         }
