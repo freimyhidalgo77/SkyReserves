@@ -1,10 +1,12 @@
 ﻿@page "/Reserva/Index"
+@inject ReservaService reservaService
+
 <PageTitle>Registro</PageTitle>
 <h3><strong>Sky Reserve</strong></h3>
 <div class="card-img-top">
     <img src="https://revistacontactord.com/wp-content/uploads/2022/05/Screen-Shot-2022-05-17-at-9.31.00-PM.png"
-         alt="Vista aérea"
-         style="width: 100%; height: 300px; object-fit: cover;" />
+    alt="Vista aérea"
+    style="width: 100%; height: 300px; object-fit: cover;" />
 </div>
 
 <!-- Header -->
@@ -46,18 +48,47 @@
             </tr>
         </thead>
         <tbody>
+
+            @foreach (var reserva in reservaList)
+            {
+                <tr>
+                    <td class="text-center">@reserva.ReservaId</td>
+                    <td class="text-center">@reserva.Origen</td>
+                    <td class="text-center">@reserva.Destino</td>
+                    <td class="text-center">@reserva.NumeroPasajeros</td>
+                    <td class="text-center">
+                        <a href="/Reserva/Edit/@reserva.ReservaId" class="btn btn-outline-warning bi bi-pencil-square"></a>
+                    </td>
+
+                    <td class="text-center">
+                        <a href="/Reserva/Delete/@reserva.ReservaId" class="btn btn-outline-danger bi bi-trash"></a>
+                    </td>
+                </tr>
+            }
         </tbody>
     </table>
+    <div class="card-footer">
+        <p><strong>Total de Reservas: </strong>@reservaList?.Count</p>
+    </div>
 </div>
 
 
 
 @code {
 
-
+    Reserva Reserva { get; set; } = new Reserva();
+    List<Reserva> reservaList { get; set; } = new List<Reserva>();
+    Origen Origen { get; set; } = new Origen();
+    Destino Destino { get; set; } = new Destino();
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
+
+    protected override async Task OnInitializedAsync()
+    {
+        var reserva = await reservaService.Listar(o => o.ReservaId > 0);
+        
+    }
 
     public void Buscar()
     {
