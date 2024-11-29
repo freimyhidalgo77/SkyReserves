@@ -3,19 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkyReserves.Models
 {
-    public class Asiento
-    {
-        [Key]
-
-        public int AsientoId { get; set; }
-
-        [ForeignKey("Reserva")]
-        public int ReservaId { get; set; }
-        public Reserva? Reserva { get; set; }
+	public class Asiento
+	{
+		public int AsientoId { get; set; }
+		public int VueloId { get; set; }
+		public string Fila { get; set; }
+		public string Letra { get; set; }
+		public int Existencia { get; set; }
 
 
-        [ForeignKey("AsientoId")]
-        public ICollection<AsientoDetalle> AsientoDetalle { get; set; } = new List<AsientoDetalle>();
+	}
 
-    }
 }
