@@ -27,6 +27,7 @@ builder.Services.AddScoped<PasaporteService>();
 builder.Services.AddScoped<PasaporteDetalleService>();
 builder.Services.AddScoped<ReservaService>();
 builder.Services.AddScoped<VuelosEspecialesService>();
+builder.Services.AddScoped<AsientoDetalleService>();
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

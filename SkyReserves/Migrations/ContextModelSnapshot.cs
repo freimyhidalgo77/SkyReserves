@@ -41,6 +41,30 @@ namespace SkyReserves.Migrations
             modelBuilder.Entity("SkyReserves.Models.Asiento", b =>
                 {
                     b.Property<int>("AsientoId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AsientoId"));
+
+                    b.Property<int>("ReservaId")
+                        .HasColumnType("int");
+
+                    b.HasKey("AsientoId");
+
+                    b.HasIndex("ReservaId");
+
+                    b.ToTable("Asientos");
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.AsientoDetalle", b =>
+                {
+                    b.Property<int>("DetalleId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DetalleId"));
+
+                    b.Property<int>("AsientoId")
                         .HasColumnType("int");
 
                     b.Property<int>("Existencia")
@@ -56,15 +80,18 @@ namespace SkyReserves.Migrations
                     b.Property<int>("ReservaId")
                         .HasColumnType("int");
 
-                    b.HasKey("AsientoId");
+                    b.HasKey("DetalleId");
+
+                    b.HasIndex("AsientoId");
 
                     b.HasIndex("ReservaId");
 
-                    b.ToTable("Asientos");
+                    b.ToTable("AsientoDetalles");
 
                     b.HasData(
                         new
                         {
+                            DetalleId = 1,
                             AsientoId = 1,
                             Existencia = 1,
                             Fila = "1",
@@ -73,6 +100,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 2,
                             AsientoId = 2,
                             Existencia = 1,
                             Fila = "1",
@@ -81,6 +109,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 3,
                             AsientoId = 3,
                             Existencia = 1,
                             Fila = "2",
@@ -89,6 +118,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 4,
                             AsientoId = 4,
                             Existencia = 3,
                             Fila = "2",
@@ -97,6 +127,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 5,
                             AsientoId = 5,
                             Existencia = 1,
                             Fila = "3",
@@ -105,6 +136,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 6,
                             AsientoId = 6,
                             Existencia = 1,
                             Fila = "3",
@@ -113,6 +145,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 7,
                             AsientoId = 7,
                             Existencia = 1,
                             Fila = "4",
@@ -121,6 +154,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 8,
                             AsientoId = 8,
                             Existencia = 3,
                             Fila = "4",
@@ -129,6 +163,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 9,
                             AsientoId = 9,
                             Existencia = 1,
                             Fila = " 5",
@@ -137,6 +172,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 10,
                             AsientoId = 10,
                             Existencia = 1,
                             Fila = "5",
@@ -145,6 +181,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 11,
                             AsientoId = 11,
                             Existencia = 1,
                             Fila = "6",
@@ -153,6 +190,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 12,
                             AsientoId = 12,
                             Existencia = 3,
                             Fila = "6",
@@ -161,6 +199,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 13,
                             AsientoId = 13,
                             Existencia = 1,
                             Fila = "7",
@@ -169,6 +208,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 14,
                             AsientoId = 14,
                             Existencia = 1,
                             Fila = "7",
@@ -177,6 +217,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 15,
                             AsientoId = 15,
                             Existencia = 1,
                             Fila = "8",
@@ -185,6 +226,7 @@ namespace SkyReserves.Migrations
                         },
                         new
                         {
+                            DetalleId = 16,
                             AsientoId = 16,
                             Existencia = 3,
                             Fila = "8",
@@ -483,17 +525,30 @@ namespace SkyReserves.Migrations
 
             modelBuilder.Entity("SkyReserves.Models.Asiento", b =>
                 {
-                    b.HasOne("SkyReserves.Models.Reserva", null)
+                    b.HasOne("SkyReserves.Models.Reserva", "Reserva")
+                        .WithMany()
+                        .HasForeignKey("ReservaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Reserva");
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.AsientoDetalle", b =>
+                {
+                    b.HasOne("SkyReserves.Models.Asiento", "Asiento")
                         .WithMany("AsientoDetalle")
                         .HasForeignKey("AsientoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("SkyReserves.Models.Reserva", "Reserva")
-                        .WithMany()
+                        .WithMany("AsientoDetalle")
                         .HasForeignKey("ReservaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Asiento");
 
                     b.Navigation("Reserva");
                 });
@@ -556,6 +611,11 @@ namespace SkyReserves.Migrations
                     b.Navigation("Destino");
 
                     b.Navigation("Origen");
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.Asiento", b =>
+                {
+                    b.Navigation("AsientoDetalle");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.Pasaporte", b =>

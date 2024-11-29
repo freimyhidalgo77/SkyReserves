@@ -20,6 +20,8 @@ namespace SkyReserves.Models
 
         public int NumeroPasajeros { get; set; }
 
-    
+        public ICollection<AsientoDetalle> AsientoDetalle { get; set; } = new List<AsientoDetalle>();
+
+
     }
 }
