@@ -266,7 +266,7 @@ namespace SkyReserves.Migrations
                 columns: new[] { "Id", "Password", "Role", "UserName" },
                 values: new object[,]
                 {
-                    { 1, "Arajet", "Admin", "Araject@gmail.com" },
+                    { 1, "Arajet", "Admin", "Arajet@gmail.com" },
                     { 2, "Cliente", "User", "Cliente@gmail.com" }
                 });
 
