@@ -2,9 +2,8 @@
 @inject OrigenService origenService
 @inject NavigationManager navigation
 
-
-<PageTitle>Crear vuelo de Origen </PageTitle>
-<EditForm Model="Origen" OnValidSubmit="Crear">
+<PageTitle>Crear vuelo de Origen</PageTitle>
+<EditForm Model="Origen" OnValidSubmit="Crear" FormName="crearOrigenForm">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="container">
@@ -15,12 +14,11 @@
             <div class="card-body">
 
                 <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
-                <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly></InputNumber>
-
+                <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly />
 
                 <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
                 <InputText id="Fecha" class="form-control" @bind-Value="Origen.origen"></InputText>
-                <ValidationMessage For="@(() => Origen.origen)" />
+                <ValidationMessage For="@(() => Origen.origen)"></ValidationMessage>
 
             </div>
 
@@ -32,52 +30,49 @@
     </div>
 </EditForm>
 
-
-
 @code {
-
-
     public Origen Origen { get; set; } = new Origen();
     public List<Origen> origenList { get; set; } = new List<Origen>();
     public string Mensaje { get; set; } = string.Empty;
-    //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
-
 
     protected override async Task OnInitializedAsync()
     {
-        var origen = await origenService.Listar(o => o.OrigenId > 0);
-
+        // Inicializa la lista de orígenes, aunque no es necesario en esta página específica
+        await CargarOrigenes();
     }
-
 
     private async Task Crear()
     {
-        var origen = new Origen
-            {
-                OrigenId = Origen.OrigenId,
-                origen = Origen.origen
-
-            };
-
-        var crear = await origenService.Guardar(Origen);
-
-        if (crear)
+        // Asegúrate de que el modelo está correctamente validado
+        if (Origen == null || string.IsNullOrWhiteSpace(Origen.origen))
         {
-            Origen = new Origen();
-            navigation.NavigateTo("/Origen/Index");
+            // Mostrar mensaje si no se introduce el origen
+            Mensaje = "El origen es obligatorio.";
+            return;
         }
-        else
-        {
-            Mensaje = "No se ha creado correctamente la cotización";
-        }
+
+        // Guarda el nuevo origen
+        await origenService.Guardar(Origen);
+
+        // Resetea el modelo de Origen
+        Origen = new Origen();
+
+        // Vuelve a cargar la lista de orígenes para reflejar el nuevo registro
+        await CargarOrigenes();
+
+        // Redirige a la página de índice
+        navigation.NavigateTo("/Origen/Index");
     }
 
+    private async Task CargarOrigenes()
+    {
+        // Recarga la lista de orígenes después de la creación
+        origenList = await origenService.Listar(o => o.OrigenId > 0);
+    }
 
     public void Volver()
     {
-        // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
+        // Redirige a la página de reservas si el usuario presiona el botón "Volver"
         navigation.NavigateTo("/Reserva/Index");
     }
-
-
 }

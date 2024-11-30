@@ -77,7 +77,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var reserva = await origenService.Listar(o => o.OrigenId > 0);
+        origenList = await origenService.Listar(o => o.OrigenId > 0);
 
     }
 

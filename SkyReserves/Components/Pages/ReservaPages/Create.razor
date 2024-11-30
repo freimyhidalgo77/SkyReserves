@@ -4,17 +4,12 @@
 @inject DestinoService destinoService
 @inject AsientoService asientosService
 @inject NavigationManager navigation
+<link rel="stylesheet" href="/Style/Reserve.css" />
 
 <PageTitle>Crear Reserva</PageTitle>
 <EditForm Model="Reserva" OnValidSubmit="Crear">
     <DataAnnotationsValidator />
     <ValidationSummary />
-
-    <div class="card-image-top">
-        <img src="https://images.prismic.io/arajet-ezycommerce/b93f72da-5043-4605-8682-9b60bfee38dd_Logo_web_Arajet.png"
-             alt="Vista aérea"
-             style="width: 100%; height: 300px; object-fit: cover;" />
-    </div>
 
     <div class="container">
         <div class="card shadow-lg">
@@ -95,8 +90,8 @@
 
     <div class="container">
         <div class="card-footer text-center">
-            <button type="button" class="btn btn-danger bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
-            <button type="submit" class="btn btn-success bi bi-floppy-fill"> Guardar Reserva</button>
+            <button type="button" class="bi bi-arrow-90deg-left" style="background-color: purple; color: white; border: none;" @onclick="Volver"> Volver</button>
+            <button type="submit" class="bi bi-floppy-fill" style="background-color: purple; color: white; border: none;"> Guardar Reserva</button>
         </div>
     </div>
 </EditForm>
