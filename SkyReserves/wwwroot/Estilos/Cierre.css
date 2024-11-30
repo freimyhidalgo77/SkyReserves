@@ -1,4 +1,7 @@
-﻿
+﻿html, body {
+    font-family: 'Times New Roman', Times, serif;
+}
+
 
 body {
     height: 100vh;
@@ -45,4 +48,6 @@ body {
 
     .btn:hover {
         background-color: #9b59b6;
-        .corner-label
+    }
+
+

@@ -78,6 +78,9 @@ body {
     display: flex;
     justify-content: center;
 }
+html, body {
+    font-family: 'Times New Roman', Times, serif;
+}
 
 .form-control {
     width: 70%;

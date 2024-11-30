@@ -1,0 +1,38 @@
+﻿html, body {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+
+.card-body .text-center span {
+    color: #f44336; 
+    font-size: 2.5rem; 
+    font-weight: 700; 
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+    letter-spacing: 1px; 
+}
+
+
+.card-body .text-center img {
+    max-height: 6rem; 
+    margin-bottom: 20px; 
+    opacity: 0.8; 
+    border-radius: 50%; 
+    transition: opacity 0.3s ease; 
+}
+
+   
+    .card-body .text-center img:hover {
+        opacity: 1; 
+    }
+
+ 
+body {
+    background: url('/Imagenes/Arajet.png') no-repeat center center fixed;
+    background-size: cover; 
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
