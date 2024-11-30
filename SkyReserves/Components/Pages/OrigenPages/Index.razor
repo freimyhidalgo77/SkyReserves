@@ -1,4 +1,5 @@
 ﻿@page "/Origen/Index"
+@rendermode InteractiveServer
 @inject OrigenService origenService
 
 <PageTitle>Origen</PageTitle>
@@ -52,7 +53,7 @@
                     </td>
 
                     <td class="text-center">
-                        <a href="/Origen/Delete/@origen.origen" class="btn btn-outline-danger bi bi-trash"></a>
+                        <a href="/Origen/Delete/@origen.OrigenId" class="btn btn-outline-danger bi bi-trash"></a>
                     </td>
                 </tr>
             }

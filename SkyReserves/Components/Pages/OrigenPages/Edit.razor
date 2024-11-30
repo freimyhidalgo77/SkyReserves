@@ -1,10 +1,11 @@
 ﻿@page "/Origen/Edit/{OrigenId:int}"
+@rendermode InteractiveServer
 @inject OrigenService origenService
 @inject NavigationManager navigation
 
 
 <PageTitle>Modificar vuelo de Destino </PageTitle>
-<EditForm Model="Origen" OnValidSubmit="Crear">
+<EditForm Model="Origen" OnValidSubmit="ModificarOrigen">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="container">
@@ -47,33 +48,21 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var origen = await origenService.Buscar(OrigenId);
+        Origen = await origenService.Buscar(OrigenId);
 
     }
 
 
-    private async Task Crear()
+    public async Task ModificarOrigen()
     {
-        var origen = new Origen
-            {
-                OrigenId = Origen.OrigenId,
-                origen = Origen.origen
 
-            };
+        // Toast.Notify(new(ToastType.Success, "Hora Guardada", "Horario registrado correctamente"));
+        await origenService.Modificar(Origen);
+        Origen = new Origen();
+        await Task.Delay(4000);
+        navigation.NavigateTo("/Origen/Index");
 
-        var crear = await origenService.Guardar(origen);
-
-        if (crear)
-        {
-            Origen = new Origen();
-            navigation.NavigateTo("/Origen/Index");
-        }
-        else
-        {
-            Mensaje = "No se ha creado correctamente la cotización";
-        }
     }
-
 
 
 

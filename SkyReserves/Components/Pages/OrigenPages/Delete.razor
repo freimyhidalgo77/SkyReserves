@@ -22,7 +22,7 @@
 	</div>
 
 	<div class="card-footer">
-		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarCliente">Eliminar</button>
+		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarOrigen">Eliminar</button>
 		<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
 	</div>
 </div>
@@ -35,16 +35,16 @@
 	[Parameter]
 	public int OrigenId { get; set; }
 	public List<Origen> origenList { get; set; } = new List<Origen>();
-	public Origen? origen;
+	public Origen origen { get; set; } = new Origen();
 	public string mensaje { get; set; } = string.Empty;
 
 	protected override async Task OnInitializedAsync()
 	{
-		var origen = await origenService.Buscar(OrigenId);
+		origen = await origenService.Buscar(OrigenId);
 	}
 
 
-	public async Task ElimnarCliente()
+	public async Task ElimnarOrigen()
 	{
 		if (origen != null)
 		{
@@ -67,3 +67,4 @@
 		navigation.NavigateTo("/Origen/Index");
 	}
 }
+
