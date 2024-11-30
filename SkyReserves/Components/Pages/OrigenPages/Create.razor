@@ -1,6 +1,7 @@
 ﻿@page "/Origen/Create"
 @inject OrigenService origenService
 @inject NavigationManager navigation
+@rendermode InteractiveServer
 <link rel="stylesheet" href="/Style/OrigenCreate.css" />
 
 <PageTitle>Crear vuelo de Origen</PageTitle>
@@ -16,9 +17,9 @@
                 <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
                 <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly />
 
-                <label class="form-label" for="Origen"><strong>Origen del Vuelo</strong></label>
-                <InputText id="Origen" class="form-control" @bind-Value="Origen.origen"></InputText>
-                <ValidationMessage For="@(() => Origen.origen)" />
+                <label class="form-label" for="origen"><strong>Origen del Vuelo</strong></label>
+                <InputText id="origen" class="form-control" @bind-Value="Origen.origen"></InputText>
+                <ValidationMessage For="@(()=> Origen.origen)"></ValidationMessage>
 
             </div>
 
@@ -31,38 +32,32 @@
 </EditForm>
 
 @code {
+
+    
     public Origen Origen { get; set; } = new Origen();
+    public List<Origen> origenList { get; set; } = new List<Origen>();
     public string Mensaje { get; set; } = string.Empty;
 
-    private async Task Crear()
+    protected override async Task OnInitializedAsync()
     {
-        if (string.IsNullOrWhiteSpace(Origen.origen))
-        {
-            Mensaje = "El origen es obligatorio.";
-            return;
-        }
-
-        try
-        {
-            bool guardado = await origenService.Guardar(Origen);
-            if (guardado)
-            {
-                Mensaje = string.Empty; // Limpia cualquier mensaje de validación
-                navigation.NavigateTo("/Origen/Index"); // Redirige tras guardar exitosamente.
-            }
-            else
-            {
-                Mensaje = "No se pudo guardar el origen.";
-            }
-        }
-        catch (Exception ex)
-        {
-            Mensaje = $"Error al guardar el origen: {ex.Message}";
-        }
+        origenList = await origenService.Listar(c => c.OrigenId > 0);
     }
 
+    public async Task Crear()
+    {
+        
+           // Toast.Notify(new(ToastType.Success, "Hora Guardada", "Horario registrado correctamente"));
+            await origenService.Guardar(Origen);
+            Origen = new Origen();
+            await Task.Delay(4000);
+            navigation.NavigateTo("/Origen/Index");
+        
+    }
+
+   
     public void Volver()
     {
+        // Redirige a la página de reservas si el usuario presiona el botón "Volver"
         navigation.NavigateTo("/Origen/Index");
     }
 }
