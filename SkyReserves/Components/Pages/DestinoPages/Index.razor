@@ -1,4 +1,5 @@
 ﻿@page "/Destino/Index"
+@rendermode InteractiveServer
 @inject DestinoService destinoservice
 
 <PageTitle>Destino</PageTitle>
@@ -77,7 +78,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var reserva = await destinoservice.Listar(o => o.DestinoId > 0);
+        destinoList = await destinoservice.Listar(d => true);
 
     }
 

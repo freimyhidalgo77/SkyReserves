@@ -1,4 +1,4 @@
-﻿@page "/Destino/Delete"
+﻿@page "/Destino/Delete/{DestinoId:int}"
 @rendermode InteractiveServer
 @inject DestinoService destinoService
 @inject NavigationManager navigation
@@ -35,12 +35,12 @@
 	[Parameter]
 	public int DestinoId { get; set; }
 	public List<Destino> destinoList { get; set; } = new List<Destino>();
-	public Destino? destino;
+	public Destino destino { get; set; } = new Destino();
 	public string mensaje { get; set; } = string.Empty;
 
 	protected override async Task OnInitializedAsync()
 	{
-		var destino = await destinoService.Buscar(DestinoId);
+		 destino = await destinoService.Buscar(DestinoId);
 	}
 
 
