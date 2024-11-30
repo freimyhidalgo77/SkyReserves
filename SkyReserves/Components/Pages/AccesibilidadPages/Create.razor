@@ -1,6 +1,7 @@
 ﻿@page "/Accesibilidad/Create"
 @inject AccesibilidadService accesibilidadService
 @inject NavigationManager navigation
+<link rel="stylesheet" href="/Style/Accesibilidad.css" />
 
 <PageTitle>Crear Accesibilidad </PageTitle>
 <EditForm Model="Accesibilidad" OnValidSubmit="Crear">
@@ -24,7 +25,7 @@
             </div>
 
             <div class="card-footer">
-                <button type="button" class="btn btn-info text-white bi bi-90deg-left" @onclick="Volver">Volver</button>
+                <button type="button" class="btn btn-info text-whie bi bi-90deg-left" @onclick="Volver">Volver</button>
                 <button type="submit" class="btn btn-success text-white bi bi-floppy-fill">Crear</button>
             </div>
         </div>

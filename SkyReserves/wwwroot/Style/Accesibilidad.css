@@ -1,0 +1,33 @@
+﻿body {
+    width: 600px; /* Ancho fijo de 600px */
+    height: 600px; /* Alto fijo de 600px */
+    margin: 0 auto; /* Centra el body en la pantalla */
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("/ImagenesFondo/Accesibilidad.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+.container {
+    background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco con opacidad */
+    width: 80%; /* Aumenta el ancho al 80% del viewport */
+    max-width: 1200px; /* Limita el ancho máximo a 1200px */
+    padding: 40px; /* Aumenta el espacio interno */
+    border-radius: 8px; /* Bordes redondeados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más visible */
+    margin: 20px auto; /* Espaciado superior e inferior */
+}
+
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente para las tarjetas */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
