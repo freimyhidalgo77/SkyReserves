@@ -74,7 +74,9 @@ namespace SkyReserves.Migrations
                 {
                     HoraID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    horaViaje = table.Column<double>(type: "float", nullable: false)
+                    Descripcion = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    HoraInicio = table.Column<TimeSpan>(type: "time", nullable: false),
+                    HoraFin = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
