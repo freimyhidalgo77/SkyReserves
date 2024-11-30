@@ -20,7 +20,7 @@ namespace SkyReserves.Service
             return await context.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> Modificar(Hora hora)
+        public async Task<bool> Modificar(Hora hora)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             context.Hora.Update(hora);

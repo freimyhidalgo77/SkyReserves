@@ -1,3 +1,4 @@
+using BlazorBootstrap;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using SkyReserves.Components;
@@ -27,6 +28,7 @@ builder.Services.AddScoped<PasaporteService>();
 builder.Services.AddScoped<PasaporteDetalleService>();
 builder.Services.AddScoped<ReservaService>();
 builder.Services.AddScoped<VuelosEspecialesService>();
+builder.Services.AddSingleton<ToastService>();
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
