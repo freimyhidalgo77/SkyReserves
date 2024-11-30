@@ -54,7 +54,7 @@
             </div>
             <div class="card-body">
                 <SeleccionarAsientoPicker ListaAsientos="AsientoList"
-                                          AsientoSeleccionado="AgregarAsiento" />
+                AsientoSeleccionado="AgregarAsiento" />
 
                 <hr />
 
@@ -140,19 +140,19 @@
 
     private async Task Crear()
     {
-        if (!AsientosSeleccionados.Any())
+        if (AsientosSeleccionados.Any())
         {
             // Agregar validación si no se han seleccionado asientos
             return;
         }
 
         // Crear la reserva solo con los detalles básicos
-        var reservaGuardada = await reservaService.Guardar(Reserva);
-
-        if (reservaGuardada)
-        {
+        await reservaService.Guardar(Reserva);
+        Reserva = new Reserva();
+        
+        
             navigation.NavigateTo("/Reserva/Index");
-        }
+        
     }
 
     private void Volver()

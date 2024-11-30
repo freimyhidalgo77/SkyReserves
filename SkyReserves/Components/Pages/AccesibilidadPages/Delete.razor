@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject AccesibilidadService accesibilidadService
 @inject NavigationManager navigation
+<link rel="stylesheet" href="/Style/Accesibilidad.css?v=1.0" />
 
 
 <PageTitle>Accesibilidad Pasajero</PageTitle>
@@ -11,19 +12,20 @@
 			<h3><strong>Eliminar accesibilidad</strong></h3>
 		</div>
 		<div class="card-body">
-			<h5><strong>Est&aacute;s seguro que deseas eliminar este vuelo destino de vuelo?</strong></h5>
+			<h5><strong>Est&aacute;s seguro que deseas eliminar esta accesibilidad?</strong></h5>
 			<div class="mb-1">
-				<p><strong>Destino vuelo ID:</strong>@accesibilidad?.AccesibilidadId</p>
+				<p><strong>Accesibilidad ID:</strong>@accesibilidad?.AccesibilidadId</p>
 			</div>
 			<div class="mb-1">
-				<p><strong>Destino:</strong>@accesibilidad?.Descripcion</p>
+				<p><strong>Descripcion:</strong>@accesibilidad?.Descripcion</p>
 			</div>
 		</div>
 	</div>
 
 	<div class="card-footer">
+		<button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
 		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarAccecibilidad">Eliminar</button>
-		<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
+		
 	</div>
 </div>
 

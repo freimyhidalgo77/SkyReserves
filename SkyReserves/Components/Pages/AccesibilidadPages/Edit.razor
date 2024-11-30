@@ -2,16 +2,18 @@
 @rendermode InteractiveServer
 @inject AccesibilidadService accesibilidadService
 @inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/AccesibilidadEdit.css" />
 
 
 <PageTitle>Modificar vuelo de Destino </PageTitle>
-<EditForm Model="Accesibilidad" OnValidSubmit="Crear">
+<EditForm Model="Accesibilidad" OnValidSubmit="Modificar">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <h1><strong>Crear Vuelo</strong></h1>
+                <h1><strong>Modificar accesibilidad</strong></h1>
             </div>
             <div class="card-body">
 
@@ -26,8 +28,8 @@
             </div>
 
             <div class="card-footer">
-                <button type="button" class="btn btn-info text-white bi bi-90deg-left" @onclick="Volver">Volver</button>
-                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill">Crear</button>
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modifcar</button>
             </div>
         </div>
     </div>
@@ -51,35 +53,30 @@
     }
 
 
-    private async Task Crear()
+    public async Task<bool> Validar()
     {
-        var accesibilidad = new Accesibilidad
-            {
-                AccesibilidadId = Accesibilidad.AccesibilidadId,
-                Descripcion = Accesibilidad.Descripcion
-
-            };
-
-        var crear = await accesibilidadService.Guardar(accesibilidad);
-
-        if (crear)
-        {
-            Accesibilidad = new Accesibilidad();
-            navigation.NavigateTo("/Accesibilidad/Index");
-        }
-        else
-        {
-            Mensaje = "No se ha creado correctamente la cotización";
-        }
+        var accesibilidadExiste = await accesibilidadService.BuscarAccesibilidad(Accesibilidad.Descripcion);
+        return accesibilidadExiste == null;
     }
 
 
 
+    public async Task Modificar()
+    {
+        if (await Validar())
+        {
+
+            Toast.Notify(new(ToastType.Success, "Accesibilidad Guardada", "La accesibilidad se ha guardado con exito!"));
+            await accesibilidadService.Guardar(Accesibilidad);
+            Accesibilidad = new Accesibilidad();
+            navigation.NavigateTo("/Accesibilidad/Index");
+        }
+    }
+
 
     public void Volver()
     {
-        // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
-        navigation.NavigateTo("/Reserva/Index");
+        navigation.NavigateTo("/Accesibilidad/Index");
     }
 
 }

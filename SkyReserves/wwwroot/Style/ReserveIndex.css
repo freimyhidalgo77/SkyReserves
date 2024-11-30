@@ -6,7 +6,7 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-image: url("/ImagenesFondo/AccesibilidadAirport.png");
+    background-image: url("/ImagenesFondo/AJB737F.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -63,21 +63,12 @@ label {
     vertical-align: middle;
 }
 
-/* Botones morados */
-.btn-success,
-.btn-outline-warning,
-.btn-outline-danger {
+/* Botón "Reservar" y "Buscar" estilizados */
+.btn-success {
     background-color: purple;
     color: white;
     border: none;
-    transition: background-color 0.3s ease;
 }
-
-    .btn-success:hover,
-    .btn-outline-warning:hover,
-    .btn-outline-danger:hover {
-        background-color: #5a2e92; /* Morado más oscuro al hacer hover */
-    }
 
 /* Espaciado entre botones */
 button {
