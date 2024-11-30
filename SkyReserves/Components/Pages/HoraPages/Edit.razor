@@ -1,0 +1,133 @@
+﻿@page "/Hora/Edit/{HoraId:int}"
+@rendermode InteractiveServer
+@inject ToastService Toast
+@inject HoraService horaService
+@inject NavigationManager navigation
+<link rel="stylesheet" href="/Estilos/Create.css" />
+
+<PageTitle>Editar Horario</PageTitle>
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<EditForm Model="Hora" OnValidSubmit="Modificar">
+    <DataAnnotationsValidator />
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5 class="card-title">Editar Horario</h5>
+            </div>
+
+            <div class="card-body">
+                @* ID del Horario *@
+                <div class="mb-3">
+                    <label for="id" class="form-label"><strong>ID</strong></label>
+                    <InputNumber class="form-control" @bind-Value="Hora.HoraID" readonly></InputNumber>
+                </div>
+
+                @* Descripción *@
+                <div class="mb-3">
+                    <label for="Descripcion" class="form-label"><strong>Descripci&oacute;n</strong></label>
+                    <InputText class="form-control" @bind-Value="Hora.Descripcion" />
+                    <ValidationMessage For="@(() => Hora.Descripcion)" />
+                </div>
+
+                @* Hora de Inicio *@
+                <div class="mb-3">
+                    <label for="HoraInicio" class="form-label"><strong>Hora de Inicio</strong></label>
+                    <InputText class="form-control" @bind-Value="HoraInicioString" />
+                    <ValidationMessage For="@(() => Hora.HoraInicio)" />
+                </div>
+
+                @* Hora de Fin *@
+                <div class="mb-3">
+                    <label for="HoraFin" class="form-label"><strong>Hora de Fin</strong></label>
+                    <InputText class="form-control" @bind-Value="HoraFinString" />
+                    <ValidationMessage For="@(() => Hora.HoraFin)" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(Mensaje))
+                {
+                    <div class="alert alert-warning mt-3" role="alert">
+                        @Mensaje
+                    </div>
+                }
+            </div>
+
+            <div class="card-footer">
+                <a href="/Hora/Index" class="btn btn-secondary text-white bi bi-arrow-90deg-left"> Volver</a>
+                <button type="submit" class="btn btn-success bi bi-pencil-square"> Modificar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int HoraId { get; set; }
+
+    public Hora Hora { get; set; } = new Hora();
+    public string Mensaje { get; set; } = string.Empty;
+
+    public string HoraInicioString
+    {
+        get => Hora.HoraInicio.ToString(@"hh\:mm");
+        set
+        {
+            if (TimeSpan.TryParse(value, out var result))
+            {
+                Hora.HoraInicio = result;
+            }
+            else
+            {
+                Toast.Notify(new(ToastType.Danger, "La Hora de Inicio no es válida"));
+            }
+        }
+    }
+
+    public string HoraFinString
+    {
+        get => Hora.HoraFin.ToString(@"hh\:mm");
+        set
+        {
+            if (TimeSpan.TryParse(value, out var result))
+            {
+                Hora.HoraFin = result;
+            }
+            else
+            {
+                Toast.Notify(new(ToastType.Danger, "La Hora de Fin no es válida"));
+            }
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (HoraId > 0)
+        {
+            Hora = await horaService.Buscar(HoraId);
+        }
+    }
+
+    public async Task<bool> Validar()
+    {
+        if (Hora.HoraInicio >= Hora.HoraFin)
+        {
+            Toast.Notify(new(ToastType.Danger, "La Hora de Inicio debe ser anterior a la Hora de Fin"));
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task Modificar()
+    {
+        if (await Validar())
+        {
+            Toast.Notify(new(ToastType.Success, "Horario actualizado correctamente"));
+            await horaService.Modificar(Hora);
+            Hora = new Hora();
+            await Task.Delay(4000);
+            navigation.NavigateTo("/Hora/Index");
+        }
+    }
+}

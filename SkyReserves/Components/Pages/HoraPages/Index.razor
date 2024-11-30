@@ -1,0 +1,108 @@
+﻿@page "/Hora/Index"
+@using SkyReserves.Models
+@using SkyReserves.Service
+@rendermode InteractiveServer
+@inject HoraService horaService
+@inject NavigationManager navigation
+<link rel="stylesheet" href="/Estilos/Horas.css" />
+
+<PageTitle>Horas de Vuelos</PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Horas de Vuelos</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                        <option value="id">ID</option>
+                        <option value="Descripcion">Descripción</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="input-group">
+                        <InputText id="valorFiltro" @bind-Value="valorFiltro" class="form-control" placeholder="Buscar" />
+                        <button @onclick="Buscar" class="btn btn-secondary bi bi-search" type="button"> Buscar</button>
+                    </div>
+                </div>
+            </div>
+
+            <a href="Hora/Create" class="btn btn-success bi bi-plus-square-fill mt-3"> Crear</a>
+
+         
+            <table class="table table-hover">
+                <thead class="table table-striped text-center text-black">
+                    <tr>
+                        <th>HoraID</th>
+                        <th>Descripci&oacute;n</th>
+                        <th>Hora de Inicio</th>
+                        <th>Hora de Fin</th>
+                        <th>Duraci&oacute;n (horas)</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var hora in horas)
+                    {
+                        <tr>
+                            <td class="text-center">@hora.HoraID</td>
+                            <td class="text-center">@hora.Descripcion</td>
+                            <td class="text-center">@hora.HoraInicio</td>
+                            <td class="text-center">@hora.HoraFin</td>
+                            <td class="text-center">@hora.Duracion</td>
+                            <td class="text-center">
+                                <a href="/Hora/Edit/@hora.HoraID" class="btn btn-outline-dark bi bi-pencil-square"></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="/Hora/Delete/@hora.HoraID" class="btn btn-outline-dark bi bi-trash"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Hora> horas = new List<Hora>();
+    public string filtro = "id";
+    public string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Cargar todas las horas al iniciar
+        horas = await horaService.Listar(a => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            switch (filtro)
+            {
+                case "id":
+                    if (int.TryParse(valorFiltro, out int id))
+                    {
+                        horas = await horaService.Listar(w => w.HoraID == id);
+                    }
+                    break;
+
+                case "Descripcion":
+                    horas = await horaService.Listar(w => w.Descripcion.ToLower().Contains(valorFiltro.ToLower()));
+                    break;
+            }
+        }
+        else
+        {
+            // Si no hay filtro, cargar todas las horas
+            horas = await horaService.Listar(a => true);
+        }
+    }
+}

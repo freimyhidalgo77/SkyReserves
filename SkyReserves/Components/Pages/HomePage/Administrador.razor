@@ -1,0 +1,42 @@
+﻿@page "/AdminDashboard"
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Authorization
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+<link rel="stylesheet" href="/Estilos/Menu.css" />
+
+<AuthorizeView Roles="Admin">
+    <Authorized>
+        <div class="container mt-4">
+            <h2 class="text-center mb-4">Bienvenido Administrador</h2>
+            <div class="d-flex justify-content-center gap-4">
+               
+                <div class="menu-item text-center">
+                    <img src="/Imagenes/MenuPrincipal.jpg" alt="Men&uacute; Principal"
+                         class="img-fluid mb-3" style="max-width: 200px; height: auto; border-radius: 10px;">
+                    <a href="/MenuPrincipal" class="btn btn-primary d-block">Men&uacute; Principal</a>
+                </div>
+
+            
+                <div class="menu-item text-center">
+                    <img src="/Imagenes/MenuSecundario.jpeg" alt="Men&uacute; Secundario"
+                         class="img-fluid mb-3" style="max-width: 200px; height: auto; border-radius: 10px;">
+                    <a href="/MenuSecundario" class="btn btn-secondary d-block">Men&uacute; Secundario</a>
+                </div>
+            </div>
+        </div>
+    </Authorized>
+</AuthorizeView>
+
+@code {
+    private async Task CheckUserRoleAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+
+        if (!user.IsInRole("Admin"))
+        {
+            Navigation.NavigateTo("/access-denied");
+        }
+    }
+}

@@ -1,0 +1,81 @@
+﻿@page "/MenuSecundario"
+@using SkyReserves.Models
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+<link rel="stylesheet" href="/Estilos/Cierre.css" />
+
+<AuthorizeView Roles="Admin">
+    <div class="container d-flex flex-column align-items-center mt-3 text-center">
+        <div class="corner-label">
+            <span><a class="fw-bolder" href="/logout">Cerrar sesi&oacute;n</a></span>
+        </div>
+
+        <div class="row mb-3">
+            <h2 class="mb-2">Configuraciones del Administrador</h2>
+        </div>
+
+        <div class="row justify-content-center">
+            @foreach (var flight in GetFilteredFlightDeals())
+            {
+                <div class="col-md-3 mb-4 d-flex justify-content-center">
+                    <div class="card h-100 text-center">
+                        <img src="@flight.ImageUrl" class="card-img-top flight-img" alt="Flight Image">
+                        <div class="card-body d-flex flex-column align-items-center">
+                            <p class="card-text">@flight.Description</p>
+                            <a href="/Hora/Index" class="btn btn-primary mt-auto">Book Now</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</AuthorizeView>
+
+<AuthorizeView>
+    <NotAuthorized>
+        @code {
+        protected override async Task OnInitializedAsync()
+        {
+            var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+            var isAdmin = user.User?.IsInRole("Admin") ?? false;
+
+            if (!isAdmin)
+            {
+                Navigation.NavigateTo("/access-denied");
+            }
+        }
+        }
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private List<FlightDeal> flightDeals = new List<FlightDeal>
+    {
+        new FlightDeal
+        {
+            ImageUrl = "/Imagenes/PuntaCana.jpeg",
+            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
+        },
+        new FlightDeal
+        {
+            ImageUrl = "/Imagenes/Bogota.jpg",
+            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
+        },
+        new FlightDeal
+        {
+            ImageUrl = "/Imagenes/Dorado-park.jpg",
+            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
+        }
+    };
+
+    private List<FlightDeal> GetFilteredFlightDeals()
+    {
+        return flightDeals.ToList();
+    }
+
+    public class FlightDeal
+    {
+        public string ImageUrl { get; set; }
+        public string Description { get; set; }
+    }
+}
