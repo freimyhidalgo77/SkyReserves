@@ -1,10 +1,14 @@
 ﻿@page "/Accesibilidad/Index"
 @rendermode InteractiveServer
 @inject AccesibilidadService accesibilidadService
+<link rel="stylesheet" href="/Style/AccesibilidadIndex.css" />
 
 <PageTitle>Accesibilidad</PageTitle>
-<h3><strong>Sky Reserve</strong></h3>
-
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="catrd-header text-center">
+<h3><strong>Accesibilidades Para Pasajeros</strong></h3>
+   
 <!-- Header -->
 <div class="row mb-3 align-items-end">
     <div class="col-md-3">
@@ -27,8 +31,8 @@
             <a href="/Accesibilidad/Create" class="btn btn-success bi bi-plus-square ms-2" style="background-color: purple; color: white; border: none;"> Reservar</a>
         </div>
     </div>
+ </div>
 </div>
-
 
 <!-- Body -->
 <div class="table-responsive">
@@ -61,8 +65,13 @@
     </table>
     <div class="card-footer">
         <p><strong>Total de Accesibilidades: </strong>@accesibilidadList?.Count</p>
-    </div>
-</div>
+         </div>
+       </div>
+     </div>
+  </div>
+
+
+
 
 
 

@@ -1,0 +1,61 @@
+﻿body {
+    width: 100%; /* Ajusta el ancho del cuerpo al viewport */
+    height: 100vh; /* Usa toda la altura del viewport */
+    margin: 0; /* Elimina márgenes por defecto */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("/ImagenesFondo/AccesibilidadAirport.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+.container {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo casi opaco */
+    width: 90%; /* Ocupa el 90% del ancho del viewport */
+    max-width: 1200px; /* Limita el ancho máximo */
+    padding: 20px; /* Reduce ligeramente el espaciado interno */
+    border-radius: 12px; /* Bordes más redondeados */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* Sombra más pronunciada */
+    margin: 20px auto; /* Espaciado superior e inferior */
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.95); /* Fondo semi-transparente más sólido */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Sombra sutil */
+}
+
+.card-header {
+    background-color: rgba(0, 123, 255, 0.1); /* Color de encabezado con transparencia */
+    padding: 10px;
+    border-radius: 8px 8px 0 0; /* Bordes redondeados solo arriba */
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-footer {
+    text-align: center;
+    padding: 10px;
+    background-color: rgba(0, 123, 255, 0.1); /* Fondo del pie */
+    border-radius: 0 0 8px 8px;
+}
+
+button {
+    margin: 5px; /* Espaciado entre botones */
+}
+
+h1 {
+    color: #333; /* Texto oscuro para mejor visibilidad */
+    font-size: 1.8rem; /* Tamaño del encabezado */
+    font-weight: bold;
+}
+
+label {
+    font-weight: bold;
+    color: #555; /* Color de texto ligeramente oscuro */
+}

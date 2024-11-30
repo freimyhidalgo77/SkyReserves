@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject AccesibilidadService accesibilidadService
 @inject NavigationManager navigation
+@inject ToastService Toast
 <link rel="stylesheet" href="/Style/Accesibilidad.css" />
 
 <PageTitle>Crear Accesibilidad </PageTitle>
@@ -53,11 +54,13 @@
     }
 
 
-    //Metodo para crear un nuevo tecnico
+ 
     public async Task Crear()
     {
         if (await Validar())
         {
+
+            Toast.Notify(new(ToastType.Success, "Accesibilidad Guardada", "La accesibilidad se ha guardado con exito!"));
             await accesibilidadService.Guardar(Accesibilidad);
             Accesibilidad = new Accesibilidad();
             navigation.NavigateTo("/Accesibilidad/Index");
@@ -67,7 +70,7 @@
 
     public void Volver()
     {
-        // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
+        Toast.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
         navigation.NavigateTo("/Accesibilidad/Index");
 
     }
