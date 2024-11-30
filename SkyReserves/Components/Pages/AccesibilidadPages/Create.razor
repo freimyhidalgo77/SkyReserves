@@ -7,7 +7,6 @@
 <PageTitle>Crear Accesibilidad </PageTitle>
 <EditForm Model="Accesibilidad" OnValidSubmit="Crear">
     <DataAnnotationsValidator />
-    <ValidationSummary />
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
@@ -44,29 +43,24 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var accesibilidad = await accesibilidadService.Listar(o => o.AccesibilidadId > 0);
+        accesibilidadList = await accesibilidadService.Listar(o => o.AccesibilidadId > 0);
+    }
+
+    public async Task<bool> Validar()
+    {
+        var accesibilidadExiste = await accesibilidadService.BuscarAccesibilidad(Accesibilidad.Descripcion);
+        return accesibilidadExiste == null;
     }
 
 
-    private async Task Crear()
+    //Metodo para crear un nuevo tecnico
+    public async Task Crear()
     {
-        var accesibilidad = new Accesibilidad
-            {
-                AccesibilidadId = Accesibilidad.AccesibilidadId,
-                Descripcion = Accesibilidad.Descripcion
-
-            };
-
-        var crear = await accesibilidadService.Guardar(Accesibilidad);
-
-        if (crear)
+        if (await Validar())
         {
+            await accesibilidadService.Guardar(Accesibilidad);
             Accesibilidad = new Accesibilidad();
             navigation.NavigateTo("/Accesibilidad/Index");
-        }
-        else
-        {
-            Mensaje = "No se ha creado correctamente la descripcion de la accesibilidad";
         }
     }
 

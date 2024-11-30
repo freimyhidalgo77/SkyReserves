@@ -53,6 +53,14 @@ namespace SkyReserves.Service
                 .FirstOrDefaultAsync(e => e.AccesibilidadId == id);
         }
 
+        public async Task<Accesibilidad?> BuscarAccesibilidad(string descripcion)
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            return await context.Accesibilidad  
+                .FirstOrDefaultAsync(e => e.Descripcion == descripcion);
+        }
+      
+
         public async Task<List<Accesibilidad>> Listar(Expression<Func<Accesibilidad, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();

@@ -1,4 +1,5 @@
-﻿@page "/Accesibilidad/Edit{AccesibilidadId:int}"
+﻿@page "/Accesibilidad/Edit/{AccesibilidadId:int}"
+@rendermode InteractiveServer
 @inject AccesibilidadService accesibilidadService
 @inject NavigationManager navigation
 
@@ -45,7 +46,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var accesibilidad = await accesibilidadService.Buscar(AccesibilidadId);
+        Accesibilidad = await accesibilidadService.Buscar(AccesibilidadId);
 
     }
 

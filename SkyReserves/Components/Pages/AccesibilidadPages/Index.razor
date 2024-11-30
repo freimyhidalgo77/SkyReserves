@@ -1,4 +1,5 @@
 ﻿@page "/Accesibilidad/Index"
+@rendermode InteractiveServer
 @inject AccesibilidadService accesibilidadService
 
 <PageTitle>Accesibilidad</PageTitle>
@@ -48,18 +49,18 @@
                     <td class="text-center">@accesibilidad.AccesibilidadId</td>
                     <td class="text-center">@accesibilidad.Descripcion</td>
                     <td class="text-center">
-                        <a href="/Origen/Edit/@accesibilidad.AccesibilidadId" class="btn btn-outline-warning bi bi-pencil-square"></a>
+                        <a href="/Accesibilidad/Edit/@accesibilidad.AccesibilidadId" class="btn btn-outline-warning bi bi-pencil-square"></a>
                     </td>
 
                     <td class="text-center">
-                        <a href="/Origen/Delete/@accesibilidad.AccesibilidadId" class="btn btn-outline-danger bi bi-trash"></a>
+                        <a href="/Accesibilidad/Delete/@accesibilidad.AccesibilidadId" class="btn btn-outline-danger bi bi-trash"></a>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
     <div class="card-footer">
-        <p><strong>Total de Reservas: </strong>@accesibilidadList?.Count</p>
+        <p><strong>Total de Accesibilidades: </strong>@accesibilidadList?.Count</p>
     </div>
 </div>
 
@@ -77,7 +78,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        var reserva = await accesibilidadService.Listar(o => o.AccesibilidadId > 0);
+        accesibilidadList =  await accesibilidadService.Listar(o => o.AccesibilidadId > 0);
 
     }
 
