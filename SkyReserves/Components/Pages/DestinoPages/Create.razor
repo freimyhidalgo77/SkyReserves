@@ -2,8 +2,9 @@
 @inject DestinoService destinoService
 @inject NavigationManager navigation
 
-<PageTitle>Crear vuelo de Destino </PageTitle>
-<EditForm Model="Destino" OnValidSubmit="Crear">
+<PageTitle>Crear vuelo de Destino</PageTitle>
+
+<EditForm Model="Destino" OnValidSubmit="Crear" FormName="crearDestinoForm">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="container">
@@ -12,15 +13,12 @@
                 <h1><strong>Crear Vuelo</strong></h1>
             </div>
             <div class="card-body">
-
-                <label class="form-label" for="OrigenId"><strong>Destino ID:</strong></label>
-                <InputNumber id="OrigenId" class="form-control" @bind-Value="Destino.DestinoId" readonly></InputNumber>
-
+                <label class="form-label" for="DestinoId"><strong>Destino ID:</strong></label>
+                <InputNumber id="DestinoId" class="form-control" @bind-Value="Destino.DestinoId" readonly />
 
                 <label class="form-label" for="Fecha"><strong>Destino del Vuelo</strong></label>
-                <InputText id="Fecha" class="form-control" @bind-Value="Destino.destino"></InputText>
+                <InputText id="Fecha" class="form-control" @bind-Value="Destino.destino" />
                 <ValidationMessage For="@(() => Destino.destino)" />
-
             </div>
 
             <div class="card-footer">
@@ -31,56 +29,46 @@
     </div>
 </EditForm>
 
-
-
-
 @code {
-
     public Destino Destino { get; set; } = new Destino();
-    public List<Destino> destinoList { get; set; } = new List<Destino>();
+    public List<Destino> destinoLits { get; set; } = new List<Destino>();
     public string Mensaje { get; set; } = string.Empty;
-    //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
-
 
     protected override async Task OnInitializedAsync()
     {
-        var origen = await destinoService.Listar(o => o.DestinoId > 0);
-
+        destinoLits = await destinoService.Listar(d => d.DestinoId > 0);
     }
-
 
     private async Task Crear()
     {
+        if (string.IsNullOrWhiteSpace(Destino.destino))
+        {
+            Mensaje = "El destino no puede estar vacío.";
+            return;
+        }
+
         var destino = new Destino
             {
                 DestinoId = Destino.DestinoId,
                 destino = Destino.destino
-
             };
 
         var crear = await destinoService.Guardar(destino);
 
         if (crear)
         {
-            Destino = new Destino();
-            navigation.NavigateTo("/Origen/Index");
+            Mensaje = "Destino creado correctamente.";
+            Destino = new Destino();  // Limpiar el formulario
+            navigation.NavigateTo("/Destino/Index");
         }
         else
         {
-            Mensaje = "No se ha creado correctamente la cotización";
+            Mensaje = "No se ha creado correctamente el destino.";
         }
     }
 
-
-
-
     public void Volver()
     {
-        // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
-        navigation.NavigateTo("/Reserva/Index");
-
-
+        navigation.NavigateTo("/D/Index");
     }
-
-
 }
