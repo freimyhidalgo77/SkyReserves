@@ -37,10 +37,13 @@
                     }
                 </InputSelect>
 
+
+                @*Llamar clase vuelo y hora tambien*@
+
                 <label class="form-label" for="NumeroPasajeros"><strong>Número de Pasajeros</strong></label>
                 <div class="input-group">
                     <button class="btn btn-outline-secondary" type="button" @onclick="DecrementarPasajeros">-</button>
-                    <InputNumber id="NumeroPasajeros" class="form-control" @bind-Value="Reserva.NumeroPasajeros" min="1" />
+                    <InputNumber id="NumeroPasajeros" class="form-control" @bind-Value="Reserva.NumeroPasajeros" min="1" readonly />
                     <button class="btn btn-outline-secondary" type="button" @onclick="IncrementarPasajeros">+</button>
                 </div>
             </div>
@@ -103,6 +106,8 @@
     public List<Destino> DestinoList { get; set; } = new List<Destino>();
     public List<Asiento> AsientoList { get; set; } = new List<Asiento>();
     public List<Asiento> AsientosSeleccionados { get; set; } = new List<Asiento>();
+   // public List<ClaseVuelo> ClaseVueloList { get; set; } = new List<ClaseVuelo>();
+   //public List<Hora> HoraList { get; set; } = new List<Hora>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -149,9 +154,7 @@
         // Crear la reserva solo con los detalles básicos
         await reservaService.Guardar(Reserva);
         Reserva = new Reserva();
-        
-        
-            navigation.NavigateTo("/Reserva/Index");
+        navigation.NavigateTo("/Reserva/Index");
         
     }
 
