@@ -1,93 +1,121 @@
 ﻿@page "/Destino/Index"
 @rendermode InteractiveServer
-@inject DestinoService destinoservice
+@inject DestinoService destinoService
+<link rel="stylesheet" href="/Style/Destino/DestinoIndex.css" />
 
 <PageTitle>Destino</PageTitle>
-<h3><strong>Sky Reserve</strong></h3>
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h3><strong>Destinos de vuelo </strong></h3>
+        </div>
 
-<!-- Header -->
-<div class="row mb-3 align-items-end">
-    <div class="col-md-3">
-        <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
-        <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
-            <option value="" disabled>Seleccionar</option>
-            <option value="ReservaID">Reserva ID</option>
-            <option value="">Fecha</option>
+        <!-- Header -->
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                    <option value="" disabled>Seleccionar</option>
+                    <option value="DestinoId">Destino ID</option>
+                    <option value="DestinoVuelo">Destino de Vuelo</option>
+                </InputSelect>
+            </div>
 
-        </InputSelect>
-    </div>
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
+                <div class="input-group">
+                    <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-success" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                    <a href="/Destino/Create" class="btn btn-success bi bi-plus-square"> Crear</a>
+                </div>
+            </div>
+        </div>
 
-    <div class="col-md-6">
-        <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
-        <div class="input-group">
-            <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
-            <button @onclick="Buscar" class="btn btn-success" type="button" style="background-color: purple; color: white; border: none;">
-                <span class="bi bi-search"></span> Buscar
-            </button>
-            <a href="/Destino/Create" class="btn btn-success bi bi-plus-square ms-2" style="background-color: purple; color: white; border: none;"> Reservar</a>
+
+        <!-- Body -->
+        <div class="table-responsive">
+            <table class="table table-light table-bordered">
+                <thead class="table table-striped text-center table-bordered mt-3">
+                    <tr>
+                        <th>Destino ID</th>
+                        <th>Destino de Vuelo</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @foreach (var destino in destinoList)
+                    {
+                        <tr>
+                            <td class="text-center">@destino.DestinoId</td>
+                            <td class="text-center">@destino.destino</td>
+                            <td class="text-center">
+                                <a href="/Destino/Edit/@destino.DestinoId" class="btn btn-outline-warning bi bi-pencil-square"></a>
+                            </td>
+
+                            <td class="text-center">
+                                <a href="/Destino/Delete/@destino.DestinoId" class="btn btn-outline-danger bi bi-trash"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="card-footer">
+                <p><strong>Total de Destinos de vuelos creados: </strong>@destinoList?.Count</p>
+            </div>
         </div>
     </div>
 </div>
 
 
-<!-- Body -->
-<div class="table-responsive">
-    <table class="table table-light table-bordered">
-        <thead class="table table-striped text-center table-bordered mt-3">
-            <tr>
-                <th>Destino ID</th>
-                <th>Destino Vuelo</th>
-                <th>Editar</th>
-                <th>Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (var destino in destinoList)
-            {
-                <tr>
-                    <td class="text-center">@destino.DestinoId</td>
-                    <td class="text-center">@destino.destino</td>
-                    <td class="text-center">
-                        <a href="/Destino/Edit/@destino.DestinoId" class="btn btn-outline-warning bi bi-pencil-square"></a>
-                    </td>
-
-                    <td class="text-center">
-                        <a href="/DEstino/Delete/@destino.DestinoId" class="btn btn-outline-danger bi bi-trash"></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <div class="card-footer">
-        <p><strong>Total de Reservas: </strong>@destinoList?.Count</p>
-    </div>
-</div>
-
-
-
 
 @code {
 
-
     Destino Destino { get; set; } = new Destino();
     List<Destino> destinoList { get; set; } = new List<Destino>();
+    List<Destino> destinoFiltro { get; set; } = new List<Destino>();
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
 
     protected override async Task OnInitializedAsync()
     {
-        destinoList = await destinoservice.Listar(d => true);
+        destinoFiltro = await destinoService.Listar(o => o.DestinoId > 0);
+        destinoList = destinoFiltro;
 
     }
-
     public void Buscar()
     {
+        if (string.IsNullOrWhiteSpace(filtro) || string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            destinoList = destinoFiltro;
+            return;
+        }
 
+        switch (filtro)
+        {
+            case "DestinoId":
+                if (int.TryParse(ValorFiltro, out int id))
+                {
+                    destinoList = destinoFiltro
+                        .Where(a => a.DestinoId == id)
+                        .ToList();
+                }
+                break;
+
+            case "DestinoVuelo":
+                destinoList = destinoFiltro
+                    .Where(a => a.destino != null && a.destino.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                break;
+
+            default:
+                destinoList = destinoFiltro;
+                break;
+        }
     }
-
-
-
 
 }

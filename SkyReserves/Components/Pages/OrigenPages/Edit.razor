@@ -29,7 +29,7 @@
 
             <div class="card-footer">
                 <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
-                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill">Crear</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modificar</button>
             </div>
         </div>
     </div>
@@ -45,7 +45,7 @@
     public Origen Origen { get; set; } = new Origen();
     public List<Origen> destinoList { get; set; } = new List<Origen>();
     public string Mensaje { get; set; } = string.Empty;
-    //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
+  
 
 
     protected override async Task OnInitializedAsync()
@@ -54,23 +54,28 @@
 
     }
 
+    public async Task<bool> Validar()
+    {
+        var origenExiste = await origenService.BuscarOrigen(Origen.origen);
+        return origenExiste == null;
+    }
+
 
     public async Task ModificarOrigen()
     {
+        if (await Validar())
+        {
 
-        // Toast.Notify(new(ToastType.Success, "Hora Guardada", "Horario registrado correctamente"));
-        await origenService.Modificar(Origen);
-        Origen = new Origen();
-        await Task.Delay(4000);
-        navigation.NavigateTo("/Origen/Index");
-
+            Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardada", "El origen de vuelo se ha guardado con exito!"));
+            await origenService.Guardar(Origen);
+            Origen = new Origen();
+            navigation.NavigateTo("/Origen/Index");
+        }
     }
-
 
 
     public void Volver()
     {
-        // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
         navigation.NavigateTo("/Origen/Index");
     }
 

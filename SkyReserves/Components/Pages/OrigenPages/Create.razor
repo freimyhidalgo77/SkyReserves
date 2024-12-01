@@ -25,8 +25,8 @@
             </div>
 
             <div class="card-footer">
-                <button type="button" class="bi bi-arrow-90deg-left" style="background-color: purple; color: white; border: none;" @onclick="Volver"> Volver</button>
-                <button type="submit" class="bi bi-floppy-fill" style="background-color: purple; color: white; border: none;"> Guardar </button>
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Crear</button>
             </div>
         </div>
     </div>
@@ -46,8 +46,8 @@
 
     public async Task<bool> Validar()
     {
-        var accesibilidadExiste = await origenService.BuscarOrigen(Origen.origen);
-        return accesibilidadExiste == null;
+        var origenExiste = await origenService.BuscarOrigen(Origen.origen);
+        return origenExiste == null;
     }
 
 
@@ -57,7 +57,7 @@
         if (await Validar())
         {
 
-            Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardada", "El origen de vuelo se ha guardado con exito!"));
+            Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardado", "El origen de vuelo se ha guardado con exito!"));
             await origenService.Guardar(Origen);
             Origen = new Origen();
             navigation.NavigateTo("/Origen/Index");

@@ -2,16 +2,17 @@
 @rendermode InteractiveServer
 @inject DestinoService destinoService
 @inject NavigationManager navigation
-
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Destino/DestinoCreate.css" />
 
 <PageTitle>Modificar vuelo de Destino </PageTitle>
-<EditForm Model="Destino" OnValidSubmit="Crear">
+<EditForm Model="Destino" OnValidSubmit="ModificarDestino">
     <DataAnnotationsValidator />
     <ValidationSummary />
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <h1><strong>Crear Vuelo</strong></h1>
+                <h1><strong>Modificar destino de Vuelo</strong></h1>
             </div>
             <div class="card-body">
 
@@ -26,8 +27,8 @@
             </div>
 
             <div class="card-footer">
-                <button type="button" class="btn btn-info text-white bi bi-90deg-left" @onclick="Volver">Volver</button>
-                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill">Crear</button>
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modificar</button>
             </div>
         </div>
     </div>
@@ -41,7 +42,6 @@
     public Destino Destino { get; set; } = new Destino();
     public List<Destino> destinoList { get; set; } = new List<Destino>();
     public string Mensaje { get; set; } = string.Empty;
-    //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
 
 
     protected override async Task OnInitializedAsync()
@@ -50,26 +50,22 @@
 
     }
 
-
-    private async Task Crear()
+    public async Task<bool> Validar()
     {
-        var destino = new Destino
-            {
-                DestinoId = Destino.DestinoId,
-                destino = Destino.destino
+        var destinoExiste = await destinoService.BuscarDestino(Destino.destino);
+        return destinoExiste == null;
+    }
 
-            };
 
-        var crear = await destinoService.Guardar(destino);
-
-        if (crear)
+    public async Task ModificarDestino()
+    {
+        if (await Validar())
         {
+
+            Toast.Notify(new(ToastType.Primary, "Destino de vuelo Modificado", "El destino de vuelo se ha modificado con exito!"));
+            await destinoService.Guardar(Destino);
             Destino = new Destino();
             navigation.NavigateTo("/Destino/Index");
-        }
-        else
-        {
-            Mensaje = "No se ha creado correctamente la cotización";
         }
     }
 
@@ -78,7 +74,6 @@
 
     public void Volver()
     {
-        // toastService.Notify(new(ToastType.Danger, "Exito!", "Ah vuelto correctamente"));
         navigation.NavigateTo("/Destino/Index");
     }
 

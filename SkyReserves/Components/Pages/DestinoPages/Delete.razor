@@ -2,6 +2,8 @@
 @rendermode InteractiveServer
 @inject DestinoService destinoService
 @inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Destino/DestinoCreate.css" />
 
 
 <PageTitle>Destino de vuelo</PageTitle>
@@ -22,8 +24,10 @@
 	</div>
 
 	<div class="card-footer">
-		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarDestino">Eliminar</button>
-		<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
+		<button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
+		<button type="button" class="btn btn-purple bi bi-trash" @onclick="ElimnarDestino">Eliminar</button>
+
+		
 	</div>
 </div>
 
@@ -53,11 +57,11 @@
 			if (eliminado)
 			{
 				navigation.NavigateTo("/Destino/Index");
-				//toastService.Notify(new(ToastType.Danger, "Cliente eliminado con exito!"));
+				Toast.Notify(new(ToastType.Danger, "Destino de vuelo eliminado", "El destino de vuelo se ha eliminado correctamnete"));
 			}
 			else
 			{
-				mensaje = "No se pudo eliminar el destino";
+				Toast.Notify(new(ToastType.Warning, "Error al eliminar el destino de vuelo", "El destino de vuelo no se pudo eliminar correctamente"));
 			}
 		}
 

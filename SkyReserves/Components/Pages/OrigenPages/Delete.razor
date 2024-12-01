@@ -23,12 +23,11 @@
 	</div>
 
 	<div class="card-footer">
-		<button type="button" class="btn btn-outline-info bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
-		<button type="button" class="btn btn-outline-trash" @onclick="ElimnarOrigen">Eliminar</button>
-	
+		<button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
+		<button type="submit" class="btn btn-danger text-white bi bi-trash" @onclick="ElimnarOrigen"> Eliminar</button>
+
 	</div>
 </div>
-
 
 
 @code {
@@ -54,11 +53,11 @@
 			if (eliminado)
 			{
 				navigation.NavigateTo("/Origen/Index");
-				//toastService.Notify(new(ToastType.Danger, "Cliente eliminado con exito!"));
+				Toast.Notify(new(ToastType.Danger, "Origen Eliminado", "El origen se ha eliminado con exito!"));
 			}
 			else
 			{
-				mensaje = "No se pudo eliminar el cliente";
+				Toast.Notify(new(ToastType.Warning, "Error al eliminar el origen!", "El origen no pudo eliminarse"));
 			}
 		}
 

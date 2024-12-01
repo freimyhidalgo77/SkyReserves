@@ -2,16 +2,16 @@
 @rendermode InteractiveServer
 @inject DestinoService destinoService
 @inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Destino/DestinoCreate.css" />
 
 <PageTitle>Crear vuelo de Destino</PageTitle>
-
 <EditForm Model="Destino" OnValidSubmit="Crear" FormName="crearDestinoForm">
     <DataAnnotationsValidator />
-    <ValidationSummary />
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <h1><strong>Crear Vuelo</strong></h1>
+                <h1><strong>Crear destino de Vuelo</strong></h1>
             </div>
             <div class="card-body">
                 <label class="form-label" for="DestinoId"><strong>Destino ID:</strong></label>
@@ -23,8 +23,8 @@
             </div>
 
             <div class="card-footer">
-                <button type="button" class="btn btn-info text-white bi bi-90deg-left" @onclick="Volver">Volver</button>
-                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill">Crear</button>
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Crear</button>
             </div>
         </div>
     </div>
@@ -40,36 +40,33 @@
         destinoLits = await destinoService.Listar(d => d.DestinoId > 0);
     }
 
-    private async Task Crear()
+    public async Task<bool> Validar()
     {
-        if (string.IsNullOrWhiteSpace(Destino.destino))
+        var destinoExiste = await destinoService.BuscarDestino(Destino.destino);
+        if (destinoExiste != null)
         {
-            Mensaje = "El destino no puede estar vacío.";
-            return;
+            Toast.Notify(new (ToastType.Warning, "Error al guardar el vuelo!", "El destino de vuelo ya existe!"));
+            return false; 
         }
 
-        var destino = new Destino
-            {
-                DestinoId = Destino.DestinoId,
-                destino = Destino.destino
-            };
+        return true; 
+    }
 
-        var crear = await destinoService.Guardar(destino);
 
-        if (crear)
+    public async Task Crear()
+    {
+        if (await Validar())
         {
-            Mensaje = "Destino creado correctamente.";
-            Destino = new Destino();  // Limpiar el formulario
+
+            Toast.Notify(new(ToastType.Success, "Destino de vuelo Guardado", "El destino de vuelo se ha guardado con exito!"));
+            await destinoService.Guardar(Destino);
+            Destino = new Destino();
             navigation.NavigateTo("/Destino/Index");
-        }
-        else
-        {
-            Mensaje = "No se ha creado correctamente el destino.";
         }
     }
 
     public void Volver()
     {
-        navigation.NavigateTo("/D/Index");
+        navigation.NavigateTo("/Destino/Index");
     }
 }

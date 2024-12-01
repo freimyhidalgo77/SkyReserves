@@ -4,7 +4,7 @@ body {
     height: 100vh;
     margin: 0;
     padding: 0;
-    background-image: url("/ImagenesFondo/Playa.png");
+    background-image: url("/ImagenesFondo/BeautyCity.png");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
@@ -46,7 +46,8 @@ body {
 
 /* Botones morados */
 .btn-info,
-.btn-success {
+.btn-success,
+.btn-purple {
     background-color: purple;
     color: white;
     border: none;
@@ -54,7 +55,8 @@ body {
 }
 
     .btn-info:hover,
-    .btn-success:hover {
+    .btn-success:hover,
+    .btn-purple:hover {
         background-color: #5a2e92;
     }
 
@@ -75,6 +77,3 @@ body {
     color: red;
     font-size: 0.875rem;
 }
-
-
-

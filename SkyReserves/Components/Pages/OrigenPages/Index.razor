@@ -8,64 +8,64 @@
     <div class="card shadow-lg">
         <div class="card-header text-center">
             <h3><strong>Origenes de vuelo </strong></h3>
-     </div>
-
-<!-- Header -->
-<div class="row mb-3 align-items-end">
-    <div class="col-md-3">
-        <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
-        <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
-            <option value="" disabled>Seleccionar</option>
-            <option value="ReservaID">Reserva ID</option>
-            <option value="">Fecha</option>
-        </InputSelect>
-    </div>
-
-    <div class="col-md-6">
-        <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
-        <div class="input-group">
-            <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
-            <button @onclick="Buscar" class="btn btn-success" type="button" style="background-color: purple; color: white; border: none;">
-                <span class="bi bi-search"></span> Buscar
-            </button>
-            <a href="/Origen/Create" class="btn btn-success bi bi-plus-square ms-2" style="background-color: purple; color: white; border: none;"> Crear</a>
         </div>
-    </div>
-</div>
+
+        <!-- Header -->
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                    <option value="" disabled>Seleccionar</option>
+                    <option value="OrigenID">Origen ID</option>
+                    <option value="OrigenVuelo">Origen de Vuelo</option>
+                </InputSelect>
+            </div>
+
+            <div class="col-md-6">
+                <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
+                <div class="input-group">
+                    <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
+                    <button @onclick="Buscar" class="btn btn-success" type="button">
+                        <span class="bi bi-search"></span> Buscar
+                    </button>
+                    <a href="/Origen/Create" class="btn btn-success bi bi-plus-square"> Crear</a>
+                </div>
+            </div>
+        </div>
 
 
-<!-- Body -->
-<div class="table-responsive">
-    <table class="table table-light table-bordered">
-        <thead class="table table-striped text-center table-bordered mt-3">
-            <tr>
-                <th>Origen ID</th>
-                <th>Origen Vuelo</th>
-                <th>Editar</th>
-                <th>Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
+        <!-- Body -->
+        <div class="table-responsive">
+            <table class="table table-light table-bordered">
+                <thead class="table table-striped text-center table-bordered mt-3">
+                    <tr>
+                        <th>Origen ID</th>
+                        <th>Origen de Vuelo</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
 
-            @foreach (var origen in origenList)
-            {
-                <tr>
-                    <td class="text-center">@origen.OrigenId</td>
-                    <td class="text-center">@origen.origen</td>
-                    <td class="text-center">
-                        <a href="/Origen/Edit/@origen.OrigenId" class="btn btn-outline-warning bi bi-pencil-square"></a>
-                    </td>
+                    @foreach (var origen in origenList)
+                    {
+                        <tr>
+                            <td class="text-center">@origen.OrigenId</td>
+                            <td class="text-center">@origen.origen</td>
+                            <td class="text-center">
+                                <a href="/Origen/Edit/@origen.OrigenId" class="btn btn-outline-warning bi bi-pencil-square"></a>
+                            </td>
 
-                    <td class="text-center">
-                        <a href="/Origen/Delete/@origen.OrigenId" class="btn btn-outline-danger bi bi-trash"></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <div class="card-footer">
-        <p><strong>Total de Reservas: </strong>@origenList?.Count</p>
-           </div>
+                            <td class="text-center">
+                                <a href="/Origen/Delete/@origen.OrigenId" class="btn btn-outline-danger bi bi-trash"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="card-footer">
+                <p><strong>Total de Origenes de vuelos creados: </strong>@origenList?.Count</p>
+            </div>
         </div>
     </div>
 </div>
@@ -78,20 +78,46 @@
 
     Origen Origen { get; set; } = new Origen();
     List<Origen> origenList { get; set; } = new List<Origen>();
+    List<Origen> origenFiltro { get; set; } = new List<Origen>();
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
 
     protected override async Task OnInitializedAsync()
     {
-        origenList = await origenService.Listar(o => o.OrigenId > 0);
+        origenFiltro = await origenService.Listar(o => o.OrigenId > 0);
+        origenList = origenFiltro;
 
     }
-
     public void Buscar()
     {
+        if (string.IsNullOrWhiteSpace(filtro) || string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            origenList = origenFiltro; 
+            return;
+        }
 
+        switch (filtro)
+        {
+            case "OrigenID":
+                if (int.TryParse(ValorFiltro, out int id))
+                {
+                    origenList = origenFiltro
+                        .Where(a => a.OrigenId == id)
+                        .ToList();
+                }
+                break;
+
+            case "OrigenVuelo":
+                origenList = origenFiltro
+                    .Where(a => a.origen != null && a.origen.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                break;
+
+            default:
+                origenList = origenFiltro;
+                break;
+        }
     }
-
 
 }

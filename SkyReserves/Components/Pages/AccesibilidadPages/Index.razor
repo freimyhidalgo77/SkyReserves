@@ -10,33 +10,29 @@
             <h3><strong>Accesibilidades Para Pasajeros</strong></h3>
         </div>
 
-        <!-- Contenedor de búsqueda y filtro -->
-        <div class="card-body">
-            <div class="search-bar-container">
-                <!-- Filtro -->
-                <div>
-                    <label for="Filtro" class="form-label"><strong>Filtrar por</strong></label>
-                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
-                        <option value="" disabled>Seleccionar</option>
-                        <option value="AccesibilidadId">Reserva ID</option>
-                        <option value="Descripcion">Descripción</option>
-                    </InputSelect>
-                </div>
-
-                <!-- Barra de búsqueda -->
-                <div class="input-group">
-                    <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
-                    <button @onclick="Buscar" class="btn btn-success" type="button">
-                        <span class="bi bi-search"></span> Buscar
-                    </button>
-                </div>
-
-                <!-- Botón de reserva -->
-                <a href="/Accesibilidad/Create" class="btn btn-success bi bi-plus-square"> Crear</a>
+        <div class="row mb-3 align-items-end">
+            <div class="col-md-3">
+                <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                    <option value="" disabled>Seleccionar</option>
+                    <option value="AccesibilidadId">Accesibilidad ID</option>
+                    <option value="Descripcion"> Descripcion</option>
+                </InputSelect>
             </div>
-        </div>
 
-        <!-- Tabla de accesibilidades -->
+                <div class="col-md-6">
+                    <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
+                    <div class="input-group">
+                        <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
+                        <button @onclick="Buscar" class="btn btn-success" type="button">
+                            <span class="bi bi-search"></span> Buscar
+                        </button>
+                        <a href="/Accesibilidad/Cresate" class="btn btn-success bi bi-plus-square"> Crear</a>
+                    </div>
+                </div>
+            </div>
+
+          
         <div class="table-responsive">
             <table class="table table-light table-bordered">
                 <thead class="table table-striped text-center table-bordered mt-3">
@@ -72,11 +68,9 @@
                     }
                 </tbody>
             </table>
-        </div>
-
-        <!-- Pie de la tarjeta -->
         <div class="card-footer">
             <p><strong>Total de Accesibilidades: </strong>@accesibilidadList?.Count</p>
+            </div>
         </div>
     </div>
 </div>
