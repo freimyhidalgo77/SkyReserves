@@ -19,7 +19,7 @@
                     <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
                         <option value="" disabled>Seleccionar</option>
                         <option value="AccesibilidadId">Reserva ID</option>
-                        <option value="">Fecha</option>
+                        <option value="Descripcion">Descripción</option>
                     </InputSelect>
                 </div>
 
@@ -48,17 +48,26 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var accesibilidad in accesibilidadList)
+                    @if (accesibilidadList != null && accesibilidadList.Any())
+                    {
+                        @foreach (var accesibilidad in accesibilidadList)
+                        {
+                            <tr>
+                                <td class="text-center">@accesibilidad.AccesibilidadId</td>
+                                <td class="text-center">@accesibilidad.Descripcion</td>
+                                <td class="text-center">
+                                    <a href="/Accesibilidad/Edit/@accesibilidad.AccesibilidadId" class="btn btn-outline-warning bi bi-pencil-square"></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Accesibilidad/Delete/@accesibilidad.AccesibilidadId" class="btn btn-outline-danger bi bi-trash"></a>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td class="text-center">@accesibilidad.AccesibilidadId</td>
-                            <td class="text-center">@accesibilidad.Descripcion</td>
-                            <td class="text-center">
-                                <a href="/Accesibilidad/Edit/@accesibilidad.AccesibilidadId" class="btn btn-outline-warning bi bi-pencil-square"></a>
-                            </td>
-                            <td class="text-center">
-                                <a href="/Accesibilidad/Delete/@accesibilidad.AccesibilidadId" class="btn btn-outline-danger bi bi-trash"></a>
-                            </td>
+                            <td colspan="4" class="text-center">No se encontraron resultados.</td>
                         </tr>
                     }
                 </tbody>
@@ -75,16 +84,44 @@
 @code {
     Accesibilidad Accesibilidad { get; set; } = new Accesibilidad();
     List<Accesibilidad> accesibilidadList { get; set; } = new List<Accesibilidad>();
+    List<Accesibilidad> accesibilidadListCompleta { get; set; } = new List<Accesibilidad>();
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
-        accesibilidadList = await accesibilidadService.Listar(o => o.AccesibilidadId > 0);
+        accesibilidadListCompleta = await accesibilidadService.Listar(o => o.AccesibilidadId > 0);
+        accesibilidadList = accesibilidadListCompleta;
     }
 
     public void Buscar()
     {
-        // Implementación de búsqueda
+        if (string.IsNullOrWhiteSpace(filtro) || string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            accesibilidadList = accesibilidadListCompleta; // Mostrar todo si no hay filtro o búsqueda
+            return;
+        }
+
+        switch (filtro)
+        {
+            case "AccesibilidadId":
+                if (int.TryParse(ValorFiltro, out int id))
+                {
+                    accesibilidadList = accesibilidadListCompleta
+                        .Where(a => a.AccesibilidadId == id)
+                        .ToList();
+                }
+                break;
+
+            case "Descripcion":
+                accesibilidadList = accesibilidadListCompleta
+                    .Where(a => a.Descripcion != null && a.Descripcion.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                break;
+
+            default:
+                accesibilidadList = accesibilidadListCompleta; // Mostrar todo si el filtro no es válido
+                break;
+        }
     }
 }

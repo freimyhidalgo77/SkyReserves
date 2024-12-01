@@ -2,7 +2,8 @@
 @inject OrigenService origenService
 @inject NavigationManager navigation
 @rendermode InteractiveServer
-<link rel="stylesheet" href="/Style/OrigenCreate.css" />
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Origen/OrigenCreate.css" />
 
 <PageTitle>Crear vuelo de Origen</PageTitle>
 <EditForm Model="Origen" OnValidSubmit="Crear" FormName="crearOrigenForm">
@@ -43,15 +44,24 @@
         origenList = await origenService.Listar(c => c.OrigenId > 0);
     }
 
+    public async Task<bool> Validar()
+    {
+        var accesibilidadExiste = await origenService.BuscarOrigen(Origen.origen);
+        return accesibilidadExiste == null;
+    }
+
+
+
     public async Task Crear()
     {
-        
-           // Toast.Notify(new(ToastType.Success, "Hora Guardada", "Horario registrado correctamente"));
+        if (await Validar())
+        {
+
+            Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardada", "El origen de vuelo se ha guardado con exito!"));
             await origenService.Guardar(Origen);
             Origen = new Origen();
-            await Task.Delay(4000);
             navigation.NavigateTo("/Origen/Index");
-        
+        }
     }
 
    

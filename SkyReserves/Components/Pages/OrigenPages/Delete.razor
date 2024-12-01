@@ -2,7 +2,8 @@
 @rendermode InteractiveServer
 @inject OrigenService origenService
 @inject NavigationManager navigation
-
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Origen/OrigenCreate.css" />
 
 <PageTitle>Origen de vuelo</PageTitle>
 <div class="container">
@@ -22,8 +23,9 @@
 	</div>
 
 	<div class="card-footer">
-		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarOrigen">Eliminar</button>
-		<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
+		<button type="button" class="btn btn-outline-info bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+		<button type="button" class="btn btn-outline-trash" @onclick="ElimnarOrigen">Eliminar</button>
+	
 	</div>
 </div>
 

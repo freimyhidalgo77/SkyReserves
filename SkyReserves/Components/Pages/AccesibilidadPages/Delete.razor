@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @inject AccesibilidadService accesibilidadService
 @inject NavigationManager navigation
+@inject ToastService Toast
 <link rel="stylesheet" href="/Style/Accesibilidad.css?v=1.0" />
 
 
@@ -51,6 +52,7 @@
 	{
 		if (accesibilidad != null)
 		{
+			Toast.Notify(new(ToastType.Danger, "Accesibilidad Eliminada", "La accesibilidad se ha eliminado con exito!"));
 			var eliminado = await accesibilidadService.Eliminar(AccesibilidadId);
 			if (eliminado)
 			{
