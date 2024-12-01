@@ -57,7 +57,13 @@
     public async Task<bool> Validar()
     {
         var origenExiste = await origenService.BuscarOrigen(Origen.origen);
-        return origenExiste == null;
+        if (origenExiste != null)
+        {
+            Toast.Notify(new(ToastType.Warning, "Error al crear el origen de vuelo", "Este origen ya existe cambie el origen de vuelo"));
+            return false;
+        }
+
+        return true;
     }
 
 

@@ -52,13 +52,17 @@
 
     }
 
-
     public async Task<bool> Validar()
     {
         var accesibilidadExiste = await accesibilidadService.BuscarAccesibilidad(Accesibilidad.Descripcion);
-        return accesibilidadExiste == null;
-    }
+        if (accesibilidadExiste != null)
+        {
+            Toast.Notify(new(ToastType.Warning, "Error al modificar la accesibilidad", "Esta accesibilidad ya existe cambie la accesibilidad para pasajeros"));
+            return false;
+        }
 
+        return true;
+    }
 
 
     public async Task Modificar()

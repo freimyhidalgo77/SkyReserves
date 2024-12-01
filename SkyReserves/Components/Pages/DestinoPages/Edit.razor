@@ -53,8 +53,15 @@
     public async Task<bool> Validar()
     {
         var destinoExiste = await destinoService.BuscarDestino(Destino.destino);
-        return destinoExiste == null;
+        if (destinoExiste != null)
+        {
+            Toast.Notify(new(ToastType.Warning, "Error al modificar el destino de vuelo", "Este destino ya existe cambie el destino de vuelo"));
+            return false;
+        }
+
+        return true;
     }
+
 
 
     public async Task ModificarDestino()

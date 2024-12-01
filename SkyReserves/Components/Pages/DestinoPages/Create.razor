@@ -45,7 +45,7 @@
         var destinoExiste = await destinoService.BuscarDestino(Destino.destino);
         if (destinoExiste != null)
         {
-            Toast.Notify(new (ToastType.Warning, "Error al guardar el vuelo!", "El destino de vuelo ya existe!"));
+            Toast.Notify(new (ToastType.Warning, "Error al crear el destino de vuelo", "Este destino ya existe!"));
             return false; 
         }
 
