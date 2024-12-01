@@ -5,6 +5,7 @@
 @inject DestinoService destinoService
 @inject AsientoService asientosService
 @inject NavigationManager navigation
+@inject ToastService Toast
 <link rel="stylesheet" href="/Style/Reserve.css" />
 
 <PageTitle>Crear Reserva</PageTitle>
@@ -145,18 +146,28 @@
 
     private async Task Crear()
     {
-        if (AsientosSeleccionados.Any())
+        if (!AsientosSeleccionados.Any())
         {
-            // Agregar validación si no se han seleccionado asientos
-            return;
+            Toast.Notify(new(ToastType.Warning, "No se han seleccionado asientos", "Por favor seleccione al menos un asiento."));
+            
         }
 
-        // Crear la reserva solo con los detalles básicos
+      
         await reservaService.Guardar(Reserva);
+
+ 
+        foreach (var asiento in AsientosSeleccionados)
+        {
+     
+          //  await reservaService.Guardar(Reserva.ReservaId, asiento.AsientoId);  // Ejemplo de llamada
+            
+        }
+
         Reserva = new Reserva();
-        navigation.NavigateTo("/Reserva/Index");
-        
+        AsientosSeleccionados.Clear();  // Limpiar la lista de asientos seleccionados
+        navigation.NavigateTo("/Reserva/Index"); // Redirigir al listado de reservas
     }
+
 
     private void Volver()
     {

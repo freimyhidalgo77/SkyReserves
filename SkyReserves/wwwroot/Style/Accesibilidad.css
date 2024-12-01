@@ -1,68 +1,68 @@
 ﻿/* Estilo para el cuerpo de la página */
 body {
-    width: 100%; /* Ancho completo de la ventana */
-    height: 100vh; /* Ocupa todo el alto de la ventana */
-    margin: 0; /* Elimina los márgenes por defecto */
+    width: 100%;
+    height: 100vh; 
+    margin: 0; 
     padding: 0;
     display: flex;
-    align-items: center; /* Centra verticalmente */
-    justify-content: center; /* Centra horizontalmente */
-    background-image: url("/ImagenesFondo/Accesibilidad.png"); /* Imagen de fondo */
-    background-repeat: no-repeat; /* No se repite */
-    background-size: cover; /* Cubre toda la pantalla */
-    background-position: center; /* Centra la imagen */
-    background-attachment: fixed; /* Fija la imagen al hacer scroll */
+    align-items: center; 
+    justify-content: center; 
+    background-image: url("/ImagenesFondo/Accesibilidad.png");
+    background-repeat: no-repeat; 
+    background-size: cover; 
+    background-position: center;
+    background-attachment: fixed; 
 }
 
 /* Estilo para el contenedor principal */
 .container {
-    background-color: rgba(255, 255, 255, 0.8); /* Fondo blanco con opacidad */
-    width: 80%; /* Ocupa el 80% del ancho de la pantalla */
-    max-width: 1200px; /* Ancho máximo de 1200px */
-    padding: 40px; /* Espacio interno más amplio */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más visible */
-    margin: 20px auto; /* Centra el contenedor y agrega margen */
+    background-color: rgba(255, 255, 255, 0.8); 
+    width: 80%; 
+    max-width: 1200px; 
+    padding: 40px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    margin: 20px auto; 
 }
 
 /* Estilo para las tarjetas de formulario */
 .card {
-    background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semi-transparente */
-    border-radius: 8px; /* Bordes redondeados */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra sutil */
-    padding: 20px; /* Agrega un poco de espacio dentro de la tarjeta */
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px; 
 }
 
 /* Estilo para el encabezado de la tarjeta */
 .card-header {
-    text-align: center; /* Centra el texto */
-    background-color: #f8f9fa; /* Color de fondo gris claro */
-    border-bottom: 1px solid #ddd; /* Línea divisoria en la parte inferior */
+    text-align: center; 
+    background-color: #f8f9fa; 
+    border-bottom: 1px solid #ddd; 
     padding: 15px;
 }
 
 /* Estilo para el pie de la tarjeta */
 .card-footer {
-    background-color: #f8f9fa; /* Fondo gris claro para el pie */
-    text-align: center; /* Centra los botones */
+    background-color: #f8f9fa; 
+    text-align: center; 
     padding: 10px;
 }
 
 /* Estilo de todos los botones */
 button {
     margin-top: 10px;
-    font-size: 1rem; /* Aumenta el tamaño de la fuente */
+    font-size: 1rem; 
 }
 
 /* Estilo morado para todos los botones */
 .btn-info, .btn-success, .btn-primary, .btn-danger, .btn-warning, .btn-secondary, .btn-light, .btn-dark {
-    background-color: #5a2e92; /* Morado oscuro consistente */
+    background-color: #5a2e92; 
     border: none;
-    color: white; /* Asegura que el texto sea blanco */
+    color: white; 
 }
 
     .btn-info:hover, .btn-success:hover, .btn-primary:hover, .btn-danger:hover, .btn-warning:hover, .btn-secondary:hover, .btn-light:hover, .btn-dark:hover {
-        background-color: #4a2376; /* Morado aún más oscuro al pasar el cursor */
+        background-color: #4a2376; 
     }
 
 /* Estilo para los campos del formulario */
