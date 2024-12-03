@@ -4,6 +4,7 @@
 @inject HoraService horaService
 @inject NavigationManager navigation
 <link rel="stylesheet" href="/Estilos/Create.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
 
 <PageTitle>Editar Horario</PageTitle>
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
@@ -14,7 +15,7 @@
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <h5 class="card-title">Editar Horario</h5>
+                <h5 class="card-title"><strong>Editar Horario</strong></h5>
             </div>
 
             <div class="card-body">
@@ -79,7 +80,7 @@
             }
             else
             {
-                Toast.Notify(new(ToastType.Danger, "La Hora de Inicio no es válida"));
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "La Hora de Inicio no es válida. Ingrese un formato hh:mm."));
             }
         }
     }
@@ -95,7 +96,7 @@
             }
             else
             {
-                Toast.Notify(new(ToastType.Danger, "La Hora de Fin no es válida"));
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "La Hora de Fin no es válida. Ingrese un formato hh:mm."));
             }
         }
     }
@@ -112,7 +113,7 @@
     {
         if (Hora.HoraInicio >= Hora.HoraFin)
         {
-            Toast.Notify(new(ToastType.Danger, "La Hora de Inicio debe ser anterior a la Hora de Fin"));
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "La Hora de Inicio debe ser anterior a la Hora de Fin."));
             return false;
         }
 
@@ -123,9 +124,8 @@
     {
         if (await Validar())
         {
-            Toast.Notify(new(ToastType.Success, "Horario actualizado correctamente"));
             await horaService.Modificar(Hora);
-            Hora = new Hora();
+            Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "Horario actualizado correctamente."));
             await Task.Delay(4000);
             navigation.NavigateTo("/Hora/Index");
         }

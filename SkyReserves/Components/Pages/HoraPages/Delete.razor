@@ -7,6 +7,7 @@
 @inject NavigationManager navigation
 @inject ToastService Toast
 <link rel="stylesheet" href="/Estilos/Horas.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
 
 <PageTitle>Eliminar Hora</PageTitle>
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
@@ -60,7 +61,6 @@
 
     protected override async Task OnInitializedAsync()
     {
-        
         hora = await horaService.Buscar(HoraId);
     }
 
@@ -70,13 +70,13 @@
 
         if (eliminado)
         {
-            Toast.Notify(new ToastMessage(ToastType.Success, "Se ha eliminado el horario correctamente."));
+            Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "El horario ha sido eliminado correctamente."));
             await Task.Delay(4000);
             navigation.NavigateTo("/Hora/Index");
         }
         else
         {
-            Toast.Notify(new ToastMessage(ToastType.Danger, "No se pudo eliminar el horario."));
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se pudo eliminar el horario."));
         }
     }
 }
