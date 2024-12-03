@@ -1,0 +1,70 @@
+﻿@page "/ClaseVuelo/Delete/{ClaseVueloId:int}"
+@using BlazorBootstrap
+@using SkyReserves.Models
+@using SkyReserves.Service
+@rendermode InteractiveServer
+@inject ClaseVueloService claseVueloService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Estilos/ClaseVuelo.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+
+<PageTitle>Eliminar Clase de Vuelo</PageTitle>
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Clase de Vuelo:</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <h5><strong>¿Seguro que desea eliminar esta clase de vuelo?</strong></h5>
+
+            <table class="mt-4 table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Clase de Vuelo ID:</th>
+                        <td>@claseVuelo.ClaseVueloId</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Descripción:</th>
+                        <td>@claseVuelo.descripcionClase</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer">
+            <a href="/ClaseVuelo/Index" class="btn btn-secondary text-white bi bi-arrow-left"> Volver</a>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar"> Eliminar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int ClaseVueloId { get; set; }
+    public ClaseVuelo claseVuelo { get; set; } = new ClaseVuelo();
+
+    protected override async Task OnInitializedAsync()
+    {
+        claseVuelo = await claseVueloService.Buscar(ClaseVueloId);
+    }
+
+    private async Task Eliminar()
+    {
+        var eliminado = await claseVueloService.Eliminar(ClaseVueloId);
+
+        if (eliminado)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "La clase de vuelo ha sido eliminada correctamente."));
+            await Task.Delay(4000);
+            navigation.NavigateTo("/ClaseVuelo/Index");
+        }
+        else
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se pudo eliminar la clase de vuelo."));
+        }
+    }
+}
