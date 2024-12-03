@@ -28,8 +28,9 @@ builder.Services.AddScoped<PasaporteService>();
 builder.Services.AddScoped<PasaporteDetalleService>();
 builder.Services.AddScoped<ReservaService>();
 builder.Services.AddScoped<VuelosEspecialesService>();
+builder.Services.AddScoped<FlightDealService>();
 builder.Services.AddSingleton<ToastService>();
-
+builder.Services.AddBlazorBootstrap();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

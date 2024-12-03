@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SkyReserves.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241130015106_Inicial")]
+    [Migration("20241202225455_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -159,6 +159,41 @@ namespace SkyReserves.Migrations
                     b.HasKey("DestinoId");
 
                     b.ToTable("Destino");
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.FlightDeal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FlightDeals");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Timer.png"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Clase.jpeg"
+                        });
                 });
 
             modelBuilder.Entity("SkyReserves.Models.Hora", b =>
