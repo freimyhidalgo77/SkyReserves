@@ -9,6 +9,8 @@ body {
     display: flex;
     align-items: center;
     background-image: url("/Imagenes/Arajet.png");
+    background-image: url("/Imagenes/MenuPrincipal.jpg");
+    background-image: url("/Imagenes/MenuSecundario.jpeg");
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center;
