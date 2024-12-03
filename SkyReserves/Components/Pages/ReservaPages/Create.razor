@@ -1,4 +1,5 @@
 ﻿@page "/Reserva/Create"
+@using SkyReserve.DAL
 @rendermode InteractiveServer
 @inject ReservaService reservaService
 @inject OrigenService origenService
@@ -6,6 +7,7 @@
 @inject AsientoService asientosService
 @inject NavigationManager navigation
 @inject ToastService Toast
+@inject Context Dbcontext
 <link rel="stylesheet" href="/Style/Reserve.css" />
 
 <PageTitle>Crear Reserva</PageTitle>
@@ -38,9 +40,6 @@
                     }
                 </InputSelect>
 
-
-                @*Llamar clase vuelo y hora tambien*@
-
                 <label class="form-label" for="NumeroPasajeros"><strong>Número de Pasajeros</strong></label>
                 <div class="input-group">
                     <button class="btn btn-outline-secondary" type="button" @onclick="DecrementarPasajeros">-</button>
@@ -58,7 +57,7 @@
             </div>
             <div class="card-body">
                 <SeleccionarAsientoPicker ListaAsientos="AsientoList"
-                AsientoSeleccionado="AgregarAsiento" />
+                                          AsientoSeleccionado="AgregarAsiento" />
 
                 <hr />
 
@@ -81,9 +80,7 @@
                                 <td class="ps-3">@asiento.Letra</td>
                                 <td class="ps-3">@asiento.Existencia</td>
                                 <td class="ps-3">
-                                    <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverAsiento(asiento)">
-                                        Remover
-                                    </button>
+                                    <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverAsiento(asiento)"></button>
                                 </td>
                             </tr>
                         }
@@ -95,8 +92,8 @@
 
     <div class="container">
         <div class="card-footer text-center">
-            <button type="button" class="bi bi-arrow-90deg-left" style="background-color: purple; color: white; border: none;" @onclick="Volver"> Volver</button>
-            <button type="submit" class="bi bi-floppy-fill" style="background-color: purple; color: white; border: none;"> Guardar Reserva</button>
+            <button type="button" class="btn btn-morado bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+            <button type="submit" class="btn btn-morado  bi-floppy-fill"> Guardar Reserva</button>
         </div>
     </div>
 </EditForm>
@@ -107,14 +104,14 @@
     public List<Destino> DestinoList { get; set; } = new List<Destino>();
     public List<Asiento> AsientoList { get; set; } = new List<Asiento>();
     public List<Asiento> AsientosSeleccionados { get; set; } = new List<Asiento>();
-   // public List<ClaseVuelo> ClaseVueloList { get; set; } = new List<ClaseVuelo>();
-   //public List<Hora> HoraList { get; set; } = new List<Hora>();
 
     protected override async Task OnInitializedAsync()
     {
         OrigenList = await origenService.Listar(o => o.OrigenId > 0);
         DestinoList = await destinoService.Listar(o => o.DestinoId > 0);
         AsientoList = await asientosService.Listar(o => o.AsientoId > 0);
+
+
     }
 
     private void IncrementarPasajeros()
@@ -149,24 +146,43 @@
         if (!AsientosSeleccionados.Any())
         {
             Toast.Notify(new(ToastType.Warning, "No se han seleccionado asientos", "Por favor seleccione al menos un asiento."));
-            
+            return;
         }
 
-      
-        await reservaService.Guardar(Reserva);
+        var crearReserva = await reservaService.Guardar(Reserva);
 
- 
-        foreach (var asiento in AsientosSeleccionados)
+        if(crearReserva)
         {
-     
-          //  await reservaService.Guardar(Reserva.ReservaId, asiento.AsientoId);  // Ejemplo de llamada
-            
+        
+            foreach (var asiento in AsientosSeleccionados)
+            {
+ 
+                var asientoReserva = new Asiento
+                {
+                        
+                        AsientoId = asiento.AsientoId,
+                        Fila = asiento.Fila,
+                        Letra = asiento.Letra,
+                        Existencia = asiento.Existencia,                     
+                                               
+               };
+
+             
+                await reservaService.Guardar(Reserva);
+                Reserva = new Reserva();
+                AsientosSeleccionados.Clear();
+            }
+
+    
+            navigation.NavigateTo("/Reserva/Index");
+        }
+        else
+        {
+            Toast.Notify(new(ToastType.Danger, "Error al guardar la reserva", "Hubo un problema al guardar la reserva."));
         }
 
-        Reserva = new Reserva();
-        AsientosSeleccionados.Clear();  // Limpiar la lista de asientos seleccionados
-        navigation.NavigateTo("/Reserva/Index"); // Redirigir al listado de reservas
     }
+
 
 
     private void Volver()

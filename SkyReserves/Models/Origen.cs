@@ -9,6 +9,7 @@ namespace SkyReserves.Models
         public int OrigenId { get; set; }
 
         [Required(ErrorMessage = "Favor ingrese un origen.")]
+        [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\(\)]+$", ErrorMessage = "El campo solo puede contener letras, espacios")]
         public string? origen { get; set; }
     }
 }

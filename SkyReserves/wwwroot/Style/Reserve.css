@@ -26,3 +26,15 @@
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+
+.btn-morado {
+    background-color: #6a1b9a; /* Color morado */
+    border-color: #6a1b9a; /* Borde morado */
+    color: white; /* Color del texto */
+}
+
+    .btn-morado:hover {
+        background-color: #8e24aa; /* Color morado más claro al pasar el ratón */
+        border-color: #8e24aa; /* Borde morado más claro */
+    }
