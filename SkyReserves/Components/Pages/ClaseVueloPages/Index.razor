@@ -8,6 +8,17 @@
 
 <PageTitle>Clases de Vuelo</PageTitle>
 
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+        <a href="/logout" class="btn btn-outline-danger text-nowrap common-btn w-30">
+            Cerrar sesión
+        </a>
+    </div>
+</div>
+
 <div class="container">
     <div class="card shadow-lg">
         <div class="card-header text-black text-center">
@@ -27,12 +38,12 @@
                 <div class="col-md-6 d-flex align-items-end">
                     <div class="input-group">
                         <InputText id="valorFiltro" @bind-Value="valorFiltro" class="form-control" placeholder="Buscar" />
-                        <button @onclick="Buscar" class="btn btn-secondary bi bi-search" type="button"> Buscar</button>
                     </div>
                 </div>
             </div>
 
-            <a href="ClaseVuelo/Create" class="btn btn-success bi bi-plus-square-fill mt-3"> Crear</a>
+            <a href="ClaseVuelo/Create" class="btn btn-success bi bi-plus-square-fill mt-3 w-30"> Crear</a>
+            <button @onclick="Buscar" class="btn btn-secondary bi bi-search mt-3 w-30" type="button"> Buscar</button>
 
             <table class="table table-hover mt-3">
                 <thead class="table table-striped text-center text-black">
