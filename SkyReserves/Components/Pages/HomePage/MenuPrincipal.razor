@@ -6,9 +6,18 @@
 
 <AuthorizeView Roles="Admin,User">
     <div class="container mt-4">
-        <div class="corner-label">
-            <span><a class="fw-bolder" href="/logout">Cerrar sesi&oacute;n</a></span>
+        <div class="header-buttons d-flex justify-content-lg-end align-items-center">
+            <!-- Botón Volver -->
+            <a href="/AdminDashboard" class="common-btn bi bi-arrow-90deg-left text-nowrap me-3">
+                Volver
+            </a>
+
+            <!-- Botón Cerrar Sesión -->
+            <a href="/logout" class="common-btn text-nowrap">
+                Cerrar sesi&oacute;n
+            </a>
         </div>
+    </div>
 
         <div class="row mb-3">
             <h2 class="text-center mb-2">Ofertas de vuelos populares en Arajet</h2>
@@ -75,7 +84,7 @@
                 </div>
             }
         </div>
-    </div>
+   
 </AuthorizeView>
 
 @code {

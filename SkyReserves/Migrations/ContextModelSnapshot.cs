@@ -158,6 +158,41 @@ namespace SkyReserves.Migrations
                     b.ToTable("Destino");
                 });
 
+            modelBuilder.Entity("SkyReserves.Models.FlightDeal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FlightDeals");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Timer.png"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Clase.jpeg"
+                        });
+                });
+
             modelBuilder.Entity("SkyReserves.Models.Hora", b =>
                 {
                     b.Property<int>("HoraID")
@@ -166,8 +201,16 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HoraID"));
 
-                    b.Property<double>("horaViaje")
-                        .HasColumnType("float");
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<TimeSpan>("HoraFin")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("HoraInicio")
+                        .HasColumnType("time");
 
                     b.HasKey("HoraID");
 

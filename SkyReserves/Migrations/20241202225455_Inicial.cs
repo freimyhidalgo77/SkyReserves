@@ -69,12 +69,28 @@ namespace SkyReserves.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "FlightDeals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FlightDeals", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Hora",
                 columns: table => new
                 {
                     HoraID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    horaViaje = table.Column<double>(type: "float", nullable: false)
+                    Descripcion = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    HoraInicio = table.Column<TimeSpan>(type: "time", nullable: false),
+                    HoraFin = table.Column<TimeSpan>(type: "time", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -262,6 +278,15 @@ namespace SkyReserves.Migrations
                 });
 
             migrationBuilder.InsertData(
+                table: "FlightDeals",
+                columns: new[] { "Id", "Description", "ImageUrl" },
+                values: new object[,]
+                {
+                    { 1, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Timer.png" },
+                    { 2, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Clase.jpeg" }
+                });
+
+            migrationBuilder.InsertData(
                 table: "UserAccount",
                 columns: new[] { "Id", "Password", "Role", "UserName" },
                 values: new object[,]
@@ -307,6 +332,9 @@ namespace SkyReserves.Migrations
 
             migrationBuilder.DropTable(
                 name: "Clientes");
+
+            migrationBuilder.DropTable(
+                name: "FlightDeals");
 
             migrationBuilder.DropTable(
                 name: "Hora");

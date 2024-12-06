@@ -1,0 +1,112 @@
+﻿@page "/ClaseVuelo/Index"
+@using SkyReserves.Models
+@using SkyReserves.Service
+@rendermode InteractiveServer
+@inject ClaseVueloService claseVueloService
+@inject NavigationManager navigation
+<link rel="stylesheet" href="/Estilos/ClaseVuelo.css" />
+
+<PageTitle>Clases de Vuelo</PageTitle>
+
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary  bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+        <a href="/logout" class="btn btn-outline-danger text-nowrap common-btn w-30">
+            Cerrar sesi&oacute;n
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Clases de Vuelo</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                        <option value="id">ID</option>
+                        <option value="Descripcion">Descripci&oacuten</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="input-group">
+                        <InputText id="valorFiltro" @bind-Value="valorFiltro" class="form-control" placeholder="Buscar" />
+                    </div>
+                </div>
+            </div>
+
+            <a href="ClaseVuelo/Create" class="btn btn-success bi bi-plus-square-fill mt-3 w-30"> Crear</a>
+            <button @onclick="Buscar" class="btn btn-secondary bi bi-search mt-3 w-30" type="button"> Buscar</button>
+
+            <table class="table table-hover mt-3">
+                <thead class="table table-striped text-center text-black">
+                    <tr>
+                        <th>ClaseVueloID</th>
+                        <th>Descripción</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var claseVuelo in clasesVuelo)
+                    {
+                        <tr>
+                            <td class="text-center">@claseVuelo.ClaseVueloId</td>
+                            <td class="text-center">@claseVuelo.descripcionClase</td>
+                            <td class="text-center">
+                                <a href="/ClaseVuelo/Edit/@claseVuelo.ClaseVueloId" class="btn btn-outline-dark bi bi-pencil-square"></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="/ClaseVuelo/Delete/@claseVuelo.ClaseVueloId" class="btn btn-outline-dark bi bi-trash"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<ClaseVuelo> clasesVuelo = new List<ClaseVuelo>();
+    public string filtro = "id";
+    public string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Cargar todas las clases de vuelo al iniciar
+        clasesVuelo = await claseVueloService.Listar(a => true);
+    }
+
+    public async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            switch (filtro)
+            {
+                case "id":
+                    if (int.TryParse(valorFiltro, out int id))
+                    {
+                        clasesVuelo = await claseVueloService.Listar(w => w.ClaseVueloId == id);
+                    }
+                    break;
+
+                case "Descripcion":
+                    clasesVuelo = await claseVueloService.Listar(w => w.descripcionClase.ToLower().Contains(valorFiltro.ToLower()));
+                    break;
+            }
+        }
+        else
+        {
+            // Si no hay filtro, cargar todas las clases de vuelo
+            clasesVuelo = await claseVueloService.Listar(a => true);
+        }
+    }
+}

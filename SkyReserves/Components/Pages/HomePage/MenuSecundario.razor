@@ -1,0 +1,77 @@
+﻿@page "/MenuSecundario"
+@using SkyReserves.Models
+@using SkyReserves.Service
+@inject NavigationManager Navigation
+@inject AuthenticationStateProvider AuthenticationStateProvider
+@inject FlightDealService FlightDealService 
+
+<link rel="stylesheet" href="/Estilos/Cierre.css" />
+
+<AuthorizeView Roles="Admin">
+    <div class="container mt-4">
+        <div class="header-buttons d-flex justify-content-lg-end align-items-center">
+            <!-- Botón Volver -->
+            <a href="/AdminDashboard" class="common-btn bi bi-arrow-90deg-left text-nowrap me-3">
+                Volver
+            </a>
+
+            <!-- Botón Cerrar Sesión -->
+            <a href="/logout" class="common-btn text-nowrap">
+                Cerrar sesi&oacute;n
+            </a>
+        </div>
+    </div>
+
+         <div class="row mb-3 text-center">
+            <h2 class="mb-2">Configuraciones del Administrador</h2>
+        </div>
+
+    <div class="row justify-content-center">
+        @for (int i = 0; i < filteredFlightDeals.Count; i++)
+        {
+            var flight = filteredFlightDeals[i];
+            <div class="col-md-3 mb-4 d-flex">
+                <div class="card h-100 text-center d-flex flex-column">
+                    <img src="@flight.ImageUrl" class="card-img-top flight-img" alt="Flight Image">
+                    <div class="card-body d-flex flex-column align-items-center">
+                        <p class="card-text mb-3">@flight.Description</p>
+                        @if (i == 0)
+                        {
+                            <a href="/Hora/Index" class="btn btn-primary mt-auto">Hora</a>
+                        }
+                        else if (i == 1)
+                        {
+                            <a href="/ClaseVuelo/Index" class="btn btn-secondary mt-auto">Clase Vuelo</a>
+                        }
+                        else
+                        {
+                            <a href="/Hora/Index" class="btn btn-primary mt-auto">Book Now</a>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+</AuthorizeView>
+
+
+@code {
+    private List<FlightDeal> filteredFlightDeals = new List<FlightDeal>();
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+        var user = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var isAdmin = user.User?.IsInRole("Admin") ?? false;
+
+        if (!isAdmin)
+        {
+            Navigation.NavigateTo("/access-denied");
+            return;
+        }
+
+        
+        filteredFlightDeals = await FlightDealService.GetAllFlightDeals();
+    }
+}

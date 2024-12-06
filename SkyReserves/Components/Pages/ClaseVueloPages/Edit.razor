@@ -1,0 +1,96 @@
+﻿@page "/ClaseVuelo/Edit/{ClaseVueloId:int}"
+@rendermode InteractiveServer
+@inject ToastService Toast
+@inject ClaseVueloService claseVueloService
+@inject NavigationManager navigation
+<link rel="stylesheet" href="/Estilos/ClaseVuelo.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+
+<PageTitle>Editar Clase de Vuelo</PageTitle>
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<EditForm Model="ClaseVuelo" OnValidSubmit="Modificar">
+    <DataAnnotationsValidator />
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5 class="card-title"><strong>Editar Clase de Vuelo</strong></h5>
+            </div>
+
+            <div class="card-body">
+                @* ID de la Clase de Vuelo *@
+                <div class="mb-3">
+                    <label for="id" class="form-label"><strong>ID</strong></label>
+                    <InputNumber class="form-control" @bind-Value="ClaseVuelo.ClaseVueloId" readonly />
+                </div>
+
+                @* Descripción de la Clase de Vuelo *@
+                <div class="mb-3">
+                    <label for="Descripcion" class="form-label"><strong>Descripci&oacute;n</strong></label>
+                    <InputText class="form-control" @bind-Value="ClaseVuelo.descripcionClase" />
+                    <ValidationMessage For="@(() => ClaseVuelo.descripcionClase)" />
+                </div>
+
+                @if (!string.IsNullOrEmpty(Mensaje))
+                {
+                    <div class="alert alert-warning mt-3" role="alert">
+                        @Mensaje
+                    </div>
+                }
+            </div>
+
+            <div class="card-footer">
+                <a href="/ClaseVuelo/Index" class="btn btn-secondary text-white bi bi-arrow-90deg-left"> Volver</a>
+                <button type="submit" class="btn btn-success bi bi-pencil-square"> Modificar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int ClaseVueloId { get; set; }
+
+    public ClaseVuelo ClaseVuelo { get; set; } = new ClaseVuelo();
+    public string Mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (ClaseVueloId > 0)
+        {
+            ClaseVuelo = await claseVueloService.Buscar(ClaseVueloId);
+        }
+    }
+
+    public async Task<bool> Validar()
+    {
+        if (string.IsNullOrWhiteSpace(ClaseVuelo.descripcionClase))
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "La descripción es obligatoria."));
+            return false;
+        }
+
+        // Verificar si ya existe una clase de vuelo con la misma descripción
+        var claseVueloExistente = await claseVueloService.Listar(w => w.descripcionClase.ToLower() == ClaseVuelo.descripcionClase.ToLower());
+
+        if (claseVueloExistente.Any())
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "Ya existe una clase de vuelo con esta descripción."));
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task Modificar()
+    {
+        if (await Validar())
+        {
+            await claseVueloService.Modificar(ClaseVuelo);
+            Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "Clase de vuelo modificada correctamente."));
+            await Task.Delay(4000);
+            navigation.NavigateTo("/ClaseVuelo/Index");
+        }
+    }
+}

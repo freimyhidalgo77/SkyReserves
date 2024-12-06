@@ -78,6 +78,9 @@ body {
     display: flex;
     justify-content: center;
 }
+html, body {
+    font-family: 'Times New Roman', Times, serif;
+}
 
 .form-control {
     width: 70%;
@@ -104,6 +107,7 @@ body {
     margin-bottom: 10px; 
 }
 
-.btn:hover {
-    background-color: #9b59b6; 
+    .btn:hover {
+        background-color: #9b59b6;
+    }
 
