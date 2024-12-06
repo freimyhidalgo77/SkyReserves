@@ -183,13 +183,19 @@ namespace SkyReserves.Migrations
                         {
                             Id = 1,
                             Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
-                            ImageUrl = "/Imagenes/Timer.png"
+                            ImageUrl = "/Imagenes/Timer.png "
                         },
                         new
                         {
                             Id = 2,
                             Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
                             ImageUrl = "/Imagenes/Clase.jpeg"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Accesibilidad.png"
                         });
                 });
 
