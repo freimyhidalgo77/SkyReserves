@@ -107,6 +107,7 @@ html, body {
     margin-bottom: 10px; 
 }
 
-.btn:hover {
-    background-color: #9b59b6; 
+    .btn:hover {
+        background-color: #9b59b6;
+    }
 
