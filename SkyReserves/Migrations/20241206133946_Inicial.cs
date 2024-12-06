@@ -282,8 +282,9 @@ namespace SkyReserves.Migrations
                 columns: new[] { "Id", "Description", "ImageUrl" },
                 values: new object[,]
                 {
-                    { 1, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Timer.png" },
-                    { 2, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Clase.jpeg" }
+                    { 1, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Timer.png " },
+                    { 2, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Clase.jpeg" },
+                    { 3, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Accesibilidad.png" }
                 });
 
             migrationBuilder.InsertData(

@@ -51,8 +51,14 @@ public class Context : DbContext
                Id = 2,
                 ImageUrl = "/Imagenes/Clase.jpeg",
                 Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
+            },
+            new FlightDeal
+            {
+                Id = 3,
+                ImageUrl = "/Imagenes/Accesibilidad.png",
+                Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
             }
-       
+
         );
     }
 }
