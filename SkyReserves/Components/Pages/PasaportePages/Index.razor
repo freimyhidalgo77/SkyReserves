@@ -1,0 +1,143 @@
+﻿@page "/Pasaporte/Index"
+@using SkyReserves.Models
+@using SkyReserves.Service
+@rendermode InteractiveServer
+@inject PasaporteService pasaporteService
+@inject NavigationManager navigation
+<link rel="stylesheet" href="/Estilos/ClaseVuelo.css" />
+
+<PageTitle>Listado de Pasaportes</PageTitle>
+
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary bi bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+        <a href="/logout" class="btn btn-outline-danger text-nowrap common-btn w-30">
+            Cerrar sesi&oacute;n
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Listado de Pasaportes</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                        <option value="id">ID</option>
+                        <option value="NombrePila">Nombre de Pila</option>
+                        <option value="Apellido">Apellido</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="input-group">
+                        <InputText id="valorFiltro" @bind-Value="valorFiltro" class="form-control" placeholder="Buscar" />
+                    </div>
+                </div>
+            </div>
+
+            <a href="Pasaporte/Create" class="btn btn-success bi bi-plus-square-fill mt-3 w-30"> Crear</a>
+            <button @onclick="Buscar" class="btn btn-secondary bi bi-search mt-3 w-30" type="button"> Buscar</button>
+
+            <table class="table table-hover mt-3">
+                <thead class="table table-striped text-center text-black">
+                    <tr>
+                        <th>Pasaporte ID</th>
+                        <th>Nombre</th>
+                        <th>Apellido</th>
+                        <th>Nacionalidad</th>
+                        <th>Fecha de Nacimiento</th>
+                        <th>Género</th>
+                        <th>Accesibilidad</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pasaporte in pasaportes)
+                    {
+                        <tr>
+                            <td class="text-center">@pasaporte.PasaporteId</td>
+                            <td class="text-center">@pasaporte.NombrePila</td>
+                            <td class="text-center">@pasaporte.Apellido</td>
+                            <td class="text-center">@pasaporte.Nacionalidad</td>
+                            <td class="text-center">@pasaporte.FechaNacimiento.ToShortDateString()</td>
+                            <td class="text-center">@GetGeneroNombre(int.Parse(pasaporte.Genero))</td> <!-- Aquí obtienes el nombre del género -->
+                            <td class="text-center">@pasaporte.Accesibilidad</td>
+
+
+                            <td class="text-center">
+                                <a href="/Pasaporte/Edit/@pasaporte.PasaporteId" class="btn btn-outline-dark bi bi-pencil-square"></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="/Pasaporte/Delete/@pasaporte.PasaporteId" class="btn btn-outline-dark bi bi-trash"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Pasaporte> pasaportes = new List<Pasaporte>();
+    public List<Generos> generos = new List<Generos>();
+      <!-- Lista de géneros -->
+    public string filtro = "id";
+    public string valorFiltro = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Cargar los pasaportes y géneros al inicializar
+        pasaportes = await pasaporteService.Listar(a => true);
+        generos = await pasaporteService.ObtenerGeneros();  // Asegúrate de tener un servicio para obtener los géneros
+    }
+
+    // Método para obtener el nombre del género
+    private string GetGeneroNombre(int generoId)
+    {
+        var genero = generos.FirstOrDefault(g => g.GenerosId == generoId);
+        return genero != null ? genero.Nombre : "Género no encontrado";
+    }
+
+    public async Task Buscar()
+    {
+        if (!string.IsNullOrWhiteSpace(valorFiltro))
+        {
+            switch (filtro)
+            {
+                case "id":
+                    if (int.TryParse(valorFiltro, out int id))
+                    {
+                        pasaportes = await pasaporteService.Listar(w => w.PasaporteId == id);
+                    }
+                    break;
+
+                case "NombrePila":
+                    pasaportes = await pasaporteService.Listar(w => w.NombrePila.ToLower().Contains(valorFiltro.ToLower()));
+                    break;
+
+                case "Apellido":
+                    pasaportes = await pasaporteService.Listar(w => w.Apellido.ToLower().Contains(valorFiltro.ToLower()));
+                    break;
+            }
+        }
+        else
+        {
+            pasaportes = await pasaporteService.Listar(a => true);
+        }
+    }
+
+    private void VerDetalles(int pasaporteId)
+    {
+        navigation.NavigateTo($"/Pasaporte/Details/{pasaporteId}");
+    }
+}

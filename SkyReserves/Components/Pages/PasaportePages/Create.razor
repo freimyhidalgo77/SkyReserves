@@ -1,0 +1,191 @@
+﻿@page "/Pasaporte/Create"
+@rendermode InteractiveServer
+@inject PasaporteService pasaporteService
+@inject ToastService Toast
+@inject NavigationManager navigation
+
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+<link rel="stylesheet" href="/Estilos/Pasaporte.css" />
+
+<PageTitle>Crear Nuevo Pasaporte</PageTitle>
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<EditForm Model="@Pasaporte" OnValidSubmit="Guardar">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5 class="card-title">Crear Nuevo Pasaporte</h5>
+            </div>
+
+            <div class="card-body">
+                @* ID *@
+                <div class="mb-3">
+                    <label for="PasaporteId" class="form-label"><strong>Pasaporte Id</strong></label>
+                    <InputNumber class="form-control" @bind-Value="Pasaporte.PasaporteId" readonly></InputNumber>
+                </div>
+
+                @* Nombre de Pila *@
+                <div class="mb-3">
+                    <label for="NombrePila" class="form-label"><strong>Nombre de Pila</strong></label>
+                    <InputText class="form-control" @bind-Value="Pasaporte.NombrePila"></InputText>
+                    <ValidationMessage For="@(() => Pasaporte.NombrePila)" />
+                </div>
+
+                @* Apellido *@
+                <div class="mb-3">
+                    <label for="Apellido" class="form-label"><strong>Apellido</strong></label>
+                    <InputText class="form-control" @bind-Value="Pasaporte.Apellido"></InputText>
+                    <ValidationMessage For="@(() => Pasaporte.Apellido)" />
+                </div>
+
+                @* Fecha de Nacimiento *@
+                <div class="mb-3">
+                    <label for="FechaNacimiento" class="form-label"><strong>Fecha de Nacimiento</strong></label>
+                    <InputDate class="form-control" @bind-Value="Pasaporte.FechaNacimiento"></InputDate>
+                    <ValidationMessage For="@(() => Pasaporte.FechaNacimiento)" />
+                </div>
+
+                @* Género *@
+                <div class="mb-3">
+                    <label for="Genero" class="form-label"><strong>Género</strong></label>
+                    <InputSelect class="form-control" @bind-Value="Pasaporte.Genero">
+                        <option value="">Seleccione un Género</option>
+                        @foreach (var genero in generos)
+                        {
+                            <option value="@genero.GenerosId">@genero.Nombre</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Pasaporte.Genero)" />
+                </div>
+
+                @* Accesibilidad *@
+                <div class="mb-3">
+                    <label for="Accesibilidad" class="form-label"><strong>Accesibilidad</strong></label>
+                    <InputText class="form-control" @bind-Value="Pasaporte.Accesibilidad"></InputText>
+                    <ValidationMessage For="@(() => Pasaporte.Accesibilidad)" />
+                </div>
+
+                @* Nacionalidad *@
+                <div class="mb-3">
+                    <label for="Nacionalidad" class="form-label"><strong>Nacionalidad</strong></label>
+                    <InputText class="form-control" @bind-Value="Pasaporte.Nacionalidad"></InputText>
+                    <ValidationMessage For="@(() => Pasaporte.Nacionalidad)" />
+                </div>
+
+                @* Mostrar detalles del pasaporte *@
+                <div class="form-check mb-3">
+                    <InputCheckbox id="toggleDetalles" class="form-check-input" @bind-Value="MostrarDetalles" />
+                    <label for="toggleDetalles" class="form-check-label">¿Agregar detalles del pasaporte?</label>
+                </div>
+
+                @if (MostrarDetalles)
+                {
+                    <div class="border border-success p-3 mt-3">
+                        <h4>Detalles del Pasaporte</h4>
+                        @if (!string.IsNullOrEmpty(DetalleMensaje))
+                        {
+                            <div class="alert alert-danger" role="alert">
+                                @DetalleMensaje
+                            </div>
+                        }
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="row g-3">
+                                    @* Campos para ingresar un nuevo detalle *@
+                                    <div class="col-md-4">
+                                        <label for="PaisResidencia" class="form-label"><strong>Pa&iacute;s Residencia</strong></label>
+                                        <InputText class="form-control" @bind-Value="NuevoDetalle.PaisResidencia"></InputText>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="NumeroPasaporte" class="form-label"><strong>N&uacute;mero Pasaporte</strong></label>
+                                        <InputText class="form-control" @bind-Value="NuevoDetalle.NumeroPasaporte"></InputText>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="ExpendidoPor" class="form-label"><strong>Expendido Por</strong></label>
+                                        <InputText class="form-control" @bind-Value="NuevoDetalle.ExpendidoPor"></InputText>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="FechaVencimiento" class="form-label"><strong>Fecha Vencimiento</strong></label>
+                                        <InputDate class="form-control" @bind-Value="NuevoDetalle.FechaVencimiento"></InputDate>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="PaisNacimiento" class="form-label"><strong>Pa&iacute;s Nacimiento</strong></label>
+                                        <InputText class="form-control" @bind-Value="NuevoDetalle.PaisNacimiento"></InputText>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="CiudadNatal" class="form-label"><strong>Ciudad Natal</strong></label>
+                                        <InputText class="form-control" @bind-Value="NuevoDetalle.CiudadNatal"></InputText>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-12 mt-3 text-end">
+                                @* Botón para agregar detalle *@
+                                <button type="button" class="btn btn-primary bi bi-plus-circle" @onclick="() => AgregarDetalle(NuevoDetalle)"> Agregar Detalle</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="card-footer">
+                    <a href="/Pasaporte/Index" class="btn btn-secondary text-white bi bi-arrow-90deg-left"> Volver</a>
+                    <button type="submit" class="btn btn-success bi bi-floppy-fill"> Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    public Pasaporte Pasaporte { get; set; } = new Pasaporte();
+    public List<Generos> generos { get; set; } = new List<Generos>();
+    public PasaporteDetalle NuevoDetalle { get; set; } = new PasaporteDetalle();
+    public string DetalleMensaje { get; set; } = string.Empty;
+    public bool MostrarDetalles { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        generos = await pasaporteService.ObtenerGeneros();
+    }
+
+    private async Task AgregarDetalle(PasaporteDetalle detalle)
+    {
+        if (string.IsNullOrWhiteSpace(detalle.PaisResidencia) ||
+            string.IsNullOrWhiteSpace(detalle.NumeroPasaporte) ||
+            string.IsNullOrWhiteSpace(detalle.ExpendidoPor))
+        {
+            DetalleMensaje = "Todos los campos del detalle son obligatorios.";
+            return;
+        }
+
+        if (Pasaporte.PasaporteDetalle.Any(d => d.NumeroPasaporte == detalle.NumeroPasaporte))
+        {
+            DetalleMensaje = "El número de pasaporte ya está agregado.";
+            return;
+        }
+
+        Pasaporte.PasaporteDetalle.Add(detalle);
+        NuevoDetalle = new PasaporteDetalle(); // Reiniciar detalle
+        DetalleMensaje = string.Empty;
+        await Task.CompletedTask;
+    }
+
+    private async Task Guardar()
+    {
+        if (MostrarDetalles && !Pasaporte.PasaporteDetalle.Any())
+        {
+            DetalleMensaje = "Debe agregar al menos un detalle del pasaporte.";
+            return;
+        }
+
+        await pasaporteService.Guardar(Pasaporte);
+        Toast.Notify(new(ToastType.Success, "Éxito", "Pasaporte registrado correctamente"));
+        await Task.Delay(4000);
+        navigation.NavigateTo("/Pasaporte/Index");
+    }
+}
