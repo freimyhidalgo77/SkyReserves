@@ -83,6 +83,19 @@ namespace SkyReserves.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Generos",
+                columns: table => new
+                {
+                    GenerosId = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nombre = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Generos", x => x.GenerosId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Hora",
                 columns: table => new
                 {
@@ -145,12 +158,12 @@ namespace SkyReserves.Migrations
                 {
                     PasaporteId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    PaisResidencia = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    NumeroPasaporte = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    EmitidoPor = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FechaExpiracion = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    PaisNacimiento = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CiudadNacimiento = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    NombrePila = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Apellido = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Genero = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Accesibilidad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Nacionalidad = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -255,7 +268,13 @@ namespace SkyReserves.Migrations
                 name: "PasaporteDetalles",
                 columns: table => new
                 {
-                    PasaporteId = table.Column<int>(type: "int", nullable: false)
+                    PasaporteId = table.Column<int>(type: "int", nullable: false),
+                    PaisResidencia = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    NumeroPasaporte = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpendidoPor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FechaVencimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    PaisNacimiento = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CiudadNatal = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -285,6 +304,16 @@ namespace SkyReserves.Migrations
                     { 1, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Timer.png " },
                     { 2, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Clase.jpeg" },
                     { 3, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Accesibilidad.png" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Generos",
+                columns: new[] { "GenerosId", "Nombre" },
+                values: new object[,]
+                {
+                    { 1, "Masculino" },
+                    { 2, "Femenino" },
+                    { 3, "Prefiero no decirlo" }
                 });
 
             migrationBuilder.InsertData(
@@ -336,6 +365,9 @@ namespace SkyReserves.Migrations
 
             migrationBuilder.DropTable(
                 name: "FlightDeals");
+
+            migrationBuilder.DropTable(
+                name: "Generos");
 
             migrationBuilder.DropTable(
                 name: "Hora");

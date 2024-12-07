@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SkyReserves.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241206133946_Inicial")]
+    [Migration("20241207200020_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -202,6 +202,40 @@ namespace SkyReserves.Migrations
                         });
                 });
 
+            modelBuilder.Entity("SkyReserves.Models.Generos", b =>
+                {
+                    b.Property<int>("GenerosId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenerosId"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GenerosId");
+
+                    b.ToTable("Generos");
+
+                    b.HasData(
+                        new
+                        {
+                            GenerosId = 1,
+                            Nombre = "Masculino"
+                        },
+                        new
+                        {
+                            GenerosId = 2,
+                            Nombre = "Femenino"
+                        },
+                        new
+                        {
+                            GenerosId = 3,
+                            Nombre = "Prefiero no decirlo"
+                        });
+                });
+
             modelBuilder.Entity("SkyReserves.Models.Hora", b =>
                 {
                     b.Property<int>("HoraID")
@@ -295,15 +329,48 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PasaporteId"));
 
-                    b.Property<string>("CiudadNacimiento")
+                    b.Property<string>("Accesibilidad")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmitidoPor")
+                    b.Property<string>("Apellido")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaExpiracion")
+                    b.Property<DateTime>("FechaNacimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Genero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nacionalidad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombrePila")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PasaporteId");
+
+                    b.ToTable("Pasaportes");
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.PasaporteDetalle", b =>
+                {
+                    b.Property<int>("PasaporteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CiudadNatal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExpendidoPor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaVencimiento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NumeroPasaporte")
@@ -317,16 +384,6 @@ namespace SkyReserves.Migrations
                     b.Property<string>("PaisResidencia")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("PasaporteId");
-
-                    b.ToTable("Pasaportes");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.PasaporteDetalle", b =>
-                {
-                    b.Property<int>("PasaporteId")
-                        .HasColumnType("int");
 
                     b.HasKey("PasaporteId");
 

@@ -4,7 +4,6 @@ using SkyReserves.Models;
 public class Context : DbContext
 {
     public Context(DbContextOptions<Context> options) : base(options) { }
-
     public DbSet<UserAccount> UserAccount { get; set; }
     public DbSet<ClaseVuelo> ClaseVuelo { get; set; }
     public DbSet<Accesibilidad> Accesibilidad { get; set; }
@@ -19,8 +18,10 @@ public class Context : DbContext
     public DbSet<PasaporteDetalle> PasaporteDetalles { get; set; }
     public DbSet<Reserva> Reserva { get; set; }
     public DbSet<VuelosEspeciales> VuelosEspeciales { get; set; }
-
     public DbSet<FlightDeal> FlightDeals { get; set; }
+   
+    public DbSet<Generos> Generos {  get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -37,6 +38,14 @@ public class Context : DbContext
             new Asiento { AsientoId = 1, VueloId = 1, Fila = "1", Letra = "A", Existencia = 5 },
             new Asiento { AsientoId = 2, VueloId = 1, Fila = "2", Letra = "B", Existencia = 5 }
         );
+
+        modelBuilder.Entity<Generos>().HasData(
+
+            new Generos { GenerosId = 1, Nombre = "Masculino" },
+            new Generos { GenerosId = 2, Nombre = "Femenino" },
+            new Generos { GenerosId = 3, Nombre = "Prefiero no decirlo" }
+
+         );
 
         // Datos iniciales para FlightDeals
         modelBuilder.Entity<FlightDeal>().HasData(
