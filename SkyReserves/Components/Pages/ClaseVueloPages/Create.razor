@@ -32,6 +32,15 @@
                     <ValidationMessage For="@(() => ClaseVuelo.descripcionClase)" />
                 </div>
 
+                <!-- Monto de la Clase -->
+                <label for="monto" class="form-label"><strong>Monto de la Clase (USD)</strong></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <InputNumber id="monto" class="form-control" @bind-Value="ClaseVuelo.Monto" />
+                </div>
+                <ValidationMessage For="@(() => ClaseVuelo.Monto)" />
+
+
                 @if (!string.IsNullOrEmpty(Mensaje))
                 {
                     <div class="alert alert-warning mt-3" role="alert">
@@ -59,13 +68,21 @@
 
     public async Task Guardar()
     {
+        
         if (string.IsNullOrWhiteSpace(ClaseVuelo.descripcionClase))
         {
             Toast.Notify(new(ToastType.Danger, "Error", "La descripción es obligatoria."));
             return;
         }
 
-        // Verificar si ya existe una clase de vuelo con la misma descripción
+        
+        if (ClaseVuelo.Monto <= 0)
+        {
+            Toast.Notify(new(ToastType.Danger, "Error", "El monto debe ser mayor a cero."));
+            return;
+        }
+
+       
         var claseVueloExistente = await claseVueloService.Listar(w => w.descripcionClase.ToLower() == ClaseVuelo.descripcionClase.ToLower());
 
         if (claseVueloExistente.Any())
@@ -74,11 +91,14 @@
             return;
         }
 
-        // Guardar la nueva clase de vuelo
+       
         await claseVueloService.Guardar(ClaseVuelo);
         Toast.Notify(new(ToastType.Success, "Éxito", "Clase de vuelo registrada correctamente."));
+
+        
         ClaseVuelo = new ClaseVuelo();
         await Task.Delay(4000);
         navigation.NavigateTo("/ClaseVuelo/Index");
     }
+
 }

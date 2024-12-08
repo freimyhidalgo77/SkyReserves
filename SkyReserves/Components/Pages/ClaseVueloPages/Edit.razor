@@ -32,6 +32,16 @@
                     <ValidationMessage For="@(() => ClaseVuelo.descripcionClase)" />
                 </div>
 
+                <!-- Monto de la Clase -->
+                <label for="monto" class="form-label"><strong>Monto de la Clase (USD)</strong></label>
+                <div class="input-group mb-3">
+                    <span class="input-group-text">$</span>
+                    <InputNumber id="monto" class="form-control" @bind-Value="ClaseVuelo.Monto" />
+                </div>
+                <ValidationMessage For="@(() => ClaseVuelo.Monto)" />
+
+
+
                 @if (!string.IsNullOrEmpty(Mensaje))
                 {
                     <div class="alert alert-warning mt-3" role="alert">
@@ -65,19 +75,29 @@
 
     public async Task<bool> Validar()
     {
+        
         if (string.IsNullOrWhiteSpace(ClaseVuelo.descripcionClase))
         {
             Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "La descripción es obligatoria."));
             return false;
         }
 
-        // Verificar si ya existe una clase de vuelo con la misma descripción
-        var claseVueloExistente = await claseVueloService.Listar(w => w.descripcionClase.ToLower() == ClaseVuelo.descripcionClase.ToLower());
+       
+        var claseVueloActual = await claseVueloService.Buscar(ClaseVuelo.ClaseVueloId);
 
-        if (claseVueloExistente.Any())
+        
+        if (!string.Equals(claseVueloActual.descripcionClase, ClaseVuelo.descripcionClase, StringComparison.OrdinalIgnoreCase))
         {
-            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "Ya existe una clase de vuelo con esta descripción."));
-            return false;
+            
+            var claseVueloExistente = await claseVueloService.Listar(w =>
+                w.descripcionClase.ToLower() == ClaseVuelo.descripcionClase.ToLower() &&
+                w.ClaseVueloId != ClaseVuelo.ClaseVueloId);
+
+            if (claseVueloExistente.Any())
+            {
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "Ya existe una clase de vuelo con esta descripción."));
+                return false;
+            }
         }
 
         return true;
