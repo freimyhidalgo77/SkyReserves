@@ -54,13 +54,32 @@
 	public Destino2 destino { get; set; } = new Destino2();
 	public string mensaje { get; set; } = string.Empty;
 
+
 	protected override async Task OnInitializedAsync()
 	{
 		Vuelo = await vueloService.Buscar(VueloId);
-		origen = await origenService.Buscar(OrigenId);
-		destino = await destinoService.Buscar(DestinoId);
-		
+
+		if (Vuelo != null)
+		{
+			OrigenId = Vuelo.OrigenId;
+			DestinoId = Vuelo.DestinoId;
+
+			// Cargar el origen y destino relacionados con los Ids del vuelo
+			origen = await origenService.Buscar(OrigenId);
+			destino = await destinoService.Buscar(DestinoId);
+
+			if (origen == null || destino == null)
+			{
+				mensaje = "No se encontró el origen o destino.";
+			}
+		}
+		else
+		{
+			mensaje = "No se encontró el vuelo.";
+		}
 	}
+
+
 
 
 

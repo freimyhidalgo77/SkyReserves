@@ -68,7 +68,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var asiento in Reserva.AsientoDetalle)
+                            @foreach (var asiento in Reserva?.AsientoDetalle ?? new List<AsientoDetalle>())
+
                             {
                                 if (asiento is null) continue;
                                 <tr class="text-center">
@@ -197,7 +198,6 @@
                 : "El asiento ya está seleccionado.";
         }
     }
-
 
 
 

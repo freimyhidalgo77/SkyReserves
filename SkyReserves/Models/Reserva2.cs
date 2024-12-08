@@ -18,7 +18,10 @@ namespace SkyReserves.Models
         [ForeignKey("ReservaId")]
         public ICollection<ClaseVueloDetalle> ClaseVueloDetalle { get; set; } = new List<ClaseVueloDetalle>();
 
-     
+
+        public int OrigenId { get; set; } 
+        public int DestinoId { get; set; }
+
 
     }
 }

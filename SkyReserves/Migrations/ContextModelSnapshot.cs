@@ -56,15 +56,7 @@ namespace SkyReserves.Migrations
                     b.Property<string>("Letra")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ReservaId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VueloId")
-                        .HasColumnType("int");
-
                     b.HasKey("AsientoId");
-
-                    b.HasIndex("ReservaId");
 
                     b.ToTable("Asientos2");
 
@@ -74,144 +66,126 @@ namespace SkyReserves.Migrations
                             AsientoId = 1,
                             Existencia = 1,
                             Fila = "1",
-                            Letra = "A",
-                            VueloId = 1
+                            Letra = "A"
                         },
                         new
                         {
                             AsientoId = 2,
                             Existencia = 1,
                             Fila = "2",
-                            Letra = "B",
-                            VueloId = 2
+                            Letra = "B"
                         },
                         new
                         {
                             AsientoId = 3,
                             Existencia = 1,
                             Fila = "1",
-                            Letra = "C",
-                            VueloId = 3
+                            Letra = "C"
                         },
                         new
                         {
                             AsientoId = 4,
                             Existencia = 1,
                             Fila = "1",
-                            Letra = "D",
-                            VueloId = 4
+                            Letra = "D"
                         },
                         new
                         {
                             AsientoId = 5,
                             Existencia = 1,
                             Fila = "1",
-                            Letra = "E",
-                            VueloId = 5
+                            Letra = "E"
                         },
                         new
                         {
                             AsientoId = 6,
                             Existencia = 1,
                             Fila = "1",
-                            Letra = "F",
-                            VueloId = 6
+                            Letra = "F"
                         },
                         new
                         {
                             AsientoId = 7,
                             Existencia = 1,
                             Fila = "2",
-                            Letra = "A",
-                            VueloId = 7
+                            Letra = "A"
                         },
                         new
                         {
                             AsientoId = 8,
                             Existencia = 1,
                             Fila = "2",
-                            Letra = "B",
-                            VueloId = 8
+                            Letra = "B"
                         },
                         new
                         {
                             AsientoId = 9,
                             Existencia = 1,
                             Fila = "2",
-                            Letra = "C",
-                            VueloId = 9
+                            Letra = "C"
                         },
                         new
                         {
                             AsientoId = 10,
                             Existencia = 1,
                             Fila = "2",
-                            Letra = "D",
-                            VueloId = 10
+                            Letra = "D"
                         },
                         new
                         {
                             AsientoId = 11,
                             Existencia = 1,
                             Fila = "2",
-                            Letra = "E",
-                            VueloId = 11
+                            Letra = "E"
                         },
                         new
                         {
                             AsientoId = 12,
                             Existencia = 1,
                             Fila = "2",
-                            Letra = "F",
-                            VueloId = 12
+                            Letra = "F"
                         },
                         new
                         {
                             AsientoId = 13,
                             Existencia = 1,
                             Fila = "3",
-                            Letra = "A",
-                            VueloId = 13
+                            Letra = "A"
                         },
                         new
                         {
                             AsientoId = 14,
                             Existencia = 1,
                             Fila = "3",
-                            Letra = "B",
-                            VueloId = 14
+                            Letra = "B"
                         },
                         new
                         {
                             AsientoId = 15,
                             Existencia = 1,
                             Fila = "3",
-                            Letra = "C",
-                            VueloId = 15
+                            Letra = "C"
                         },
                         new
                         {
                             AsientoId = 16,
                             Existencia = 1,
                             Fila = "3",
-                            Letra = "D",
-                            VueloId = 16
+                            Letra = "D"
                         },
                         new
                         {
                             AsientoId = 17,
                             Existencia = 1,
                             Fila = "3",
-                            Letra = "E",
-                            VueloId = 17
+                            Letra = "E"
                         },
                         new
                         {
                             AsientoId = 18,
                             Existencia = 1,
                             Fila = "3",
-                            Letra = "F",
-                            VueloId = 18
+                            Letra = "F"
                         });
                 });
 
@@ -230,6 +204,7 @@ namespace SkyReserves.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Fila")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Letra")
@@ -255,15 +230,10 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClaseVueloId"));
 
-                    b.Property<int?>("ReservaId")
-                        .HasColumnType("int");
-
                     b.Property<string>("descripcionClase")
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("ClaseVueloId");
-
-                    b.HasIndex("ReservaId");
 
                     b.ToTable("ClaseVuelo2");
 
@@ -513,7 +483,13 @@ namespace SkyReserves.Migrations
                     b.Property<int?>("Destino2DestinoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("DestinoId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("Origen2OrigenId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrigenId")
                         .HasColumnType("int");
 
                     b.HasKey("ReservaId");
@@ -615,13 +591,6 @@ namespace SkyReserves.Migrations
                     b.ToTable("VuelosEspeciales2");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Asiento2", b =>
-                {
-                    b.HasOne("SkyReserves.Models.Reserva2", null)
-                        .WithMany("AsientoDetalle")
-                        .HasForeignKey("ReservaId");
-                });
-
             modelBuilder.Entity("SkyReserves.Models.AsientoDetalle", b =>
                 {
                     b.HasOne("SkyReserves.Models.Asiento2", "Asiento")
@@ -631,7 +600,7 @@ namespace SkyReserves.Migrations
                         .IsRequired();
 
                     b.HasOne("SkyReserves.Models.Reserva2", "Reserva")
-                        .WithMany()
+                        .WithMany("AsientoDetalle")
                         .HasForeignKey("ReservaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -639,13 +608,6 @@ namespace SkyReserves.Migrations
                     b.Navigation("Asiento");
 
                     b.Navigation("Reserva");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.ClaseVuelo2", b =>
-                {
-                    b.HasOne("SkyReserves.Models.Reserva2", null)
-                        .WithMany("ClaseVueloDetalle")
-                        .HasForeignKey("ReservaId");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.ClaseVueloDetalle", b =>
@@ -657,7 +619,7 @@ namespace SkyReserves.Migrations
                         .IsRequired();
 
                     b.HasOne("SkyReserves.Models.Reserva2", "Reserva")
-                        .WithMany()
+                        .WithMany("ClaseVueloDetalle")
                         .HasForeignKey("ReservaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

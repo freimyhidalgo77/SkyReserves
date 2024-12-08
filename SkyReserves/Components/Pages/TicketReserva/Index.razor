@@ -5,6 +5,9 @@
 @inject OrigenService origenService
 @inject DestinoService destinoService
 @inject AsientoDetalleService asientoDetalleService
+@inject ClaseVueloDetalleService claseVueloDetalleService
+@inject ClaseVueloService claseVueloService
+
 <link rel="stylesheet" href="/Style/Ticket.css" />
 
 <PageTitle>Reserva Vuelo</PageTitle>
@@ -30,19 +33,41 @@
         </div>
 
         <div class="bordered bordered-success pt-3 mt-3">
+            <!-- Tabla para los detalles del asiento -->
+            <h5><strong>Detalles de los Asientos:</strong></h5>
             <table class="table table-light table-bordered">
                 <thead class="table table-striped text-center">
                     <tr>
                         <th>Asiento</th>
-                        <th>Clase de Vuelo</th>
+                        <th>Fila</th>
+                        <th>Letra</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach (var asientoDetalle in AsientoDetalleList)
                     {
                         <tr>
-                            <td>@asientoDetalle?.Asiento?.Fila</td> <!-- Asiento nombre -->
-                          
+                            <td>@asientoDetalle?.Asiento?.Fila - @asientoDetalle?.Asiento?.Letra</td>
+                            <td>@asientoDetalle?.Existencia</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <!-- Tabla para los detalles de la clase de vuelo -->
+            <h5><strong>Detalles de la Clase de Vuelo:</strong></h5>
+            <table class="table table-light table-bordered">
+                <thead class="table table-striped text-center">
+                    <tr>
+                        <th>Clase de Vuelo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var claseVueloDetalle in ClaseVueloDetalleList)
+                    {
+                      
+                        <tr>
+                            <td>@claseVueloDetalle?.DescripcionClase ?? "No encontrada"</td>
                         </tr>
                     }
                 </tbody>
@@ -54,29 +79,35 @@
 @code {
     [Parameter] public int ReservaId { get; set; }
     public Reserva2 Reserva { get; set; } = new Reserva2();
+    public AsientoDetalle AsientoDetalle { get; set; } = new AsientoDetalle();
     public List<AsientoDetalle> AsientoDetalleList { get; set; } = new List<AsientoDetalle>();
+    public List<ClaseVueloDetalle> ClaseVueloDetalleList{ get; set; } = new List<ClaseVueloDetalle>();
     public Origen2 Origen { get; set; } = new Origen2();
     public Destino2 Destino { get; set; } = new Destino2();
     public Vuelo2 vuelo2 { get; set; } = new Vuelo2();
+    public List<Asiento2> Asientos { get; set; } = new List<Asiento2>();
+    public Asiento2 asient { get; set; } = new Asiento2();
+    public ClaseVuelo2 claseVuelo { get; set; } = new ClaseVuelo2();
 
-   /* protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
     {
         // Obtener la reserva actual
         Reserva = await reservaService.Buscar(ReservaId);
 
-        // Si la reserva tiene un VueloId o algo similar
-        if (Reserva != null && Reserva.VueloId != 0) // Asegúrate de que exista el vuelo
+        // Obtener los datos relacionados (origen y destino)
+        if (Reserva != null)
         {
-            var vuelo = await vueloService.Buscar(Reserva.VueloId); // Obtener el vuelo relacionado
-            Origen = vuelo?.Origen;  // Obtener el origen del vuelo
-            Destino = vuelo?.Destino;  // Obtener el destino del vuelo
+            Origen = await origenService.Buscar(Reserva.OrigenId);
+            Destino = await destinoService.Buscar(Reserva.DestinoId);
         }
 
         // Obtener los detalles de los asientos de la reserva
-        AsientoDetalleList = await asientoDetalleService.ListarAsientoDetalle(ReservaId);
+       AsientoDetalleList = await asientoDetalleService.ListarAsientoDetalle(ReservaId);
 
-        // Obtener detalles adicionales de la reserva (si es necesario)
-        reservaList = await reservaService.ListarDetalles(ReservaId);
-    }*/
+       //ClaseVueloDetalleList = await claseVueloDetalleService.(ReservaId);
+    
 
+        // Verifica si AsientoDetalleList tiene datos
+        Console.WriteLine($"Cantidad de Asientos: {AsientoDetalleList.Count}");
+    }
 }

@@ -5,44 +5,45 @@ using System.Linq.Expressions;
 
 namespace SkyReserves.Service
 {
-    public class AsientoDetalleService(IDbContextFactory<Context> DbFactory)
+    public class AsientoDetalleService
     {
+        private readonly IDbContextFactory<Context> _dbContextFactory;
 
-        private readonly Context _context;
-
+        public AsientoDetalleService(IDbContextFactory<Context> dbContextFactory)
+        {
+            _dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
+        }
 
         public async Task<List<Asiento2>> Listar(Expression<Func<Asiento2, bool>> criterio)
         {
-            await using var context = await DbFactory.CreateDbContextAsync();
+            await using var context = await _dbContextFactory.CreateDbContextAsync();
             return await context.Asientos2.Where(criterio).ToListAsync();
         }
 
-
         public async Task<bool> Eliminar(int detalleId)
         {
-            await using var contexto = await DbFactory.CreateDbContextAsync();
-            var detalle = await contexto.AsientoDetalles1.FindAsync(detalleId);
+            await using var context = await _dbContextFactory.CreateDbContextAsync();
+            var detalle = await context.AsientoDetalles1.FindAsync(detalleId);
             if (detalle != null)
             {
-
-                contexto.AsientoDetalles1.Remove(detalle);
-                await contexto.SaveChangesAsync();
+                context.AsientoDetalles1.Remove(detalle);
+                await context.SaveChangesAsync();
                 return true;
             }
             return false;
         }
 
-        public async Task<List<AsientoDetalle>> ListarAsientoDetalle(Expression<Func<AsientoDetalle, bool>> criterio)
+        public async Task<List<AsientoDetalle>> ListarAsientoDetalle(int reservaId)
         {
-            await using var context = await DbFactory.CreateDbContextAsync();
+          
+            await using var context = await _dbContextFactory.CreateDbContextAsync();
+
+        
             return await context.AsientoDetalles1
-                .Where(criterio)
-                .ToListAsync();
+                .Where(a => a.ReservaId == reservaId)  
+                .Include(a => a.Asiento)  
+                .ToListAsync();  
         }
-
-
-
-
 
     }
 }
