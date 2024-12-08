@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using SkyReserves.DAL;
 using SkyReserves.Models;
 using System.Linq.Expressions;
@@ -63,12 +64,16 @@ namespace SkyReserves.Service
         }
 
 
-        public async Task<Reserva2?> BuscarConDetalle(int Id)
+        public async Task<Reserva2?> BuscarConDetalle(int reservaId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.Reserva2
-                .Include(t => t.AsientoDetalle)
-                .FirstOrDefaultAsync(t => t.ReservaId == Id);
+                .Where(r => r.ReservaId == reservaId)
+                .Include(r => r.AsientoDetalle)
+                .ThenInclude(ad => ad.Asiento)
+                .Include(r => r.ClaseVueloDetalle)
+                .ThenInclude(cd => cd.ClaseVuelo)
+                .FirstOrDefaultAsync();
         }
 
 

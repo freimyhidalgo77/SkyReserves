@@ -1,73 +1,75 @@
 ﻿@page "/Ticket/Index"
 @rendermode InteractiveServer
 @inject ReservaService reservaService
-@inject VueloService vueloService
-@inject OrigenService origenService
-@inject DestinoService destinoService
 @inject AsientoDetalleService asientoDetalleService
 @inject ClaseVueloDetalleService claseVueloDetalleService
-@inject ClaseVueloService claseVueloService
 
 <link rel="stylesheet" href="/Style/Ticket.css" />
 
 <PageTitle>Reserva Vuelo</PageTitle>
-
 <div class="container">
     <div class="card shadow-lg">
         <div class="card-header">
             <h3><strong>Detalles de la reserva creada</strong></h3>
         </div>
         <div class="card-body">
-            <div class="mb-1">
-                <p><strong>Reserva ID:</strong> @Reserva?.ReservaId</p>
-            </div>
-            <div class="mb-1">
-                <p><strong>Origen:</strong> @Origen?.origen</p>
-            </div>
-            <div class="mb-1">
-                <p><strong>Destino:</strong> @Destino?.destino</p>
-            </div>
-            <div class="mb-1">
-                <p><strong>Número de pasajeros:</strong> @vuelo2?.NumeroPasajeros</p>
-            </div>
+            @if (Reserva != null)
+            {
+                <p><strong>Reserva ID:</strong> @Reserva.ReservaId</p>
+            }
+           
         </div>
 
         <div class="bordered bordered-success pt-3 mt-3">
-            <!-- Tabla para los detalles del asiento -->
             <h5><strong>Detalles de los Asientos:</strong></h5>
             <table class="table table-light table-bordered">
-                <thead class="table table-striped text-center">
+                <thead class="table-striped text-center">
                     <tr>
-                        <th>Asiento</th>
                         <th>Fila</th>
                         <th>Letra</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var asientoDetalle in AsientoDetalleList)
+                    @if (AsientoDetalleList != null && AsientoDetalleList.Any())
+                    {
+                        @foreach (var asientoDetalle in AsientoDetalleList)
+                        {
+                            <tr>
+                                <td>@(asientoDetalle.Asiento?.Fila ?? "No encontrado")</td>
+                                <td>@(asientoDetalle.Asiento?.Letra ?? "No encontrado")</td>
+                            </tr>
+                        }
+                    }
+                    else
                     {
                         <tr>
-                            <td>@asientoDetalle?Fila</td>
-                            <td>@asientoDetalle?.Letra</td>
+                            <td colspan="2" class="text-center">No hay asientos disponibles.</td>
                         </tr>
                     }
                 </tbody>
             </table>
 
-            <!-- Tabla para los detalles de la clase de vuelo -->
             <h5><strong>Detalles de la Clase de Vuelo:</strong></h5>
             <table class="table table-light table-bordered">
-                <thead class="table table-striped text-center">
+                <thead class="table-striped text-center">
                     <tr>
                         <th>Clase de Vuelo</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var claseVueloDetalle in ClaseVueloDetalleList)
+                    @if (ClaseVueloDetalleList != null && ClaseVueloDetalleList.Any())
                     {
-                      
+                        @foreach (var claseVueloDetalle in ClaseVueloDetalleList)
+                        {
+                            <tr>
+                                <td>@(claseVueloDetalle.ClaseVuelo?.descripcionClase ?? "No encontrada")</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
                         <tr>
-                            <td>@claseVueloDetalle?.DescripcionClase ?? "No encontrada"</td>
+                            <td class="text-center">No hay clases disponibles.</td>
                         </tr>
                     }
                 </tbody>
@@ -79,34 +81,21 @@
 @code {
     [Parameter] public int ReservaId { get; set; }
     public Reserva2 Reserva { get; set; } = new Reserva2();
-    public AsientoDetalle AsientoDetalle { get; set; } = new AsientoDetalle();
     public List<AsientoDetalle> AsientoDetalleList { get; set; } = new List<AsientoDetalle>();
-    public List<ClaseVueloDetalle> ClaseVueloDetalleList{ get; set; } = new List<ClaseVueloDetalle>();
-    public Origen2 Origen { get; set; } = new Origen2();
-    public Destino2 Destino { get; set; } = new Destino2();
-    public Vuelo2 vuelo2 { get; set; } = new Vuelo2();
-    public List<Asiento2> Asientos { get; set; } = new List<Asiento2>();
-    public Asiento2 asient { get; set; } = new Asiento2();
-    public ClaseVuelo2 claseVuelo { get; set; } = new ClaseVuelo2();
+    public List<ClaseVueloDetalle> ClaseVueloDetalleList { get; set; } = new List<ClaseVueloDetalle>();
 
     protected override async Task OnInitializedAsync()
     {
+        await CargarDetalles();
+    }
 
-        Reserva = await reservaService.Buscar(ReservaId);
-
-     
+    private async Task CargarDetalles()
+    {
+        Reserva = await reservaService.BuscarConDetalle(ReservaId);
         if (Reserva != null)
         {
-            Origen = await origenService.Buscar(Reserva.OrigenId);
-            Destino = await destinoService.Buscar(Reserva.DestinoId);
+            AsientoDetalleList = await asientoDetalleService.ListarAsientoDetalle(ReservaId);
+            ClaseVueloDetalleList = await claseVueloDetalleService.ListarClaseVueloDetalle(cd => cd.ReservaId == ReservaId);
         }
-
-       AsientoDetalleList = await asientoDetalleService.ListarAsientoDetalle(ReservaId);
-
-      // ClaseVueloDetalleList = await asientoDetalleService.(ReservaId);
-    
-
-        // Verifica si AsientoDetalleList tiene datos
-        Console.WriteLine($"Cantidad de Asientos: {AsientoDetalleList.Count}");
     }
 }

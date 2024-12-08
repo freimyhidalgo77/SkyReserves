@@ -17,7 +17,7 @@ builder.Services.AddDbContextFactory<Context>(o => o.UseSqlServer(ConStr));
 builder.Services.AddBlazorBootstrap();
 builder.Services.AddScoped<AccesibilidadService>();
 builder.Services.AddScoped<ReservaService>();
-builder.Services.AddScoped<ClaseVueloService>();
+//builder.Services.AddScoped<ClaseVueloService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<NacionalidadService>();
 builder.Services.AddScoped<OrigenService>();

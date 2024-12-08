@@ -21,6 +21,7 @@ namespace SkyReserves.Service
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.ClaseVueloDetalle
                 .Where(criterio)
+                .Include(cd => cd.ClaseVuelo) 
                 .ToListAsync();
         }
 

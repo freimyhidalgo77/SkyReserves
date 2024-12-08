@@ -45,5 +45,20 @@ namespace SkyReserves.Service
                 .ToListAsync();  
         }
 
+
+        public async Task<List<ClaseVueloDetalle>> ListarClaseVueloDetalle(int reservaId)
+        {
+
+            await using var context = await _dbContextFactory.CreateDbContextAsync();
+
+
+            return await context.ClaseVueloDetalle
+                .Where(a => a.ReservaId == reservaId)
+                .Include(a => a.ClaseVuelo)
+                .ToListAsync();
+        }
+
+
+
     }
 }

@@ -66,7 +66,6 @@ public class Context : DbContext
             new Asiento2 { AsientoId = 17, Fila = "3", Letra = "E", Existencia = 1 },
             new Asiento2 { AsientoId = 18,  Fila = "3", Letra = "F", Existencia = 1 }
 
-
         );
 
 
