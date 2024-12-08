@@ -60,5 +60,12 @@ namespace SkyReserves.Service
                 .ToListAsync();
         }
 
+        public async Task<List<ClaseVuelo>> Listar()
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            return await context.ClaseVuelo.ToListAsync();
+        }
+
+
     }
 }

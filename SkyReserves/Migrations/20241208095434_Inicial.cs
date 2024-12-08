@@ -48,7 +48,8 @@ namespace SkyReserves.Migrations
                 {
                     ClaseVueloId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    descripcionClase = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    descripcionClase = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Monto = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -142,10 +143,11 @@ namespace SkyReserves.Migrations
                 {
                     PagoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MetodoPago = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    FechaPago = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EstadoPago = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ReservaId = table.Column<int>(type: "int", nullable: false)
+                    ClaseVueloId = table.Column<int>(type: "int", nullable: false),
+                    TarjetaNumero = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    FechaVencimiento = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CVV = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: false),
+                    MontoPagar = table.Column<double>(type: "float", nullable: false)
                 },
                 constraints: table =>
                 {
