@@ -235,7 +235,7 @@
             return;
         }
 
-        Toast.Notify(new(ToastType.Success, "Vuelo reservado", "El vuelo se ha reservado con exito!"));
+        Toast.Notify(new(ToastType.Primary, "Vuelo reservado", "El vuelo se ha reservado con exito!"));
         var crearReserva = await reservaService.Guardar(Reserva);
         Reserva = new Reserva2();
         if (crearReserva)

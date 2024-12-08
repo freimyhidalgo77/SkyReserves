@@ -32,6 +32,17 @@ namespace SkyReserves.Service
             return false;
         }
 
+        public async Task<List<AsientoDetalle>> ListarAsientoDetalle(Expression<Func<AsientoDetalle, bool>> criterio)
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            return await context.AsientoDetalles1
+                .Where(criterio)
+                .ToListAsync();
+        }
+
+
+
+
 
     }
 }
