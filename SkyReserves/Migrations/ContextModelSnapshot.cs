@@ -91,6 +91,9 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClaseVueloId"));
 
+                    b.Property<double>("Monto")
+                        .HasColumnType("float");
+
                     b.Property<string>("descripcionClase")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -299,19 +302,24 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PagoId"));
 
-                    b.Property<string>("EstadoPago")
+                    b.Property<string>("CVV")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
-                    b.Property<DateTime>("FechaPago")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MetodoPago")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ReservaId")
+                    b.Property<int>("ClaseVueloId")
                         .HasColumnType("int");
+
+                    b.Property<string>("FechaVencimiento")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("MontoPagar")
+                        .HasColumnType("float");
+
+                    b.Property<string>("TarjetaNumero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PagoId");
 
