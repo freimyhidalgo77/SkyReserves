@@ -31,8 +31,8 @@
 </EditForm>
 
 @code {
-    public Destino2 Destino { get; set; } = new Destino2();
-    public List<Destino2> destinoLits { get; set; } = new List<Destino2>();
+    public Destino Destino { get; set; } = new Destino();
+    public List<Destino> destinoLits { get; set; } = new List<Destino>();
     public string Mensaje { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -60,7 +60,7 @@
 
             Toast.Notify(new(ToastType.Success, "Destino de vuelo Guardado", "El destino de vuelo se ha guardado con exito!"));
             await destinoService.Guardar(Destino);
-            Destino = new Destino2();
+            Destino = new Destino();
             navigation.NavigateTo("/Destino/Index");
         }
     }

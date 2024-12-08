@@ -64,14 +64,14 @@
 
   
 
-    public Vuelo2 Vuelo { get; set; } = new Vuelo2();
-    public List<Origen2> OrigenList { get; set; } = new List<Origen2>();
-    public List<Destino2> DestinoList { get; set; } = new List<Destino2>();
-    public List<Asiento2> AsientoList { get; set; } = new List<Asiento2>();
+    public Vuelo Vuelo { get; set; } = new Vuelo();
+    public List<Origen> OrigenList { get; set; } = new List<Origen>();
+    public List<Destino> DestinoList { get; set; } = new List<Destino>();
+    public List<Asiento> AsientoList { get; set; } = new List<Asiento>();
     private const int LimitePasajeros = 16;
-    public List<Asiento2> AsientosSeleccionados { get; set; } = [];
-    public Origen2 Origen { get; set; } = new Origen2();
-    public Destino2 Destino { get; set; } = new Destino2();
+    public List<Asiento> AsientosSeleccionados { get; set; } = [];
+    public Origen Origen { get; set; } = new Origen();
+    public Destino Destino { get; set; } = new Destino();
 
 
     protected override async Task OnInitializedAsync()
@@ -144,7 +144,7 @@
         if (guardarExitoso)
         {
             Toast.Notify(new(ToastType.Success, "Vuelo Creado", "El vuelo se ha creado con éxito."));
-            Vuelo = new Vuelo2();
+            Vuelo = new Vuelo();
             navigation.NavigateTo("/Reserva/Index");
         }
         else

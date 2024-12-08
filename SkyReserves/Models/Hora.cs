@@ -2,7 +2,7 @@
 
 namespace SkyReserves.Models
 {
-    public class Hora2
+    public class Hora
     {
         [Key]
         public int HoraID { get; set; }

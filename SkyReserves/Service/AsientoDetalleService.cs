@@ -14,19 +14,19 @@ namespace SkyReserves.Service
             _dbContextFactory = dbContextFactory ?? throw new ArgumentNullException(nameof(dbContextFactory));
         }
 
-        public async Task<List<Asiento2>> Listar(Expression<Func<Asiento2, bool>> criterio)
+        public async Task<List<Asiento>> Listar(Expression<Func<Asiento, bool>> criterio)
         {
             await using var context = await _dbContextFactory.CreateDbContextAsync();
-            return await context.Asientos2.Where(criterio).ToListAsync();
+            return await context.Asientos.Where(criterio).ToListAsync();
         }
 
         public async Task<bool> Eliminar(int detalleId)
         {
             await using var context = await _dbContextFactory.CreateDbContextAsync();
-            var detalle = await context.AsientoDetalles1.FindAsync(detalleId);
+            var detalle = await context.AsientoDetalles.FindAsync(detalleId);
             if (detalle != null)
             {
-                context.AsientoDetalles1.Remove(detalle);
+                context.AsientoDetalles.Remove(detalle);
                 await context.SaveChangesAsync();
                 return true;
             }
@@ -39,7 +39,7 @@ namespace SkyReserves.Service
             await using var context = await _dbContextFactory.CreateDbContextAsync();
 
         
-            return await context.AsientoDetalles1
+            return await context.AsientoDetalles
                 .Where(a => a.ReservaId == reservaId)  
                 .Include(a => a.Asiento)  
                 .ToListAsync();  

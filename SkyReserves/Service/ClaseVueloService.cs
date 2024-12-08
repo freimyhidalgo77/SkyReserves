@@ -14,14 +14,14 @@ namespace SkyReserves.Service
             return await context.ClaseVuelo.AnyAsync(e => e.ClaseVueloId == claseVueloId);
         }
 
-        private async Task<bool> Insertar(ClaseVuelo2 claseVuelo)
+        private async Task<bool> Insertar(ClaseVuelo claseVuelo)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             context.ClaseVuelo.Add(claseVuelo);
             return await context.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> Modificar(ClaseVuelo2 claseVuelo)
+        private async Task<bool> Modificar(ClaseVuelo claseVuelo)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             context.ClaseVuelo.Update(claseVuelo);
@@ -29,7 +29,7 @@ namespace SkyReserves.Service
             return modificado;
         }
 
-        public async Task<bool> Guardar(ClaseVuelo2 claseVuelo)
+        public async Task<bool> Guardar(ClaseVuelo claseVuelo)
         {
             if (!await Existe(claseVuelo.ClaseVueloId))
                 return await Insertar(claseVuelo);
@@ -45,14 +45,14 @@ namespace SkyReserves.Service
                 .ExecuteDeleteAsync() > 0;
         }
 
-        public async Task<ClaseVuelo2> Buscar(int id)
+        public async Task<ClaseVuelo> Buscar(int id)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.ClaseVuelo
                 .FirstOrDefaultAsync(e => e.ClaseVueloId == id);
         }
 
-        public async Task<List<ClaseVuelo2>> Listar(Expression<Func<ClaseVuelo2, bool>> criterio)
+        public async Task<List<ClaseVuelo>> Listar(Expression<Func<ClaseVuelo, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.ClaseVuelo

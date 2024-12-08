@@ -2,7 +2,7 @@
 
 namespace SkyReserves.Models
 {
-    public class ClaseVuelo2
+    public class ClaseVuelo
     {
 
         [Key]

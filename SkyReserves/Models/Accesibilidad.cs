@@ -2,7 +2,7 @@
 
 namespace SkyReserves.Models
 {
-    public class Accesibilidad2
+    public class Accesibilidad
     {
 
         [Key]

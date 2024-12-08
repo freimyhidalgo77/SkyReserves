@@ -11,12 +11,12 @@ namespace SkyReserves.Models
 
         [ForeignKey("Reserva2")]
         public int ReservaId { get; set; }
-        public Reserva2? Reserva { get; set; }
+        public Reserva? Reserva { get; set; }
 
 
         [ForeignKey("ClaseVuelo2")]
         public int ClaseVueloId { get; set; }
-        public ClaseVuelo2? ClaseVuelo { get; set; }
+        public ClaseVuelo? ClaseVuelo { get; set; }
 
 
         public string? DescripcionClase { get; set; }

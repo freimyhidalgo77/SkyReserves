@@ -10,25 +10,25 @@ namespace SkyReserves.Service
         private async Task<bool> Existe(int destinoId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Destino2.AnyAsync(e => e.DestinoId == destinoId);
+            return await context.Destino.AnyAsync(e => e.DestinoId == destinoId);
         }
 
-        private async Task<bool> Insertar(Destino2 destino)
+        private async Task<bool> Insertar(Destino destino)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            context.Destino2.Add(destino);
+            context.Destino.Add(destino);
             return await context.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> Modificar(Destino2 destino)
+        private async Task<bool> Modificar(Destino destino)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            context.Destino2.Update(destino);
+            context.Destino.Update(destino);
             var modificado = await context.SaveChangesAsync() > 0;
             return modificado;
         }
 
-        public async Task<bool> Guardar(Destino2 destino)
+        public async Task<bool> Guardar(Destino destino)
         {
             if (!await Existe(destino.DestinoId))
                 return await Insertar(destino);
@@ -39,30 +39,30 @@ namespace SkyReserves.Service
         public async Task<bool> Eliminar(int destinoId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Destino2
+            return await context.Destino
                 .Where(e => e.DestinoId == destinoId)
                 .ExecuteDeleteAsync() > 0;
         }
 
-        public async Task<Destino2?> Buscar(int id)
+        public async Task<Destino?> Buscar(int id)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Destino2
+            return await context.Destino
                 .FirstOrDefaultAsync(e => e.DestinoId == id);
         }
 
-        public async Task<Destino2?> BuscarDestino(string destino)
+        public async Task<Destino?> BuscarDestino(string destino)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Destino2
+            return await context.Destino
                 .FirstOrDefaultAsync(e => e.destino == destino);
         }
 
 
-        public async Task<List<Destino2>> Listar(Expression<Func<Destino2, bool>> criterio)
+        public async Task<List<Destino>> Listar(Expression<Func<Destino, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Destino2
+            return await context.Destino
                 .AsNoTracking()
                 .Where(criterio)
                 .ToListAsync();

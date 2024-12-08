@@ -39,8 +39,8 @@
 
     [Parameter]
     public int AccesibilidadId { get; set; }
-    public Accesibilidad2 Accesibilidad { get; set; } = new Accesibilidad2();
-    public List<Destino2> destinoList { get; set; } = new List<Destino2>();
+    public Accesibilidad Accesibilidad { get; set; } = new Accesibilidad();
+    public List<Destino> destinoList { get; set; } = new List<Destino>();
     public string Mensaje { get; set; } = string.Empty;
     //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
 
@@ -71,7 +71,7 @@
 
             Toast.Notify(new(ToastType.Primary, "Accesibilidad Modificada", "La accesibilidad se ha modificado con exito!"));
             await accesibilidadService.Guardar(Accesibilidad);
-            Accesibilidad = new Accesibilidad2();
+            Accesibilidad = new Accesibilidad();
             navigation.NavigateTo("/Accesibilidad/Index");
         }
     }

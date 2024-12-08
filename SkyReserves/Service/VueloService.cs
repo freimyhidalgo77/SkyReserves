@@ -12,20 +12,20 @@ namespace SkyReserves.Service
         private async Task<bool> Existe(int vueloId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Vuelo2.AnyAsync(e => e.VueloID == vueloId);
+            return await context.Vuelo.AnyAsync(e => e.VueloID == vueloId);
         }
 
         private async Task<bool> ExisteDestino(int destinoId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Destino2.AnyAsync(d => d.DestinoId == destinoId);
+            return await context.Destino.AnyAsync(d => d.DestinoId == destinoId);
         }
 
-        private async Task<bool> Insertar(Vuelo2 vuelo)
+        private async Task<bool> Insertar(Vuelo vuelo)
         {
 
             await using var context = await DbFactory.CreateDbContextAsync();
-            context.Vuelo2.Add(vuelo);
+            context.Vuelo.Add(vuelo);
             return await context.SaveChangesAsync() > 0;
 
 
@@ -40,7 +40,7 @@ namespace SkyReserves.Service
              return await context.SaveChangesAsync() > 0;*/
         }
 
-        private async Task<bool> Modificar(Vuelo2 vuelo)
+        private async Task<bool> Modificar(Vuelo vuelo)
         {
             // Verificar si el DestinoId existe en la base de datos antes de modificar
             if (!await ExisteDestino(vuelo.DestinoId))
@@ -49,12 +49,12 @@ namespace SkyReserves.Service
             }
 
             await using var context = await DbFactory.CreateDbContextAsync();
-            context.Vuelo2.Update(vuelo);
+            context.Vuelo.Update(vuelo);
             var modificado = await context.SaveChangesAsync() > 0;
             return modificado;
         }
 
-        public async Task<bool> Guardar(Vuelo2 vuelo)
+        public async Task<bool> Guardar(Vuelo vuelo)
         {
             if (!await Existe(vuelo.VueloID))
                 return await Insertar(vuelo);
@@ -65,31 +65,31 @@ namespace SkyReserves.Service
         public async Task<bool> Eliminar(int vueloId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Vuelo2
+            return await context.Vuelo
                 .Where(e => e.VueloID == vueloId)
                 .ExecuteDeleteAsync() > 0;
         }
 
-        public async Task<Vuelo2?> Buscar(int id)
+        public async Task<Vuelo?> Buscar(int id)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Vuelo2
+            return await context.Vuelo
                 .FirstOrDefaultAsync(e => e.VueloID == id);
                 
         }
 
-        public async Task<Vuelo2?> BuscarVuelo(int origenId, int destinoId)
+        public async Task<Vuelo?> BuscarVuelo(int origenId, int destinoId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Vuelo2
+            return await context.Vuelo
                 .FirstOrDefaultAsync(v => v.OrigenId == origenId && v.DestinoId == destinoId);
         }
 
 
-        public async Task<List<Vuelo2>> Listar(Expression<Func<Vuelo2, bool>> criterio)
+        public async Task<List<Vuelo>> Listar(Expression<Func<Vuelo, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Vuelo2
+            return await context.Vuelo
                  .Include(v => v.Origen) // Incluye la entidad relacionada Origen
                 .Include(v => v.Destino) // Incluye la entidad relacionada Destino
                 .AsNoTracking()

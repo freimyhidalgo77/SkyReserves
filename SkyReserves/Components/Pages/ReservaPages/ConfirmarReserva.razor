@@ -119,23 +119,23 @@
 
     public int OrigenId { get; set; }
     public int DestinoId { get; set; }
-    public Reserva2 Reserva { get; set; } = new Reserva2();
+    public Reserva Reserva { get; set; } = new Reserva();
 
     public AsientoDetalle ReservaAsientoDetalle { get; set; } = new AsientoDetalle();
     private List<AsientoDetalle> asientoDetalleList = new List<AsientoDetalle>();
     public ClaseVueloDetalle ClaseVueloDetalle { get; set; } = new ClaseVueloDetalle();
 
-    public Vuelo2 Vuelo { get; set; } = new Vuelo2();
-    public List<Origen2> OrigenList { get; set; } = new();
-    public List<Destino2> DestinoList { get; set; } = new();
-    public List<Asiento2> AsientoList { get; set; } = new();
+    public Vuelo Vuelo { get; set; } = new Vuelo();
+    public List<Origen> OrigenList { get; set; } = new();
+    public List<Destino> DestinoList { get; set; } = new();
+    public List<Asiento> AsientoList { get; set; } = new();
     public List<AsientoDetalle> AsientosSeleccionados { get; set; } = new List<AsientoDetalle>();
-    public Origen2 origen2 { get; set; } = new Origen2();
-    public Destino2 destino2 { get; set; } = new Destino2();
-    public List<ClaseVuelo2> ClaseVueloSeleccionado { get; set; } = new();
-    public List<ClaseVuelo2> ClaseVueloList { get; set; } = new List<ClaseVuelo2>();
-    public Asiento2 Asiento { get; set; } = new Asiento2();
-    public List<Reserva2> reservaList { get; set; } = new List<Reserva2>();
+    public Origen origen2 { get; set; } = new Origen();
+    public Destino destino2 { get; set; } = new Destino();
+    public List<ClaseVuelo> ClaseVueloSeleccionado { get; set; } = new();
+    public List<ClaseVuelo> ClaseVueloList { get; set; } = new List<ClaseVuelo>();
+    public Asiento Asiento { get; set; } = new Asiento();
+    public List<Reserva> reservaList { get; set; } = new List<Reserva>();
     public string mensaje { get; set; } = string.Empty;
 
 
@@ -214,7 +214,7 @@
 
         Toast.Notify(new(ToastType.Primary, "Vuelo reservado", "El vuelo se ha reservado con exito!"));
         var crearReserva = await reservaService.Guardar(Reserva);
-        Reserva = new Reserva2();
+        Reserva = new Reserva();
         if (crearReserva)
         {
            

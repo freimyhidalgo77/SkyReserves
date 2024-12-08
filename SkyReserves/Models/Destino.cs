@@ -2,7 +2,7 @@
 
 namespace SkyReserves.Models
 {
-    public class Destino2
+    public class Destino
     {
         [Key]
 
@@ -13,7 +13,7 @@ namespace SkyReserves.Models
 
         public string? destino { get; set; }
 
-        public ICollection<Reserva2>? Reservas { get; set; }
+   
 
     }
 }

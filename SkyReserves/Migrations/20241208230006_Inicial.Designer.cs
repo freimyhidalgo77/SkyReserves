@@ -12,7 +12,7 @@ using SkyReserves.DAL;
 namespace SkyReserves.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241208152008_Inicial")]
+    [Migration("20241208230006_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -25,7 +25,7 @@ namespace SkyReserves.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("SkyReserves.Models.Accesibilidad2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Accesibilidad", b =>
                 {
                     b.Property<int>("AccesibilidadId")
                         .ValueGeneratedOnAdd()
@@ -39,10 +39,10 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("AccesibilidadId");
 
-                    b.ToTable("Accesibilidad2");
+                    b.ToTable("Accesibilidad");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Asiento2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Asiento", b =>
                 {
                     b.Property<int>("AsientoId")
                         .ValueGeneratedOnAdd()
@@ -61,7 +61,7 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("AsientoId");
 
-                    b.ToTable("Asientos2");
+                    b.ToTable("Asientos");
 
                     b.HasData(
                         new
@@ -222,10 +222,10 @@ namespace SkyReserves.Migrations
 
                     b.HasIndex("ReservaId");
 
-                    b.ToTable("AsientoDetalles1");
+                    b.ToTable("AsientoDetalles");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.ClaseVuelo2", b =>
+            modelBuilder.Entity("SkyReserves.Models.ClaseVuelo", b =>
                 {
                     b.Property<int>("ClaseVueloId")
                         .ValueGeneratedOnAdd()
@@ -238,7 +238,7 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("ClaseVueloId");
 
-                    b.ToTable("ClaseVuelo2");
+                    b.ToTable("ClaseVuelo");
 
                     b.HasData(
                         new
@@ -294,7 +294,7 @@ namespace SkyReserves.Migrations
                     b.ToTable("ClaseVueloDetalle");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Cliente2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Cliente", b =>
                 {
                     b.Property<int>("ClienteId")
                         .ValueGeneratedOnAdd()
@@ -332,10 +332,10 @@ namespace SkyReserves.Migrations
 
                     b.HasIndex("AccesibilidadId");
 
-                    b.ToTable("Cliente2");
+                    b.ToTable("Cliente");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Destino2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Destino", b =>
                 {
                     b.Property<int>("DestinoId")
                         .ValueGeneratedOnAdd()
@@ -352,7 +352,7 @@ namespace SkyReserves.Migrations
                     b.ToTable("Destino2", (string)null);
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Hora2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Hora", b =>
                 {
                     b.Property<int>("HoraID")
                         .ValueGeneratedOnAdd()
@@ -365,7 +365,7 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("HoraID");
 
-                    b.ToTable("Hora2");
+                    b.ToTable("Hora");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.Nacionalidad1", b =>
@@ -382,10 +382,10 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("NacionalidadId");
 
-                    b.ToTable("Nacionalida1");
+                    b.ToTable("Nacionalida");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Origen2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Origen", b =>
                 {
                     b.Property<int>("OrigenId")
                         .ValueGeneratedOnAdd()
@@ -399,10 +399,10 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("OrigenId");
 
-                    b.ToTable("Origen2");
+                    b.ToTable("Origen");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Pago2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Pago", b =>
                 {
                     b.Property<int>("PagoId")
                         .ValueGeneratedOnAdd()
@@ -426,10 +426,10 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("PagoId");
 
-                    b.ToTable("Pago2");
+                    b.ToTable("Pago");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Pasaporte2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Pasaporte", b =>
                 {
                     b.Property<int>("PasaporteId")
                         .ValueGeneratedOnAdd()
@@ -462,10 +462,10 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("PasaporteId");
 
-                    b.ToTable("Pasaportes2");
+                    b.ToTable("Pasaportes");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.PasaporteDetalle2", b =>
+            modelBuilder.Entity("SkyReserves.Models.PasaporteDetalle", b =>
                 {
                     b.Property<int>("PasaporteId")
                         .HasColumnType("int");
@@ -475,7 +475,7 @@ namespace SkyReserves.Migrations
                     b.ToTable("PasaportesDetalle");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Reserva2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Reserva", b =>
                 {
                     b.Property<int>("ReservaId")
                         .ValueGeneratedOnAdd()
@@ -483,13 +483,7 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservaId"));
 
-                    b.Property<int?>("Destino2DestinoId")
-                        .HasColumnType("int");
-
                     b.Property<int>("DestinoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("Origen2OrigenId")
                         .HasColumnType("int");
 
                     b.Property<int>("OrigenId")
@@ -497,14 +491,10 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("ReservaId");
 
-                    b.HasIndex("Destino2DestinoId");
-
-                    b.HasIndex("Origen2OrigenId");
-
-                    b.ToTable("Reserva2");
+                    b.ToTable("Reserva");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.UserAccount2", b =>
+            modelBuilder.Entity("SkyReserves.Models.UserAccount", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -523,7 +513,7 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("UserAccount2");
+                    b.ToTable("UserAccount");
 
                     b.HasData(
                         new
@@ -542,7 +532,7 @@ namespace SkyReserves.Migrations
                         });
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Vuelo2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Vuelo", b =>
                 {
                     b.Property<int>("VueloID")
                         .ValueGeneratedOnAdd()
@@ -591,18 +581,18 @@ namespace SkyReserves.Migrations
 
                     b.HasIndex("OrigenId");
 
-                    b.ToTable("VuelosEspeciales2");
+                    b.ToTable("VuelosEspeciales");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.AsientoDetalle", b =>
                 {
-                    b.HasOne("SkyReserves.Models.Asiento2", "Asiento")
+                    b.HasOne("SkyReserves.Models.Asiento", "Asiento")
                         .WithMany()
                         .HasForeignKey("AsientoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SkyReserves.Models.Reserva2", "Reserva")
+                    b.HasOne("SkyReserves.Models.Reserva", "Reserva")
                         .WithMany("AsientoDetalle")
                         .HasForeignKey("ReservaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -615,13 +605,13 @@ namespace SkyReserves.Migrations
 
             modelBuilder.Entity("SkyReserves.Models.ClaseVueloDetalle", b =>
                 {
-                    b.HasOne("SkyReserves.Models.ClaseVuelo2", "ClaseVuelo")
+                    b.HasOne("SkyReserves.Models.ClaseVuelo", "ClaseVuelo")
                         .WithMany()
                         .HasForeignKey("ClaseVueloId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SkyReserves.Models.Reserva2", "Reserva")
+                    b.HasOne("SkyReserves.Models.Reserva", "Reserva")
                         .WithMany("ClaseVueloDetalle")
                         .HasForeignKey("ReservaId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -632,9 +622,9 @@ namespace SkyReserves.Migrations
                     b.Navigation("Reserva");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Cliente2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Cliente", b =>
                 {
-                    b.HasOne("SkyReserves.Models.Accesibilidad2", "Accesibilidad")
+                    b.HasOne("SkyReserves.Models.Accesibilidad", "Accesibilidad")
                         .WithMany()
                         .HasForeignKey("AccesibilidadId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -643,9 +633,9 @@ namespace SkyReserves.Migrations
                     b.Navigation("Accesibilidad");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.PasaporteDetalle2", b =>
+            modelBuilder.Entity("SkyReserves.Models.PasaporteDetalle", b =>
                 {
-                    b.HasOne("SkyReserves.Models.Pasaporte2", "Pasaporte")
+                    b.HasOne("SkyReserves.Models.Pasaporte", "Pasaporte")
                         .WithMany("PasaporteDetalle")
                         .HasForeignKey("PasaporteId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -654,26 +644,15 @@ namespace SkyReserves.Migrations
                     b.Navigation("Pasaporte");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Reserva2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Vuelo", b =>
                 {
-                    b.HasOne("SkyReserves.Models.Destino2", null)
-                        .WithMany("Reservas")
-                        .HasForeignKey("Destino2DestinoId");
-
-                    b.HasOne("SkyReserves.Models.Origen2", null)
-                        .WithMany("Reservas")
-                        .HasForeignKey("Origen2OrigenId");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.Vuelo2", b =>
-                {
-                    b.HasOne("SkyReserves.Models.Destino2", "Destino")
+                    b.HasOne("SkyReserves.Models.Destino", "Destino")
                         .WithMany()
                         .HasForeignKey("DestinoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SkyReserves.Models.Origen2", "Origen")
+                    b.HasOne("SkyReserves.Models.Origen", "Origen")
                         .WithMany()
                         .HasForeignKey("OrigenId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -686,13 +665,13 @@ namespace SkyReserves.Migrations
 
             modelBuilder.Entity("SkyReserves.Models.VuelosEspeciales2", b =>
                 {
-                    b.HasOne("SkyReserves.Models.Destino2", "Destino")
+                    b.HasOne("SkyReserves.Models.Destino", "Destino")
                         .WithMany()
                         .HasForeignKey("DestinoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SkyReserves.Models.Origen2", "Origen")
+                    b.HasOne("SkyReserves.Models.Origen", "Origen")
                         .WithMany()
                         .HasForeignKey("OrigenId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -703,22 +682,12 @@ namespace SkyReserves.Migrations
                     b.Navigation("Origen");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Destino2", b =>
-                {
-                    b.Navigation("Reservas");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.Origen2", b =>
-                {
-                    b.Navigation("Reservas");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.Pasaporte2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Pasaporte", b =>
                 {
                     b.Navigation("PasaporteDetalle");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Reserva2", b =>
+            modelBuilder.Entity("SkyReserves.Models.Reserva", b =>
                 {
                     b.Navigation("AsientoDetalle");
 

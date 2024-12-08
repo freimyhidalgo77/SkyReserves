@@ -13,12 +13,12 @@ namespace SkyReserves.Models
 
         [ForeignKey("Reserva2")]
         public int ReservaId { get; set; }
-        public Reserva2? Reserva { get; set; }
+        public Reserva? Reserva { get; set; }
 
 
         [ForeignKey("Asiento2")]
         public int AsientoId { get; set; }
-        public Asiento2? Asiento { get; set; }
+        public Asiento? Asiento { get; set; }
 
         [Required(ErrorMessage = "Favor llenar este campo ")]
         public string? Fila { get; set; }

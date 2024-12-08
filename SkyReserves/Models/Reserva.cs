@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkyReserves.Models
 {
-    public class Reserva2
+    public class Reserva
     {
 
         [Key]

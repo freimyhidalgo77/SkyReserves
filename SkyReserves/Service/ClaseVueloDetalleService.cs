@@ -10,7 +10,7 @@ namespace SkyReserves.Service
 
         private readonly Context _context;
 
-        public async Task<List<ClaseVuelo2>> Listar(Expression<Func<ClaseVuelo2, bool>> criterio)
+        public async Task<List<ClaseVuelo>> Listar(Expression<Func<ClaseVuelo, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.ClaseVuelo.Where(criterio).ToListAsync();

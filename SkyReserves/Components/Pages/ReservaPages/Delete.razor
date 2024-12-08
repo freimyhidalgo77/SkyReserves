@@ -46,12 +46,12 @@
 	public int VueloId { get; set; }
 	public int OrigenId { get; set; }
 	public int DestinoId { get; set; }
-	public Vuelo2 Vuelo { get; set; } = new Vuelo2();
-	public Reserva2? reserva;
-	public Asiento2 asiento { get; set; } = new Asiento2();
-	public List<Asiento2> Asiento { get; set; } = new();
-	public Origen2 origen { get; set; } = new Origen2();
-	public Destino2 destino { get; set; } = new Destino2();
+	public Vuelo Vuelo { get; set; } = new Vuelo();
+	public Reserva? reserva;
+	public Asiento asiento { get; set; } = new Asiento();
+	public List<Asiento> Asiento { get; set; } = new();
+	public Origen origen { get; set; } = new Origen();
+	public Destino destino { get; set; } = new Destino();
 	public string mensaje { get; set; } = string.Empty;
 
 

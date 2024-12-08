@@ -41,8 +41,8 @@
 
     [Parameter]
     public int OrigenId { get; set; }
-    public Origen2 Origen { get; set; } = new Origen2();
-    public List<Origen2> destinoList { get; set; } = new List<Origen2>();
+    public Origen Origen { get; set; } = new Origen();
+    public List<Origen> destinoList { get; set; } = new List<Origen>();
     public string Mensaje { get; set; } = string.Empty;
   
 
@@ -73,7 +73,7 @@
 
             Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardada", "El origen de vuelo se ha guardado con exito!"));
             await origenService.Guardar(Origen);
-            Origen = new Origen2();
+            Origen = new Origen();
             navigation.NavigateTo("/Origen/Index");
         }
     }

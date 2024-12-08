@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkyReserves.Models
 {
-    public class Pasaporte2
+    public class Pasaporte
     {
         [Key]
 
@@ -28,6 +28,6 @@ namespace SkyReserves.Models
         public string? CiudadNacimiento { get; set; }
 
         [ForeignKey("PasaporteId")]
-        public ICollection<PasaporteDetalle2> PasaporteDetalle { get; set; } = new List<PasaporteDetalle2>();
+        public ICollection<PasaporteDetalle> PasaporteDetalle { get; set; } = new List<PasaporteDetalle>();
     }
 }

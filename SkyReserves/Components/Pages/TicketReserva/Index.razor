@@ -78,16 +78,16 @@
 
 @code {
     [Parameter] public int ReservaId { get; set; }
-    public Reserva2 Reserva { get; set; } = new Reserva2();
+    public Reserva Reserva { get; set; } = new Reserva();
     public AsientoDetalle AsientoDetalle { get; set; } = new AsientoDetalle();
     public List<AsientoDetalle> AsientoDetalleList { get; set; } = new List<AsientoDetalle>();
     public List<ClaseVueloDetalle> ClaseVueloDetalleList{ get; set; } = new List<ClaseVueloDetalle>();
-    public Origen2 Origen { get; set; } = new Origen2();
-    public Destino2 Destino { get; set; } = new Destino2();
-    public Vuelo2 vuelo2 { get; set; } = new Vuelo2();
-    public List<Asiento2> Asientos { get; set; } = new List<Asiento2>();
-    public Asiento2 asient { get; set; } = new Asiento2();
-    public ClaseVuelo2 claseVuelo { get; set; } = new ClaseVuelo2();
+    public Origen Origen { get; set; } = new Origen();
+    public Destino Destino { get; set; } = new Destino();
+    public Vuelo vuelo2 { get; set; } = new Vuelo();
+    public List<Asiento> Asientos { get; set; } = new List<Asiento>();
+    public Asiento asient { get; set; } = new Asiento();
+    public ClaseVuelo claseVuelo { get; set; } = new ClaseVuelo();
 
     protected override async Task OnInitializedAsync()
     {
