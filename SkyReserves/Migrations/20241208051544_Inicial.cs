@@ -254,8 +254,8 @@ namespace SkyReserves.Migrations
                     AsientoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     VueloId = table.Column<int>(type: "int", nullable: false),
-                    Fila = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Letra = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Fila = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Letra = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Existencia = table.Column<int>(type: "int", nullable: false),
                     ReservaId = table.Column<int>(type: "int", nullable: true)
                 },
@@ -295,7 +295,10 @@ namespace SkyReserves.Migrations
                     AsientoDetalleID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ReservaId = table.Column<int>(type: "int", nullable: false),
-                    AsientoId = table.Column<int>(type: "int", nullable: false)
+                    AsientoId = table.Column<int>(type: "int", nullable: false),
+                    Fila = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Letra = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Existencia = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -318,14 +321,15 @@ namespace SkyReserves.Migrations
                 name: "ClaseVueloDetalle",
                 columns: table => new
                 {
-                    ReservaId = table.Column<int>(type: "int", nullable: false)
+                    ClaseVueloDetalleId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ReservaId1 = table.Column<int>(type: "int", nullable: false),
-                    ClaseVueloId = table.Column<int>(type: "int", nullable: false)
+                    ReservaId = table.Column<int>(type: "int", nullable: false),
+                    ClaseVueloId = table.Column<int>(type: "int", nullable: false),
+                    DescripcionClase = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClaseVueloDetalle", x => x.ReservaId);
+                    table.PrimaryKey("PK_ClaseVueloDetalle", x => x.ClaseVueloDetalleId);
                     table.ForeignKey(
                         name: "FK_ClaseVueloDetalle_ClaseVuelo2_ClaseVueloId",
                         column: x => x.ClaseVueloId,
@@ -333,8 +337,8 @@ namespace SkyReserves.Migrations
                         principalColumn: "ClaseVueloId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClaseVueloDetalle_Reserva2_ReservaId1",
-                        column: x => x.ReservaId1,
+                        name: "FK_ClaseVueloDetalle_Reserva2_ReservaId",
+                        column: x => x.ReservaId,
                         principalTable: "Reserva2",
                         principalColumn: "ReservaId",
                         onDelete: ReferentialAction.Cascade);
@@ -412,9 +416,9 @@ namespace SkyReserves.Migrations
                 column: "ClaseVueloId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClaseVueloDetalle_ReservaId1",
+                name: "IX_ClaseVueloDetalle_ReservaId",
                 table: "ClaseVueloDetalle",
-                column: "ReservaId1");
+                column: "ReservaId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Cliente2_AccesibilidadId",

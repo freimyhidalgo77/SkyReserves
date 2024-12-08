@@ -10,9 +10,8 @@
 @inject VueloService vueloService
 @inject AsientoDetalleService  asientoDetalleService
 @inject ClaseVueloDetalleService claseVueloDetalleService
-
 @inject ClaseVueloService claseVueloService
-<link rel="stylesheet" href="/Style/Reserve.css" />
+<link rel="stylesheet" href="/Style/ConfirmReserve.css" />
 
 <PageTitle>Confirmar reserva</PageTitle>
 <EditForm Model="Reserva" OnValidSubmit="Crear">
@@ -54,6 +53,10 @@
                     AsientoSeleccionado="AgregarAsiento" />
 
                     <hr />
+
+                    <div class="text-center">
+                        <img src="/ImagenesFondo/Boeing 737-Max 8 diagram.png" alt="Boeing 737-Max 8" class="img-fluid mt-4" />
+                    </div>
 
                     <table class="table table-light">
                         <thead class="table table-stripped">
@@ -169,39 +172,27 @@
 
 
 
-    private void AgregarAsiento(Asiento2 asientoId)
-    {
-        // Busca el asiento en la lista AsientoList usando el AsientoId
-        var asientoExistente = Reserva.AsientoDetalle.FirstOrDefault(A => A.AsientoId == asientoId );
-        if (asientoExistente!= null && !AsientosSeleccionados.Contains(asientoExistente))
-        {
-            // Crea un objeto Asiento2 a partir de AsientoDetalle
-            AsientosSeleccionados.Add(new Asiento2
-                {
-                    AsientoId = asientoDetalle.AsientoId,
-                    Fila = asientoDetalle.Fila,
-                    Letra = asientoDetalle.Letra,
-                    Existencia = asientoDetalle.Existencia
-                });
 
-            // Agrega el AsientoDetalle a la lista de detalles de reserva
-            var asientoReservaDetalle = new AsientoDetalle
+    public void AgregarAsiento(int asientoId)
+    {
+        var asiento = AsientoList.FirstOrDefault(a => a.AsientoId == asientoId);
+      //  if (asiento != null && !AsientosSeleccionados.Contains/*(asiento)*/)
+        {
+           // AsientosSeleccionados.Add(asiento);
+            var asientoDetalle = new AsientoDetalle
                 {
-                    AsientoId = asientoDetalle.AsientoId,
-                    Fila = asientoDetalle.Fila,
-                    Letra = asientoDetalle.Letra,
-                    Existencia = asientoDetalle.Existencia
+                    AsientoId = asiento.AsientoId,
+                    Fila = asiento.Fila,
+                    Letra = asiento.Letra,
+                    Existencia = asiento.Existencia
                 };
 
-            Reserva.AsientoDetalle.Add(asientoReservaDetalle);
+           // Reserva.AsientoDetalle.Add(asientoDetalle);
         }
     }
 
 
-
-
-
-    private void AgregarClaseVuelo(int claseVueloId)
+    public void AgregarClaseVuelo(int claseVueloId)
     {
         var claseVuelo = ClaseVueloList.FirstOrDefault(c => c.ClaseVueloId == claseVueloId);
         if (claseVuelo != null && !ClaseVueloSeleccionado.Contains(claseVuelo))
@@ -210,14 +201,13 @@
             var claseVueloDetalle = new ClaseVueloDetalle
                 {
                     ClaseVueloId = claseVuelo.ClaseVueloId,
-                    DescripcionClase = claseVuelo.descripcionClase 
+                    DescripcionClase = claseVuelo.descripcionClase
                 };
 
-        
-            Reserva.ClaseVueloDetalle.Add(claseVueloDetalle);
+          //  Reserva.ClaseVueloDetalle.Add(claseVueloDetalle);
         }
-    }
 
+    }
 
 
 
@@ -257,7 +247,7 @@
     {
         if (asiento != null)
         {
-            AsientosSeleccionados.Remove(asiento);
+           // AsientosSeleccionados.Remove(asiento);
         }
     }
 

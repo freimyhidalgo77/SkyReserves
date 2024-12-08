@@ -7,6 +7,8 @@ namespace SkyReserves.Models
     {
         [Key]
 
+        public int ClaseVueloDetalleId { get; set; }
+
         [ForeignKey("Reserva2")]
         public int ReservaId { get; set; }
         public Reserva2? Reserva { get; set; }

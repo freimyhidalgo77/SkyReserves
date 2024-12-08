@@ -51,11 +51,9 @@ namespace SkyReserves.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("Fila")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Letra")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("ReservaId")
@@ -228,6 +226,15 @@ namespace SkyReserves.Migrations
                     b.Property<int>("AsientoId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Existencia")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Fila")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Letra")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("ReservaId")
                         .HasColumnType("int");
 
@@ -290,23 +297,26 @@ namespace SkyReserves.Migrations
 
             modelBuilder.Entity("SkyReserves.Models.ClaseVueloDetalle", b =>
                 {
-                    b.Property<int>("ReservaId")
+                    b.Property<int>("ClaseVueloDetalleId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservaId"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClaseVueloDetalleId"));
 
                     b.Property<int>("ClaseVueloId")
                         .HasColumnType("int");
 
-                    b.Property<int>("ReservaId1")
+                    b.Property<string>("DescripcionClase")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReservaId")
                         .HasColumnType("int");
 
-                    b.HasKey("ReservaId");
+                    b.HasKey("ClaseVueloDetalleId");
 
                     b.HasIndex("ClaseVueloId");
 
-                    b.HasIndex("ReservaId1");
+                    b.HasIndex("ReservaId");
 
                     b.ToTable("ClaseVueloDetalle");
                 });
@@ -648,7 +658,7 @@ namespace SkyReserves.Migrations
 
                     b.HasOne("SkyReserves.Models.Reserva2", "Reserva")
                         .WithMany()
-                        .HasForeignKey("ReservaId1")
+                        .HasForeignKey("ReservaId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
