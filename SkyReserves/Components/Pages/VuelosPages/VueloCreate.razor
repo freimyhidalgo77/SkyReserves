@@ -3,7 +3,6 @@
 @inject ReservaService reservaService
 @inject OrigenService origenService
 @inject DestinoService destinoService
-@inject AsientoService asientosService
 @inject NavigationManager navigation
 @inject VueloService vueloService
 @inject ToastService Toast
@@ -79,7 +78,6 @@
     {
         OrigenList = await origenService.Listar(o => o.OrigenId > 0);
         DestinoList = await destinoService.Listar(o => o.DestinoId > 0);
-        AsientoList = await asientosService.Listar(o => o.AsientoId > 0);
 
 
     }

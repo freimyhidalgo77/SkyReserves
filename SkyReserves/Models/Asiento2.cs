@@ -7,7 +7,6 @@ namespace SkyReserves.Models
 	{
 		[Key]
 		public int AsientoId { get; set; }
-		public int VueloId { get; set; } //Ojo aqui con esto, posible conflicto
 		public string? Fila { get; set; }
 		public string? Letra { get; set; }
 		public int Existencia { get; set; }

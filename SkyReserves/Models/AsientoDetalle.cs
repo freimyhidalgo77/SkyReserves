@@ -20,8 +20,11 @@ namespace SkyReserves.Models
         public int AsientoId { get; set; }
         public Asiento2? Asiento { get; set; }
 
+        [Required(ErrorMessage = "Favor llenar este campo ")]
         public string? Fila { get; set; }
+
         public string? Letra { get; set; }
+
         public int Existencia { get; set; }
 
 

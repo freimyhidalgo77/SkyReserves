@@ -12,11 +12,11 @@ namespace SkyReserves.Models
 
 
         [ForeignKey("ReservaId")]
-        public ICollection<Asiento2> AsientoDetalle { get; set; } = new List<Asiento2>();
+        public ICollection<AsientoDetalle> AsientoDetalle { get; set; } = new List<AsientoDetalle>();
 
 
         [ForeignKey("ReservaId")]
-        public ICollection<ClaseVuelo2> ClaseVueloDetalle { get; set; } = new List<ClaseVuelo2>();
+        public ICollection<ClaseVueloDetalle> ClaseVueloDetalle { get; set; } = new List<ClaseVueloDetalle>();
 
      
 

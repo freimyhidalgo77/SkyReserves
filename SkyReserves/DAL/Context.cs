@@ -35,7 +35,6 @@ public class Context : DbContext
 
     
 
-
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<UserAccount2>().HasData(
             new UserAccount2 { Id = 1, UserName = "Araject@gmail.com", Password = "Arajet", Role = "Admin" },
@@ -43,29 +42,29 @@ public class Context : DbContext
         );
 
         modelBuilder.Entity<Asiento2>().HasData(
-            new Asiento2 { AsientoId = 1, VueloId = 1, Fila = "1", Letra = "A", Existencia = 1 },
-            new Asiento2 { AsientoId = 2, VueloId = 2, Fila = "2", Letra = "B", Existencia = 1 },
+            new Asiento2 { AsientoId = 1, Fila = "1", Letra = "A", Existencia = 1 },
+            new Asiento2 { AsientoId = 2, Fila = "2", Letra = "B", Existencia = 1 },
 
-            new Asiento2 { AsientoId = 3, VueloId = 3, Fila = "1", Letra = "C", Existencia = 1 },
-            new Asiento2 { AsientoId = 4, VueloId = 4, Fila = "1", Letra = "D", Existencia = 1 },
-            new Asiento2 { AsientoId = 5, VueloId = 5, Fila = "1", Letra = "E", Existencia = 1 },
-            new Asiento2 { AsientoId = 6, VueloId = 6, Fila = "1", Letra = "F", Existencia = 1 },
+            new Asiento2 { AsientoId = 3,  Fila = "1", Letra = "C", Existencia = 1 },
+            new Asiento2 { AsientoId = 4,  Fila = "1", Letra = "D", Existencia = 1 },
+            new Asiento2 { AsientoId = 5,  Fila = "1", Letra = "E", Existencia = 1 },
+            new Asiento2 { AsientoId = 6,  Fila = "1", Letra = "F", Existencia = 1 },
 
         // Fila 2
-            new Asiento2 { AsientoId = 7, VueloId = 7, Fila = "2", Letra = "A", Existencia = 1 },
-            new Asiento2 { AsientoId = 8, VueloId = 8, Fila = "2", Letra = "B", Existencia = 1 },
-            new Asiento2 { AsientoId = 9, VueloId = 9, Fila = "2", Letra = "C", Existencia = 1 },
-            new Asiento2 { AsientoId = 10, VueloId = 10, Fila = "2", Letra = "D", Existencia = 1 },
-            new Asiento2 { AsientoId = 11, VueloId = 11, Fila = "2", Letra = "E", Existencia = 1 },
-            new Asiento2 { AsientoId = 12, VueloId = 12, Fila = "2", Letra = "F", Existencia = 1 },
+            new Asiento2 { AsientoId = 7, Fila = "2", Letra = "A", Existencia = 1 },
+            new Asiento2 { AsientoId = 8, Fila = "2", Letra = "B", Existencia = 1 },
+            new Asiento2 { AsientoId = 9, Fila = "2", Letra = "C", Existencia = 1 },
+            new Asiento2 { AsientoId = 10,Fila = "2", Letra = "D", Existencia = 1 },
+            new Asiento2 { AsientoId = 11,Fila = "2", Letra = "E", Existencia = 1 },
+            new Asiento2 { AsientoId = 12, Fila = "2", Letra = "F", Existencia = 1 },
 
         // Fila 3
-            new Asiento2 { AsientoId = 13, VueloId = 13, Fila = "3", Letra = "A", Existencia = 1 },
-            new Asiento2 { AsientoId = 14, VueloId = 14, Fila = "3", Letra = "B", Existencia = 1 },
-            new Asiento2 { AsientoId = 15, VueloId = 15, Fila = "3", Letra = "C", Existencia = 1 },
-            new Asiento2 { AsientoId = 16, VueloId = 16, Fila = "3", Letra = "D", Existencia = 1 },
-            new Asiento2 { AsientoId = 17, VueloId = 17, Fila = "3", Letra = "E", Existencia = 1 },
-            new Asiento2 { AsientoId = 18, VueloId = 18, Fila = "3", Letra = "F", Existencia = 1 }
+            new Asiento2 { AsientoId = 13, Fila = "3", Letra = "A", Existencia = 1 },
+            new Asiento2 { AsientoId = 14, Fila = "3", Letra = "B", Existencia = 1 },
+            new Asiento2 { AsientoId = 15,  Fila = "3", Letra = "C", Existencia = 1 },
+            new Asiento2 { AsientoId = 16,  Fila = "3", Letra = "D", Existencia = 1 },
+            new Asiento2 { AsientoId = 17, Fila = "3", Letra = "E", Existencia = 1 },
+            new Asiento2 { AsientoId = 18,  Fila = "3", Letra = "F", Existencia = 1 }
 
 
         );

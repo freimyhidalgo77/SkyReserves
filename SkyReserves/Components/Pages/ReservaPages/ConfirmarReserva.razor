@@ -3,7 +3,6 @@
 @inject ReservaService reservaService
 @inject OrigenService origenService
 @inject DestinoService destinoService
-@inject AsientoService asientosService
 @inject NavigationManager navigation
 @inject ToastService Toast
 @inject Context Dbcontext
@@ -113,7 +112,7 @@
                                 if (claseVuelo is null) continue;
                                 <tr class="text-center">
                                     <td class="ps-3">@claseVuelo.ClaseVueloId</td>
-                                    <td class="ps-3">@claseVuelo.descripcionClase</td>
+                                    <td class="ps-3">@claseVuelo.DescripcionClase</td>
                                     <td class="ps-3">
                                         <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverClaseVuelo(claseVuelo)"></button>
                                     </td>
@@ -138,11 +137,11 @@
     [Parameter]
     public int ReservaId { get; set; }
     public int VueloId { get; set; }
-    [Parameter]
+
     public int OrigenId { get; set; }
     public int DestinoId { get; set; }
     public Reserva2 Reserva { get; set; } = new Reserva2();
- 
+
     public AsientoDetalle ReservaAsientoDetalle { get; set; } = new AsientoDetalle();
     private List<AsientoDetalle> asientoDetalleList = new List<AsientoDetalle>();
     public ClaseVueloDetalle ClaseVueloDetalle { get; set; } = new ClaseVueloDetalle();
@@ -157,8 +156,10 @@
     public List<ClaseVuelo2> ClaseVueloSeleccionado { get; set; } = new();
     public List<ClaseVuelo2> ClaseVueloList { get; set; } = new List<ClaseVuelo2>();
     public Asiento2 Asiento { get; set; } = new Asiento2();
+    public List<Reserva2> reservaList { get; set; } = new List<Reserva2>();
+    public string mensaje { get; set; } = string.Empty;
 
- 
+
 
 
     protected override async Task OnInitializedAsync()
@@ -167,29 +168,37 @@
         destino2 = await destinoService.Buscar(DestinoId);
         AsientoList = await asientoDetalleService.Listar(a => a.AsientoId > 0);
         ClaseVueloList = await claseVueloDetalleService.Listar(c => c.ClaseVueloId > 0);
+        reservaList = await reservaService.Listar(r => r.ReservaId > 0);
 
     }
-
 
 
 
     public void AgregarAsiento(int asientoId)
     {
         var asiento = AsientoList.FirstOrDefault(a => a.AsientoId == asientoId);
-      //  if (asiento != null && !AsientosSeleccionados.Contains/*(asiento)*/)
+        if (asiento != null && !Reserva.AsientoDetalle.Any(ad => ad.AsientoId == asiento.AsientoId))
         {
-           // AsientosSeleccionados.Add(asiento);
             var asientoDetalle = new AsientoDetalle
                 {
                     AsientoId = asiento.AsientoId,
+                    ReservaId = Reserva.ReservaId,
                     Fila = asiento.Fila,
                     Letra = asiento.Letra,
                     Existencia = asiento.Existencia
                 };
 
-           // Reserva.AsientoDetalle.Add(asientoDetalle);
+            Reserva.AsientoDetalle.Add(asientoDetalle);
+        }
+        else
+        {
+            mensaje = asiento == null
+                ? "El asiento seleccionado no existe."
+                : "El asiento ya está seleccionado.";
         }
     }
+
+
 
 
     public void AgregarClaseVuelo(int claseVueloId)
@@ -197,17 +206,17 @@
         var claseVuelo = ClaseVueloList.FirstOrDefault(c => c.ClaseVueloId == claseVueloId);
         if (claseVuelo != null && !ClaseVueloSeleccionado.Contains(claseVuelo))
         {
-            ClaseVueloSeleccionado.Add(claseVuelo);
+            ClaseVueloSeleccionado.Add(claseVuelo); // <- Aquí ClaseVueloSeleccionado espera ClaseVuelo2
             var claseVueloDetalle = new ClaseVueloDetalle
                 {
                     ClaseVueloId = claseVuelo.ClaseVueloId,
                     DescripcionClase = claseVuelo.descripcionClase
                 };
 
-          //  Reserva.ClaseVueloDetalle.Add(claseVueloDetalle);
+            Reserva.ClaseVueloDetalle.Add(claseVueloDetalle); // <- Aquí Reserva espera ClaseVueloDetalle
         }
-
     }
+
 
 
 
@@ -243,24 +252,24 @@
 
 
 
-    private void RemoverAsiento(Asiento2 asiento)
+    private void RemoverAsiento(AsientoDetalle asiento)
     {
         if (asiento != null)
         {
-           // AsientosSeleccionados.Remove(asiento);
+           AsientosSeleccionados.Remove(asiento);
         }
     }
 
 
 
-
-    private void RemoverClaseVuelo(ClaseVuelo2 claseVuelo)
+    private void RemoverClaseVuelo(ClaseVueloDetalle claseVueloDetalle)
     {
-        if (claseVuelo != null)
+        if (claseVueloDetalle != null)
         {
-            ClaseVueloSeleccionado.Remove(claseVuelo);
+            Reserva.ClaseVueloDetalle.Remove(claseVueloDetalle);
         }
     }
+
 
     private void Volver()
     {
