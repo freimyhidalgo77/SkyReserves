@@ -47,8 +47,8 @@
                     @foreach (var asientoDetalle in AsientoDetalleList)
                     {
                         <tr>
-                            <td>@asientoDetalle?.Asiento?.Fila - @asientoDetalle?.Asiento?.Letra</td>
-                            <td>@asientoDetalle?.Existencia</td>
+                            <td>@asientoDetalle?Fila</td>
+                            <td>@asientoDetalle?.Letra</td>
                         </tr>
                     }
                 </tbody>
@@ -91,20 +91,19 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Obtener la reserva actual
+
         Reserva = await reservaService.Buscar(ReservaId);
 
-        // Obtener los datos relacionados (origen y destino)
+     
         if (Reserva != null)
         {
             Origen = await origenService.Buscar(Reserva.OrigenId);
             Destino = await destinoService.Buscar(Reserva.DestinoId);
         }
 
-        // Obtener los detalles de los asientos de la reserva
        AsientoDetalleList = await asientoDetalleService.ListarAsientoDetalle(ReservaId);
 
-       //ClaseVueloDetalleList = await claseVueloDetalleService.(ReservaId);
+      // ClaseVueloDetalleList = await asientoDetalleService.(ReservaId);
     
 
         // Verifica si AsientoDetalleList tiene datos
