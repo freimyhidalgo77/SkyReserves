@@ -1,0 +1,114 @@
+﻿@page "/Pago/Index"
+@using SkyReserves.Models
+@using SkyReserves.Service
+@rendermode InteractiveServer
+@inject PagoService pagoService
+@inject NavigationManager navigation
+
+<link rel="stylesheet" href="/Estilos/ClaseVuelo.css" />
+
+<PageTitle>Registro de Pagos</PageTitle>
+
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+        <a href="/logout" class="btn btn-outline-danger text-nowrap common-btn w-30">
+            Cerrar sesi&oacute;n
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Registro de Pagos</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="filtrarPor" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtrarPor" class="form-select" @bind-Value="FiltroSeleccionado">
+                        <option value="ID">ID</option>
+                        <option value="ClaseVuelo">Clase de Vuelo</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="input-group">
+                        <InputText id="Busqueda" class="form-control" @bind-Value="CriterioBusqueda" placeholder="@GetPlaceholder()" />
+                    </div>
+                </div>
+            </div>
+
+                  <a href="/Pago/Create" class="btn btn-success bi bi-plus-square-fill mt-3 w-30"> Crear</a>
+                 <button @onclick="BuscarPagos" class="btn btn-secondary bi bi-search mt-3 w-30" type="button"> Buscar</button>
+               
+
+            <table class="table table-hover mt-3">
+                <thead class="table table-striped text-center text-black">
+                    <tr>
+                        <th>Pago Id</th>
+                        <th>Clase de Vuelo</th>
+                        <th>Tarjeta</th>
+                        <th>Fecha Vencimiento</th>
+                        <th>CVV</th>
+                        <th>Monto Pagado</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var pago in Pagos)
+                    {
+                        <tr>
+                            <td class="text-center">@pago.PagoId</td>
+                            <td class="text-center">@pago.ClaseVueloId</td>
+                            <td class="text-center">@pago.TarjetaNumero</td>
+                            <td class="text-center">@pago.FechaVencimiento</td>
+                            <td class="text-center">@pago.CVV</td>
+                            <td class="text-center">$@pago.MontoPagar.ToString("N2")</td>
+                            <td class="text-center">
+                                <a href="/Pago/Edit/@pago.PagoId" class="btn btn-outline-dark bi bi-pencil-square"></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="/Pago/Delete/@pago.PagoId" class="btn btn-outline-dark bi bi-trash"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+
+@code {
+    public List<Pago> Pagos { get; set; } = new List<Pago>();
+    private string FiltroSeleccionado { get; set; } = "ID";
+    private string CriterioBusqueda { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Pagos = await pagoService.Listar(a => true);
+    }
+
+    private async Task BuscarPagos()
+    {
+        if (FiltroSeleccionado == "ID" && int.TryParse(CriterioBusqueda, out int id))
+        {
+            Pagos = await pagoService.Listar(a => a.PagoId == id);
+        }
+        else if (FiltroSeleccionado == "ClaseVuelo" && int.TryParse(CriterioBusqueda, out int claseVueloId))
+        {
+            Pagos = await pagoService.Listar(a => a.ClaseVueloId == claseVueloId);
+        }
+    }
+
+    private string GetPlaceholder()
+    {
+        return FiltroSeleccionado == "ID" ? "Buscar por ID" : "Buscar por Clase de Vuelo";
+    }
+}
