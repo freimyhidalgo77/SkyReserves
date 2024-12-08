@@ -35,8 +35,8 @@
 @code {
 
     
-    public Origen Origen { get; set; } = new Origen();
-    public List<Origen> origenList { get; set; } = new List<Origen>();
+    public Origen2 Origen { get; set; } = new Origen2();
+    public List<Origen2> origenList { get; set; } = new List<Origen2>();
     public string Mensaje { get; set; } = string.Empty;
 
     protected override async Task OnInitializedAsync()
@@ -64,7 +64,7 @@
 
             Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardado", "El origen de vuelo se ha guardado con exito!"));
             await origenService.Guardar(Origen);
-            Origen = new Origen();
+            Origen = new Origen2();
             navigation.NavigateTo("/Origen/Index");
         }
     }
@@ -72,7 +72,7 @@
    
     public void Volver()
     {
-        // Redirige a la página de reservas si el usuario presiona el botón "Volver"
+        
         navigation.NavigateTo("/Origen/Index");
     }
 }

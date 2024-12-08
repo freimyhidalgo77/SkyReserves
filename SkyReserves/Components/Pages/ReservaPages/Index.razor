@@ -1,106 +1,109 @@
 ﻿@page "/Reserva/Index"
 @rendermode InteractiveServer
 @inject ReservaService reservaService
+@inject VueloService vueloService
+@inject OrigenService origenService
+@inject DestinoService destinoService
 <link rel="stylesheet" href="/Style/ReserveIndex.css" />
 
-
-<PageTitle>Registro</PageTitle>
+<PageTitle>Reserva Vuelo</PageTitle>
 <div class="container">
     <div class="card shadow-lg">
         <div class="card-header text-center">
-<h3><strong>Reservas de Vuelo</strong></h3>
+            <h3><strong>Reservas de Vuelo</strong></h3>
 
+            <!-- Header -->
+            <div class="row mb-3 align-items-end">
+                <div class="col-md-3">
+                    <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                        <option value="" disabled>Seleccionar</option>
+                        <option value="ReservaID">Reserva ID</option>
+                        <option value=""></option>
+                    </InputSelect>
+                </div>
 
-<!-- Header -->
-<div class="row mb-3 align-items-end">
-    <div class="col-md-3">
-        <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
-        <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
-            <option value="" disabled>Seleccionar</option>
-            <option value="ReservaID">Reserva ID</option>
-            <option value="">Fecha</option>
+                <div class="col-md-6">
+                    <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
+                    <div class="input-group">
+                        <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
+                        <button @onclick="Buscar" class="btn btn-success" type="button" style="background-color: purple; color: white; border: none;">
+                            <span class="bi bi-search"></span> Buscar
+                        </button>
+                        <a href="/Vuelo2/Create" class="btn btn-success bi bi-plus-square ms-2" style="background-color: purple; color: white; border: none;"> Crear vuelo</a>
+                    </div>
+                </div>
+            </div>
 
-        </InputSelect>
-    </div>
-
-    <div class="col-md-6">
-        <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
-        <div class="input-group">
-            <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
-            <button @onclick="Buscar" class="btn btn-success" type="button" style="background-color: purple; color: white; border: none;">
-                <span class="bi bi-search"></span> Buscar
-            </button>
-            <a href="/Reserva/Create" class="btn btn-success bi bi-plus-square ms-2" style="background-color: purple; color: white; border: none;"> Reservar</a>
+            <!-- Body -->
+            <div class="table-responsive">
+                <table class="table table-light table-bordered">
+                    <thead class="table table-striped text-center table-bordered mt-3">
+                        <tr>
+                            <th>Reserva ID</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Pasajeros</th>
+                            <th>Confirmar reserva</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var vuelo in vueloList)
+                        {
+                            <tr>
+                                <td class="text-center">@vuelo.VueloID</td>
+                                <td class="text-center">@vuelo.Origen?.origen</td>
+                                <td class="text-center">@vuelo?.Destino?.destino</td>
+                                <td class="text-center">@vuelo?.NumeroPasajeros</td>
+                                <td class="text-center">
+                                    <a href="/Reserva/Edit/@vuelo?.VueloID" class="btn btn-morado bi bi-check-square" style="background-color: purple; color: white; border: none"></a>
+                                </td>
+                                <td class="text-center">
+                                    <a href="/Reserva/Delete/@vuelo?.VueloID" class="btn btn-outline-morado bi bi-trash" style="background-color: purple; color: white; border: none"></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="card-footer">
+                    <p><strong>Total de Vuelos creados: </strong>@vueloList?.Count</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
-
-<!-- Body -->
-<div class="table-responsive">
-    <table class="table table-light table-bordered">
-        <thead class="table table-striped text-center table-bordered mt-3">
-            <tr>
-                <th>Reserva ID</th>
-                <th>Origen</th>
-                <th>Destino</th>
-                <th>Fecha</th>
-                <th>Editar</th>
-                <th>Eliminar</th>
-            </tr>
-        </thead>
-        <tbody>
-
-            @foreach (var reserva in reservaList)
-            {
-                <tr>
-                    <td class="text-center">@reserva.ReservaId</td>
-                    <td class="text-center">@reserva.Origen</td>
-                    <td class="text-center">@reserva.Destino</td>
-                    <td class="text-center">@reserva.NumeroPasajeros</td>
-                    <td class="text-center">
-                        <a href="/Reserva/Edit/@reserva.ReservaId" class="btn btn-outline-warning bi bi-pencil-square"></a>
-                    </td>
-
-                    <td class="text-center">
-                        <a href="/Reserva/Delete/@reserva.ReservaId" class="btn btn-outline-danger bi bi-trash"></a>
-                    </td>
-                </tr>
-            }
-        </tbody>
-    </table>
-    <div class="card-footer">
-        <p><strong>Total de Vuelos de Origenes Creados: </strong>@reservaList?.Count</p>
-               </div>
-          </div>
-       </div>
-   </div>
-</div>
-
-
 @code {
+    public Vuelo2 Vuelo { get; set; } = new Vuelo2();
+    public List<Vuelo2> vueloList { get; set; } = new List<Vuelo2>();
+    public Reserva2 Reserva { get; set; } = new Reserva2();
+    public List<Reserva2> reservaList { get; set; } = new List<Reserva2>();
+    public Origen2 Origen { get; set; } = new Origen2();
+    public Destino2 Destino { get; set; } = new Destino2();
+    public List<Origen2> origenLits { get; set; } = new List<Origen2>();
 
-
-    Reserva Reserva { get; set; } = new Reserva();
-    List<Reserva> reservaList { get; set; } = new List<Reserva>();
-    Origen Origen { get; set; } = new Origen();
-    Destino Destino { get; set; } = new Destino();
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
-
     protected override async Task OnInitializedAsync()
     {
-        var reserva = await reservaService.Listar(o => o.ReservaId > 0);
-
+        reservaList = await reservaService.Listar(o => o.ReservaId > 0);
+        vueloList = await vueloService.Listar(v => v.VueloID > 0);
     }
 
     public void Buscar()
     {
+        if (string.IsNullOrEmpty(filtro) || string.IsNullOrEmpty(ValorFiltro))
+        {
+            return; // Si no hay filtro seleccionado o valor de búsqueda, no hacer nada
+        }
 
+        if (filtro == "ReservaID")
+        {
+            // Filtrar por ReservaID
+            vueloList = vueloList.Where(v => v.VueloID.ToString().Contains(ValorFiltro)).ToList();
+        }
+       
     }
-
-
-
-
 }

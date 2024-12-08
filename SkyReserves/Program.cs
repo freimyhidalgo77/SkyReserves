@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using SkyReserve.DAL;
+using SkyReserves.DAL;
 using SkyReserves.Components;
 using SkyReserves.Service;
 
@@ -29,6 +29,10 @@ builder.Services.AddScoped<PasaporteService>();
 builder.Services.AddScoped<PasaporteDetalleService>();
 builder.Services.AddScoped<ReservaService>();
 builder.Services.AddScoped<VuelosEspecialesService>();
+builder.Services.AddScoped<VueloService>();
+builder.Services.AddScoped<AsientoDetalleService>();
+builder.Services.AddScoped<ClaseVueloDetalleService>();
+
 
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)

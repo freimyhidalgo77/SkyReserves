@@ -2,13 +2,14 @@
 
 namespace SkyReserves.Models
 {
-    public class ClaseVuelo
+    public class ClaseVuelo2
     {
 
         [Key]
         public int ClaseVueloId { get; set; }
 
-        [Required(ErrorMessage = "Favor ingrese una clase de vuelo.")]
         public string? descripcionClase { get; set; }
+
+  
     }
 }

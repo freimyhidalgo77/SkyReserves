@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkyReserves.Models
 {
-    public class PasaporteDetalle
+    public class PasaporteDetalle2
     {
 
         [Key]
 
         [ForeignKey("Pasaporte")]
         public int PasaporteId { get; set; }
-        public Pasaporte? Pasaporte { get; set; }
+        public Pasaporte2? Pasaporte { get; set; }
     }
 }

@@ -37,8 +37,8 @@
 
 @code {
 
-    public Accesibilidad Accesibilidad { get; set; } = new Accesibilidad();
-    public List<Accesibilidad> accesibilidadList { get; set; } = new List<Accesibilidad>();
+    public Accesibilidad2 Accesibilidad { get; set; } = new Accesibilidad2();
+    public List<Accesibilidad2> accesibilidadList { get; set; } = new List<Accesibilidad2>();
     public string Mensaje { get; set; } = string.Empty;
     //public List<ToastMessage> MensajeToast { get; set; } = new List<ToastMessage>();
 
@@ -68,7 +68,7 @@
 
             Toast.Notify(new(ToastType.Success, "Accesibilidad Guardada", "La accesibilidad se ha guardado con exito!"));
             await accesibilidadService.Guardar(Accesibilidad);
-            Accesibilidad = new Accesibilidad();
+            Accesibilidad = new Accesibilidad2();
             navigation.NavigateTo("/Accesibilidad/Index");
         }
     }

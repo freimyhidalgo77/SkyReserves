@@ -1,54 +1,39 @@
-﻿@page "/Reserva/Delete{ReservaId:int}"
+﻿@page "/Reserva/Delete/{VueloId:int}"
 @rendermode InteractiveServer
 @inject ReservaService reservaService
 @inject AsientoService asientoService 
+@inject VueloService vueloService 
 @inject NavigationManager navigation
-
+@inject OrigenService origenService
+@inject DestinoService destinoService
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Reserve.css" />
 
 <PageTitle>Reservas</PageTitle>
 <div class="container">
 	<div class="card shadow-lg">
 		<div class="card-header">
-			<h3><strong>Eliminar reserva</strong></h3>
+			<h3><strong>Eliminar Vuelo</strong></h3>
 		</div>
 		<div class="card-body">
 			<h5><strong>Est&aacute;s seguro que deseas eliminar esta reserva?</strong></h5>
 			<div class="mb-1">
-				<p><strong>Cliente ID:</strong>@reserva?.ReservaId</p>
+				<p><strong>Vuelo ID:</strong>@Vuelo.VueloID</p>
 			</div>
 			<div class="mb-1">
-				<p><strong>Fecha:</strong>@reserva?.Origen</p>
+				<p><strong>Origen:</strong>@Vuelo.Origen?.origen</p>
 			</div>
 			<div class="mb-1">
-				<p><strong>Nombre:</strong>@reserva?.Destino</p>
+				<p><strong>Destino:</strong>@Vuelo?.Destino?.destino</p>
 			</div>
-		</div>
-
-		<div class="bordered bordered-success pt-3 mt-3">
-			<table class="table table-light table-bordered">
-				<thead class="table table-striped text-center">
-					<tr>
-						<th>Fila</th>
-						<th>Letra</th>
-						<th>Existencia</th>
-					</tr>
-				</thead>
-				<tbody>
-					@foreach (var detalle in Asiento )
-					{
-						<td>@detalle.Fila</td>
-						<td>@detalle.Letra</td>
-						<td>@detalle.Existencia</td>
-
-
-					}
-				</tbody>
-			</table>
+			<div class="mb-1">
+				<p><strong>Pasajeros:</strong>@Vuelo?.NumeroPasajeros</p>
+			</div>
 		</div>
 
 		<div class="card-footer">
-			<button type="button" class="btn btn-info bi bi-arrow-90deg-left"> Volver</button>
-			<button type="button" class="btn btn-danger bi bi-trash" @onclick="Elimnar">Eliminar</button>
+			<button type="button" class="btn btn-morado bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+			<button type="button" class="btn btn-morado bi bi-trash" @onclick="Elimnar">Eliminar</button>
 		</div>
 	</div>
 </div>
@@ -59,24 +44,41 @@
 
 
 	[Parameter]
-	public int ReservaId { get; set; }
-	public Reserva? reserva;
-	public Asiento asiento { get; set; } = new Asiento();
-	public List<Asiento> Asiento { get; set; } = new();
+	public int VueloId { get; set; }
+	public int OrigenId { get; set; }
+	public int DestinoId { get; set; }
+	public Vuelo2 Vuelo { get; set; } = new Vuelo2();
+	public Reserva2? reserva;
+	public Asiento2 asiento { get; set; } = new Asiento2();
+	public List<Asiento2> Asiento { get; set; } = new();
+	public Origen2 origen { get; set; } = new Origen2();
+	public Destino2 destino { get; set; } = new Destino2();
 	public string mensaje { get; set; } = string.Empty;
 
-	protected override Task OnInitializedAsync()
+	protected override async Task OnInitializedAsync()
 	{
-		return Cliente();
+		Vuelo = await vueloService.Buscar(VueloId);
+		origen = await origenService.Buscar(OrigenId);
+		destino = await destinoService.Buscar(DestinoId);
+		
 	}
 
-	public async Task Cliente()
+
+
+	public async Task ElimnarOrigen()
 	{
-		reserva = await reservaService.Buscar(ReservaId); //Aqui hay que poner el metodo BuscarConDetalle, va en reserva
-		if (reserva != null)
+		if (Vuelo != null)
 		{
-			//asiento = Asiento.ToList();
-			//reserva = await asiento.Listar(c => true);
+			var eliminado = await vueloService.Eliminar(VueloId);
+			if (eliminado)
+			{
+				navigation.NavigateTo("/Origen/Index");
+				Toast.Notify(new(ToastType.Danger, "Origen Eliminado", "El origen se ha eliminado con exito!"));
+			}
+			else
+			{
+				Toast.Notify(new(ToastType.Warning, "Error al eliminar el origen!", "El origen no pudo eliminarse"));
+			}
 		}
 
 	}
@@ -84,17 +86,17 @@
 
 	public async Task Elimnar()
 	{
-		if (reserva != null)
+		if (Vuelo != null)
 		{
-			var eliminado = await reservaService.Eliminar(ReservaId);
+			var eliminado = await vueloService.Eliminar(VueloId);
 			if (eliminado)
 			{
 				navigation.NavigateTo("/Reserva/Index");
-				//toastService.Notify(new(ToastType.Danger, "Cliente eliminado con exito!"));
+				Toast.Notify(new(ToastType.Danger, "Vuelo eliminado!", "El vuelo se ha eliminado con exito"));
 			}
 			else
 			{
-				mensaje = "No se pudo eliminar el cliente";
+				mensaje = "No se pudo eliminar el vuelo";
 			}
 		}
 

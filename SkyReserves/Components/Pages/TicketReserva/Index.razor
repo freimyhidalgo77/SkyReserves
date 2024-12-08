@@ -1,0 +1,84 @@
+﻿@page "/Ticket/Index"
+@rendermode InteractiveServer
+@inject ReservaService reservaService
+@inject VueloService vueloService
+@inject OrigenService origenService
+@inject DestinoService destinoService
+@inject AsientoDetalleService asientoDetalleService
+<link rel="stylesheet" href="/Style/Ticket.css" />
+
+<PageTitle>Reserva Vuelo</PageTitle>
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h3><strong>Detalles de la reserva creada</strong></h3>
+        </div>
+        <div class="card-body">
+            <div class="mb-1">
+               <p><strong>Reserva ID:</strong>@Reserva?.ReservaId</p>
+            </div>
+            <div class="mb-1">
+                <p><strong>Origen:</strong>@Origen?.origen</p>
+            </div>
+            <div class="mb-1">
+                <p><strong>Destino:</strong>@Destino?.destino</p>
+            </div>
+            <div class="mb-1">
+                <p><strong>Numero de pasajeros:</strong>@vuelo2.NumeroPasajeros</p>
+            </div>
+        </div>
+
+        <div class="bordered bordered-success pt-3 mt-3">
+            <table class="table table-light table-bordered">
+                <thead class="table table-striped text-center">
+                    <tr>
+                        <th>Asiento</th>
+                        <th>Clase de Vuelo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var detalle in reservaList)
+                    {    
+                        @*<td>@detalle.Asiento</td>*@
+
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@code {
+
+    [Parameter]
+    public int ReservaId { get; set; }
+    public int OrigenId { get; set; }
+    public int DestinoId { get; set; }
+    public Reserva2 Reserva { get; set; } = new Reserva2();
+    public List<Reserva2> reservaList { get; set; } = new List<Reserva2>();
+    public Origen2 Origen { get; set; } = new Origen2();
+    public Destino2 Destino { get; set; } = new Destino2();
+    public List<Origen2> origenLits { get; set; } = new List<Origen2>();
+    public List<AsientoDetalle> AsientoDetalleList { get; set; } = new List<AsientoDetalle>();
+    public AsientoDetalle AsientoDetalle { get; set; } = new AsientoDetalle();
+    public Reserva2? reserva;
+    public Asiento2 asiento2 { get; set; } = new Asiento2();
+    public string filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+    public Vuelo2 vuelo2 { get; set; } = new Vuelo2();
+    
+   
+    protected override async Task OnInitializedAsync()
+    {
+
+        Origen = await origenService.Buscar(OrigenId);
+        Destino = await destinoService.Buscar(DestinoId);
+        Reserva = await reservaService.Buscar(ReservaId);
+
+
+    }
+
+
+
+}

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SkyReserves.Models
 {
-    public class Cliente
+    public class Cliente2
     {
 
         [Key]
@@ -29,7 +29,7 @@ namespace SkyReserves.Models
 
         [ForeignKey("Accesibilidad")]
         public int AccesibilidadId { get; set; }
-        public Accesibilidad? Accesibilidad { get; set; }
+        public Accesibilidad2? Accesibilidad { get; set; }
 
         [Required(ErrorMessage = "Favor seleccione una clase de vuelo.")]
         public string? Email { get; set; }

@@ -1,0 +1,51 @@
+﻿<div class="col-auto input-group align-items-center">
+    <InputSelect class="form-select" @bind-Value="ClaseVueloId">
+        <option disabled value="0">Seleccione una clase de vuelo</option>
+        @foreach (var clase in ListaClaseVuelo)
+        {
+            <option value="@clase.ClaseVueloId">
+                @($"{clase.descripcionClase}")
+            </option>
+        }
+    </InputSelect>
+    <button type="button" class="btn btn-success bi bi-plus-square" @onclick="SeleccionarClaseVuelo"></button>
+</div>
+
+@if (!string.IsNullOrEmpty(mensaje))
+{
+    <div class="alert alert-danger">@mensaje</div>
+}
+
+@code {
+    [Parameter]
+    public List<ClaseVuelo2> ListaClaseVuelo { get; set; } = new List<ClaseVuelo2>();
+
+    [Parameter]
+    public int ClaseVueloId { get; set; }
+
+    [Parameter]
+    public EventCallback<int> ClaseVueloSeleccionado { get; set; }
+
+    public string? mensaje { get; set; } = string.Empty;
+
+    private async Task SeleccionarClaseVuelo()
+    {
+        if (ClaseVueloId > 0)
+        {
+            var claseSeleccionada = ListaClaseVuelo.SingleOrDefault(c => c.ClaseVueloId == ClaseVueloId);
+            if (claseSeleccionada != null)
+            {
+                // Llamamos al callback para agregar la clase de vuelo seleccionada
+                await ClaseVueloSeleccionado.InvokeAsync(ClaseVueloId);
+            }
+            else
+            {
+                mensaje = "La clase de vuelo seleccionada no está disponible o no existe.";
+            }
+        }
+        else
+        {
+            mensaje = "Debe seleccionar al menos una clase de vuelo.";
+        }
+    }
+}

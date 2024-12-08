@@ -63,7 +63,7 @@ label {
     vertical-align: middle;
 }
 
-/* Botón "Reservar" y "Buscar" estilizados */
+/* Estilo para botones "Reservar" y "Buscar" */
 .btn-success {
     background-color: purple;
     color: white;
@@ -95,3 +95,51 @@ button {
         align-items: center;
         justify-content: center;
     }
+
+/* Dimensiones uniformes para InputSelect, input y botones */
+.form-select,
+.form-control,
+.btn {
+    height: 38px; /* Misma altura */
+    font-size: 14px;
+    padding: 0.375rem 0.75rem;
+    border-radius: 5px;
+    box-sizing: border-box;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Estilo para botones morados */
+.btn-morado {
+    background-color: purple;
+    color: white;
+    border: 1px solid purple;
+}
+
+    .btn-morado:hover {
+        background-color: #8e24aa; /* Color morado más claro al pasar el ratón */
+        border-color: #8e24aa;
+    }
+
+/* Botón morado solo borde (outline) */
+.btn-outline-morado {
+    background-color: transparent;
+    color: purple;
+    border: 1px solid purple;
+}
+
+    .btn-outline-morado:hover {
+        background-color: purple;
+        color: white;
+        border-color: #8e24aa;
+    }
+
+/* Botones morados */
+.btn-success,
+.btn-outline-warning,
+.btn-outline-danger {
+    background-color: purple;
+    color: white;
+    border: none;
+    transition: background-color 0.3s ease;
+}

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SkyReserves.Models
 {
-    public class UserAccount
+    public class UserAccount2
     {
         [Key]
 

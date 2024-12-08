@@ -38,8 +38,8 @@
 
     [Parameter]
     public int DestinoId { get; set; }
-    public Destino Destino { get; set; } = new Destino();
-    public List<Destino> destinoList { get; set; } = new List<Destino>();
+    public Destino2 Destino { get; set; } = new Destino2();
+    public List<Destino2> destinoList { get; set; } = new List<Destino2>();
     public string Mensaje { get; set; } = string.Empty;
 
 
@@ -70,7 +70,7 @@
 
             Toast.Notify(new(ToastType.Primary, "Destino de vuelo Modificado", "El destino de vuelo se ha modificado con exito!"));
             await destinoService.Guardar(Destino);
-            Destino = new Destino();
+            Destino = new Destino2();
             navigation.NavigateTo("/Destino/Index");
         }
     }

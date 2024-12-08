@@ -1,0 +1,279 @@
+﻿@page "/Reserva/Edit/{ReservaId:int}"
+@rendermode InteractiveServer
+@inject ReservaService reservaService
+@inject OrigenService origenService
+@inject DestinoService destinoService
+@inject AsientoService asientosService
+@inject NavigationManager navigation
+@inject ToastService Toast
+@inject Context Dbcontext
+@inject VueloService vueloService
+@inject AsientoDetalleService  asientoDetalleService
+@inject ClaseVueloDetalleService claseVueloDetalleService
+
+@inject ClaseVueloService claseVueloService
+<link rel="stylesheet" href="/Style/Reserve.css" />
+
+<PageTitle>Confirmar reserva</PageTitle>
+<EditForm Model="Reserva" OnValidSubmit="Crear">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5><strong>Datos del vuelo creado para confirmar reserva</strong></h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-1">
+                    <p class="mb-0"><strong>Reserva ID:</strong>@Reserva?.ReservaId</p>
+                </div>
+
+                <div class="mb-1">
+                    <p class="mb-0"><strong>Origen del vuelo:</strong> @origen2?.origen</p>
+                </div>
+
+                <div class="mb-1">
+                    <p class="mb-0"><strong>Destino del vuelo:</strong> @destino2?.destino</p>
+                </div>
+
+                <div class="mb-1">
+                    <p class="mb-0"><strong>Numero de Pasajeros:</strong> @Vuelo?.NumeroPasajeros</p>
+                </div>     
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
+                    <h5><strong>Seleccionar Asientos</strong></h5>
+                </div>
+                <div class="card-body">
+                    <SeleccionarAsientoPicker ListaAsientos="AsientoList" 
+                    AsientoId="ReservaAsientoDetalle.AsientoId"
+                    AsientoSeleccionado="AgregarAsiento" />
+
+                    <hr />
+
+                    <table class="table table-light">
+                        <thead class="table table-stripped">
+                            <tr class="text-center">
+                                <th>Asiento ID</th>
+                                <th>Fila</th>
+                                <th>Letra</th>
+                                <th>Disponibilidad</th>
+                                <th>Remover</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var asiento in Reserva.AsientoDetalle)
+                            {
+                                if (asiento is null) continue;
+                                <tr class="text-center">
+                                    <td class="ps-3">@asiento.AsientoId</td>
+                                    <td class="ps-3">@asiento.Fila</td>
+                                    <td class="ps-3">@asiento.Letra</td>
+                                    <td class="ps-3">@asiento.Existencia</td>
+                                    <td class="ps-3">
+                                        <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverAsiento(asiento)"></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card shadow-lg">
+                <div class="card-header text-center">
+                    <h5><strong>Seleccionar Clase de vuelo</strong></h5>
+                </div>
+                <div class="card-body">
+                    <SeleccionarClaseVueloPicker ListaClaseVuelo="ClaseVueloList" 
+                    ClaseVueloId="ClaseVueloDetalle.ClaseVueloId"
+                    ClaseVueloSeleccionado="AgregarClaseVuelo" />
+
+                    <hr />
+
+                    <table class="table table-light">
+                        <thead class="table table-stripped">
+                            <tr class="text-center">
+                                <th>Clase Vuelo ID</th>
+                                <th>Descripcion Clase</th>
+                                <th>Remover</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var claseVuelo in Reserva.ClaseVueloDetalle)
+                            {
+                                if (claseVuelo is null) continue;
+                                <tr class="text-center">
+                                    <td class="ps-3">@claseVuelo.ClaseVueloId</td>
+                                    <td class="ps-3">@claseVuelo.descripcionClase</td>
+                                    <td class="ps-3">
+                                        <button type="button" class="btn btn-outline-danger bi bi-trash" @onclick="() => RemoverClaseVuelo(claseVuelo)"></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="card-footer text-center">
+                <button type="button" class="btn btn-morado bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+                <button type="submit" class="btn btn-morado  bi-floppy-fill"> Reservar vuelo</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+
+    [Parameter]
+    public int ReservaId { get; set; }
+    public int VueloId { get; set; }
+    [Parameter]
+    public int OrigenId { get; set; }
+    public int DestinoId { get; set; }
+    public Reserva2 Reserva { get; set; } = new Reserva2();
+ 
+    public AsientoDetalle ReservaAsientoDetalle { get; set; } = new AsientoDetalle();
+    private List<AsientoDetalle> asientoDetalleList = new List<AsientoDetalle>();
+    public ClaseVueloDetalle ClaseVueloDetalle { get; set; } = new ClaseVueloDetalle();
+
+    public Vuelo2 Vuelo { get; set; } = new Vuelo2();
+    public List<Origen2> OrigenList { get; set; } = new();
+    public List<Destino2> DestinoList { get; set; } = new();
+    public List<Asiento2> AsientoList { get; set; } = new();
+    public List<AsientoDetalle> AsientosSeleccionados { get; set; } = new List<AsientoDetalle>();
+    public Origen2 origen2 { get; set; } = new Origen2();
+    public Destino2 destino2 { get; set; } = new Destino2();
+    public List<ClaseVuelo2> ClaseVueloSeleccionado { get; set; } = new();
+    public List<ClaseVuelo2> ClaseVueloList { get; set; } = new List<ClaseVuelo2>();
+    public Asiento2 Asiento { get; set; } = new Asiento2();
+
+ 
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        origen2 = await origenService.Buscar(OrigenId);
+        destino2 = await destinoService.Buscar(DestinoId);
+        AsientoList = await asientoDetalleService.Listar(a => a.AsientoId > 0);
+        ClaseVueloList = await claseVueloDetalleService.Listar(c => c.ClaseVueloId > 0);
+
+    }
+
+
+
+    private void AgregarAsiento(Asiento2 asientoId)
+    {
+        // Busca el asiento en la lista AsientoList usando el AsientoId
+        var asientoExistente = Reserva.AsientoDetalle.FirstOrDefault(A => A.AsientoId == asientoId );
+        if (asientoExistente!= null && !AsientosSeleccionados.Contains(asientoExistente))
+        {
+            // Crea un objeto Asiento2 a partir de AsientoDetalle
+            AsientosSeleccionados.Add(new Asiento2
+                {
+                    AsientoId = asientoDetalle.AsientoId,
+                    Fila = asientoDetalle.Fila,
+                    Letra = asientoDetalle.Letra,
+                    Existencia = asientoDetalle.Existencia
+                });
+
+            // Agrega el AsientoDetalle a la lista de detalles de reserva
+            var asientoReservaDetalle = new AsientoDetalle
+                {
+                    AsientoId = asientoDetalle.AsientoId,
+                    Fila = asientoDetalle.Fila,
+                    Letra = asientoDetalle.Letra,
+                    Existencia = asientoDetalle.Existencia
+                };
+
+            Reserva.AsientoDetalle.Add(asientoReservaDetalle);
+        }
+    }
+
+
+
+
+
+    private void AgregarClaseVuelo(int claseVueloId)
+    {
+        var claseVuelo = ClaseVueloList.FirstOrDefault(c => c.ClaseVueloId == claseVueloId);
+        if (claseVuelo != null && !ClaseVueloSeleccionado.Contains(claseVuelo))
+        {
+            ClaseVueloSeleccionado.Add(claseVuelo);
+            var claseVueloDetalle = new ClaseVueloDetalle
+                {
+                    ClaseVueloId = claseVuelo.ClaseVueloId,
+                    DescripcionClase = claseVuelo.descripcionClase 
+                };
+
+        
+            Reserva.ClaseVueloDetalle.Add(claseVueloDetalle);
+        }
+    }
+
+
+
+
+
+    private async Task Crear()
+    {
+       if (!Reserva.AsientoDetalle.Any())
+        {
+            Toast.Notify(new(ToastType.Warning, "No se han seleccionado asientos", "Por favor seleccione al menos un asiento."));
+            return;
+        }
+
+        if (!Reserva.ClaseVueloDetalle.Any())
+        {
+            Toast.Notify(new(ToastType.Warning, "No se han seleccionado la clase de vuelo", "Por favor seleccione la clase de vuelo."));
+            return;
+        }
+
+        Toast.Notify(new(ToastType.Success, "Vuelo reservado", "El vuelo se ha reservado con exito!"));
+        var crearReserva = await reservaService.Guardar(Reserva);
+        Reserva = new Reserva2();
+        if (crearReserva)
+        {
+           
+            navigation.NavigateTo("/Ticket/Index");
+        }
+        else
+        {
+          
+        }
+    }
+
+
+
+
+    private void RemoverAsiento(Asiento2 asiento)
+    {
+        if (asiento != null)
+        {
+            AsientosSeleccionados.Remove(asiento);
+        }
+    }
+
+
+
+
+    private void RemoverClaseVuelo(ClaseVuelo2 claseVuelo)
+    {
+        if (claseVuelo != null)
+        {
+            ClaseVueloSeleccionado.Remove(claseVuelo);
+        }
+    }
+
+    private void Volver()
+    {
+        navigation.NavigateTo("/Reserva/Index");
+    }
+}

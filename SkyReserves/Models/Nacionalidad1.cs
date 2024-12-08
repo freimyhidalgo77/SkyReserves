@@ -2,7 +2,7 @@
 
 namespace SkyReserves.Models
 {
-    public class Nacionalidad
+    public class Nacionalidad1
     {
         [Key]
 

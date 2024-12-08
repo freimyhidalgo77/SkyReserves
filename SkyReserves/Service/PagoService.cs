@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SkyReserve.DAL;
+using SkyReserves.DAL;
 using SkyReserves.Models;
 using System.Linq.Expressions;
 
@@ -11,25 +11,25 @@ namespace SkyReserves.Service
         private async Task<bool> Existe(int pagoId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Pago.AnyAsync(e => e.PagoId == pagoId);
+            return await context.Pago2.AnyAsync(e => e.PagoId == pagoId);
         }
 
-        private async Task<bool> Insertar(Pago pago)
+        private async Task<bool> Insertar(Pago2 pago)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            context.Pago.Add(pago);
+            context.Pago2.Add(pago);
             return await context.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> Modificar(Pago pago)
+        private async Task<bool> Modificar(Pago2 pago)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            context.Pago.Update(pago);
+            context.Pago2.Update(pago);
             var modificado = await context.SaveChangesAsync() > 0;
             return modificado;
         }
 
-        public async Task<bool> Guardar(Pago pago)
+        public async Task<bool> Guardar(Pago2 pago)
         {
             if (!await Existe(pago.PagoId))
                 return await Insertar(pago);
@@ -40,22 +40,22 @@ namespace SkyReserves.Service
         public async Task<bool> Eliminar(int pagoId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Pago
+            return await context.Pago2
                 .Where(e => e.PagoId == pagoId)
                 .ExecuteDeleteAsync() > 0;
         }
 
-        public async Task<Pago> Buscar(int id)
+        public async Task<Pago2> Buscar(int id)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Pago
+            return await context.Pago2
                 .FirstOrDefaultAsync(e => e.PagoId == id);
         }
 
-        public async Task<List<Pago>> Listar(Expression<Func<Pago, bool>> criterio)
+        public async Task<List<Pago2>> Listar(Expression<Func<Pago2, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Pago
+            return await context.Pago2
                 .AsNoTracking()
                 .Where(criterio)
                 .ToListAsync();

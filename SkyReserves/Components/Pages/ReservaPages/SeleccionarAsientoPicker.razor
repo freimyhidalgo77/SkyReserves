@@ -1,7 +1,6 @@
 ﻿<div class="col-auto input-group align-items-center">
-
     <InputSelect class="form-select" @bind-Value="AsientoId">
-        <option disabled value="0">Seleccione un asiento</option>
+        <option disabled value="0">Asientos Disponibles</option>
         @foreach (var asiento in ListaAsientos)
         {
             <option value="@asiento.AsientoId">
@@ -19,7 +18,7 @@
 
 @code {
     [Parameter]
-    public List<Asiento> ListaAsientos { get; set; } = new List<Asiento>();
+    public List<Asiento2> ListaAsientos { get; set; } = new List<Asiento2>();
 
     [Parameter]
     public int AsientoId { get; set; }

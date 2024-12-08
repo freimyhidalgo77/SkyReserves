@@ -2,14 +2,15 @@
 
 namespace SkyReserves.Models
 {
-    public class Origen
+    public class Accesibilidad2
     {
 
         [Key]
-        public int OrigenId { get; set; }
+        public int AccesibilidadId { get; set; }
 
-        [Required(ErrorMessage = "Favor ingrese un origen.")]
+        [Required(ErrorMessage = "Favor ingrese una descripcion.")]
         [RegularExpression(@"^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s\(\)]+$", ErrorMessage = "El campo solo puede contener letras, espacios")]
-        public string? origen { get; set; }
+        public string? Descripcion { get; set; }
+
     }
 }

@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkyReserves.Models
 {
-    public class Pago
+    public class Pago2
     {
 
         [Key]
@@ -20,7 +20,7 @@ namespace SkyReserves.Models
 
         [ForeignKey("Reserva")]
         public int ReservaId { get; set; }
-        Reserva? Reserva { get; set; }
+        Reserva2? Reserva { get; set; }
 
     }
 }
