@@ -104,10 +104,9 @@
         // Obtener los detalles de los asientos de la reserva
        AsientoDetalleList = await asientoDetalleService.ListarAsientoDetalle(ReservaId);
 
-       //ClaseVueloDetalleList = await claseVueloDetalleService.(ReservaId);
+       ClaseVueloDetalleList = await asientoDetalleService.ListarClaseVueloDetalles(ReservaId);
     
 
-        // Verifica si AsientoDetalleList tiene datos
-        Console.WriteLine($"Cantidad de Asientos: {AsientoDetalleList.Count}");
+      
     }
 }
