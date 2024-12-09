@@ -3,52 +3,55 @@
 @inject DestinoService destinoService
 @inject NavigationManager navigation
 @inject ToastService Toast
-<link rel="stylesheet" href="/Style/Destino/DestinoCreate.css" />
-
+<link rel="stylesheet" href="/Style/Destino/Destino.css" />
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
-<PageTitle>Modificar vuelo de Destino </PageTitle>
+<PageTitle>Modificar vuelo de Destino</PageTitle>
+
 <EditForm Model="Destino" OnValidSubmit="ModificarDestino">
     <DataAnnotationsValidator />
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <h1><strong>Modificar destino de Vuelo</strong></h1>
+                <h5><strong>Modificar destino de Vuelo</strong></h5>
             </div>
+
             <div class="card-body">
+                @* Origen ID - Readonly *@
+                <div class="mb-3">
+                    <label for="OrigenId" class="form-label"><strong>Origen ID:</strong></label>
+                    <InputNumber id="OrigenId" class="form-control" @bind-Value="Destino.DestinoId" readonly />
+                </div>
 
-                <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
-                <InputNumber id="OrigenId" class="form-control" @bind-Value="Destino.DestinoId" readonly></InputNumber>
+                @* Destino - Editable input field *@
+                <div class="mb-3">
+                    <label for="Destino" class="form-label"><strong>Destino del Vuelo</strong></label>
+                    <InputText id="Destino" class="form-control" @bind-Value="Destino.destino" />
+                    <ValidationMessage For="@(() => Destino.destino)" />
+                </div>
 
-
-                <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
-                <InputText id="Fecha" class="form-control" @bind-Value="Destino.destino"></InputText>
-                <ValidationMessage For="@(() => Destino.destino)" />
-
+                @* Add any other necessary fields here *@
             </div>
 
             <div class="card-footer">
+                @* Back Button *@
                 <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+                @* Submit Button *@
                 <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modificar</button>
             </div>
         </div>
     </div>
 </EditForm>
 
-
 @code {
-
     [Parameter]
     public int DestinoId { get; set; }
     public Destino Destino { get; set; } = new Destino();
-    public List<Destino> destinoList { get; set; } = new List<Destino>();
     public string Mensaje { get; set; } = string.Empty;
-
 
     protected override async Task OnInitializedAsync()
     {
         Destino = await destinoService.Buscar(DestinoId);
-
     }
 
     public async Task<bool> Validar()
@@ -56,34 +59,25 @@
         var destinoExiste = await destinoService.BuscarDestino(Destino.destino);
         if (destinoExiste != null)
         {
-            Toast.Notify(new(ToastType.Warning, "Error al modificar el destino de vuelo", "Este destino ya existe cambie el destino de vuelo"));
+            Toast.Notify(new ToastMessage(ToastType.Warning, "Error al modificar el destino de vuelo", "Este destino ya existe, cambie el destino de vuelo"));
             return false;
         }
-
         return true;
     }
-
-
 
     public async Task ModificarDestino()
     {
         if (await Validar())
         {
-
-            Toast.Notify(new(ToastType.Primary, "Destino de vuelo Modificado", "El destino de vuelo se ha modificado con exito!"));
             await destinoService.Guardar(Destino);
+            Toast.Notify(new ToastMessage(ToastType.Primary, "Destino de vuelo Modificado", "El destino de vuelo se ha modificado con éxito!"));
             await Task.Delay(4000);
-            Destino = new Destino();
             navigation.NavigateTo("/Destino/Index");
         }
     }
-
-
-
 
     public void Volver()
     {
         navigation.NavigateTo("/Destino/Index");
     }
-
 }

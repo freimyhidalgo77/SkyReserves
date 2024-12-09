@@ -3,75 +3,73 @@
 @inject DestinoService destinoService
 @inject NavigationManager navigation
 @inject ToastService Toast
-<link rel="stylesheet" href="/Style/Destino/DestinoCreate.css" />
+<link rel="stylesheet" href="/Style/Destino/Destino.css" />
 
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
+<PageTitle>Eliminar Destino de Vuelo</PageTitle>
 
-<PageTitle>Destino de vuelo</PageTitle>
 <div class="container">
-	<div class="card shadow-lg">
-		<div class="card-header">
-			<h3><strong>Eliminar destino de vuelos</strong></h3>
-		</div>
-		<div class="card-body">
-			<h5><strong>Est&aacute;s seguro que deseas eliminar este vuelo destino de vuelo?</strong></h5>
-			<div class="mb-1">
-				<p><strong>Destino vuelo ID:</strong>@destino?.DestinoId</p>
-			</div>
-			<div class="mb-1">
-				<p><strong>Destino:</strong>@destino?.destino</p>
-			</div>
-		</div>
-	</div>
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Destino de Vuelo:</strong></h5>
+        </div>
 
-	<div class="card-footer">
-		<button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
-		<button type="button" class="btn btn-purple bi bi-trash" @onclick="ElimnarDestino">Eliminar</button>
+        <div class="card-body">
+            <h5><strong>¿Seguro que deseas eliminar este destino de vuelo?</strong></h5>
 
+            <table class="mt-4 table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Destino Vuelo ID:</th>
+                        <td>@destino?.DestinoId</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Destino:</th>
+                        <td>@destino?.destino</td>
+                    </tr>
+                </tbody>
+            </table>
 
-	</div>
+        </div>
+
+        <div class="card-footer">
+            <button type="button" class="btn btn-secondary text-white bi bi-arrow-left" @onclick="Volver"> Volver</button>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarDestino"> Eliminar</button>
+        </div>
+    </div>
 </div>
 
-
-
 @code {
+    [Parameter]
+    public int DestinoId { get; set; }
+    public Destino destino { get; set; } = new Destino();
 
+    protected override async Task OnInitializedAsync()
+    {
+        destino = await destinoService.Buscar(DestinoId);
+    }
 
-	[Parameter]
-	public int DestinoId { get; set; }
-	public List<Destino> destinoList { get; set; } = new List<Destino>();
-	public Destino destino { get; set; } = new Destino();
-	public string mensaje { get; set; } = string.Empty;
+    public async Task EliminarDestino()
+    {
+        if (destino != null)
+        {
+            var eliminado = await destinoService.Eliminar(DestinoId);
+            if (eliminado)
+            {
+                Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "El destino de vuelo ha sido eliminado correctamente."));
+                await Task.Delay(4000);
+                navigation.NavigateTo("/Destino/Index");
+            }
+            else
+            {
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se pudo eliminar el destino de vuelo."));
+            }
+        }
+    }
 
-	protected override async Task OnInitializedAsync()
-	{
-		destino = await destinoService.Buscar(DestinoId);
-	}
-
-
-
-	public async Task ElimnarDestino()
-	{
-		if (destino != null)
-		{
-			var eliminado = await destinoService.Eliminar(DestinoId);
-			if (eliminado)
-			{
-				await Task.Delay(4000);
-				navigation.NavigateTo("/Destino/Index");
-				Toast.Notify(new(ToastType.Danger, "Destino de vuelo eliminado", "El destino de vuelo se ha eliminado correctamnete"));
-			}
-			else
-			{
-				Toast.Notify(new(ToastType.Warning, "Error al eliminar el destino de vuelo", "El destino de vuelo no se pudo eliminar correctamente"));
-			}
-		}
-
-	}
-
-	public void Volver()
-	{
-		navigation.NavigateTo("/Destino/Index");
-	}
+    public void Volver()
+    {
+        navigation.NavigateTo("/Destino/Index");
+    }
 }
