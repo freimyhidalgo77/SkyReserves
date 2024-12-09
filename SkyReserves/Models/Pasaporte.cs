@@ -22,7 +22,7 @@ namespace SkyReserves.Models
         public string? Genero { get; set; }
 
         [Required(ErrorMessage = "Favor ingrese la accesibilidad.")]
-        public string? Accesibilidad { get; set; }
+        public string? AccesibilidadId { get; set; }
 
         [Required(ErrorMessage = "Favor ingrese la nacionalidad.")]
         public string? Nacionalidad { get; set; }
