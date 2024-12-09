@@ -164,7 +164,7 @@ namespace SkyReserves.Migrations
                     Apellido = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FechaNacimiento = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Genero = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Accesibilidad = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AccesibilidadId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Nacionalidad = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>

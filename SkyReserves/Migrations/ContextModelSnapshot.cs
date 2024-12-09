@@ -334,7 +334,7 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PasaporteId"));
 
-                    b.Property<string>("Accesibilidad")
+                    b.Property<string>("AccesibilidadId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 

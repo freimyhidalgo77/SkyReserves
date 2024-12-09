@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace SkyReserves.Migrations
 {
     [DbContext(typeof(Context))]
-    [Migration("20241208095434_Inicial")]
+    [Migration("20241209055303_Inicial")]
     partial class Inicial
     {
         /// <inheritdoc />
@@ -337,7 +337,7 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PasaporteId"));
 
-                    b.Property<string>("Accesibilidad")
+                    b.Property<string>("AccesibilidadId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
