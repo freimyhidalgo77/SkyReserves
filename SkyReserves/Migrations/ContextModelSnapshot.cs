@@ -542,32 +542,6 @@ namespace SkyReserves.Migrations
                     b.ToTable("PasaporteDetalles");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Reserva", b =>
-                {
-                    b.Property<int>("ReservaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservaId"));
-
-                    b.Property<int>("DestinoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumeroPasajeros")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrigenId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReservaId");
-
-                    b.HasIndex("DestinoId");
-
-                    b.HasIndex("OrigenId");
-
-                    b.ToTable("Reserva");
-                });
-
             modelBuilder.Entity("SkyReserves.Models.UserAccount", b =>
                 {
                     b.Property<int>("Id")
@@ -604,6 +578,32 @@ namespace SkyReserves.Migrations
                             Role = "User",
                             UserName = "Cliente@gmail.com"
                         });
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.Vuelo", b =>
+                {
+                    b.Property<int>("VueloId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VueloId"));
+
+                    b.Property<int>("DestinoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumeroPasajeros")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrigenId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VueloId");
+
+                    b.HasIndex("DestinoId");
+
+                    b.HasIndex("OrigenId");
+
+                    b.ToTable("Vuelo");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.VuelosEspeciales", b =>
@@ -665,7 +665,7 @@ namespace SkyReserves.Migrations
                     b.Navigation("Pasaporte");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Reserva", b =>
+            modelBuilder.Entity("SkyReserves.Models.Vuelo", b =>
                 {
                     b.HasOne("SkyReserves.Models.Destino", "Destino")
                         .WithMany()

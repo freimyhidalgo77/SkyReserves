@@ -1,224 +1,79 @@
 ﻿@page "/MenuPrincipal"
-@using System.Globalization
-@using SkyReserves.Models
-@inject NavigationManager Navigation
-<link rel="stylesheet" href="/Estilos/Cierre.css" />
+@rendermode InteractiveServer
+@inject VueloService vueloService
+@inject OrigenService origenService
+@inject DestinoService destinoService
 
-<PageTitle> Men&uacute; Principal </PageTitle>
+<link rel="stylesheet" href="/Estilos/Asiento.css" />
 
-<AuthorizeView Roles="Admin,User">
-    <div class="container mt-4">
-        <div class="header-buttons d-flex justify-content-lg-end align-items-center">
-            <!-- Botón Volver -->
-            <a href="/AdminDashboard" class="common-btn bi bi-arrow-90deg-left text-nowrap me-3">
-                Volver
-            </a>
+<PageTitle>Listado de Vuelos</PageTitle>
 
-            <!-- Botón Cerrar Sesión -->
-            <a href="/logout" class="common-btn text-nowrap">
-                Cerrar sesi&oacute;n
-            </a>
+
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary bi bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Lista de Vuelos</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover mt-3">
+                    <thead class="table table-striped text-center text-black">
+                        <tr>
+                            <th>ID del Vuelo</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>N&uacute;mero de Pasajeros</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (vueloList != null && vueloList.Any())
+                        {
+                            @foreach (var vuelo in vueloList)
+                            {
+                                <tr>
+                                    <td class="text-center">@vuelo.VueloId</td>
+                                    <td class="text-center">@vuelo.Origen?.origen </td>
+                                    <td class="text-center">@vuelo.Destino?.destino</td>
+                                    <td class="text-center">@vuelo.NumeroPasajeros</td>
+                                    <td class="text-center">
+                                        <a href="/Vuelo/Edit/@vuelo.VueloId" class="btn btn-outline-dark bi bi-check2-circle">
+                                            Ver Detalles
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No hay vuelos registrados.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+</div>
 
-        <div class="row mb-3">
-            <h2 class="text-center mb-2">Ofertas de vuelos populares en Arajet</h2>
-            <div class="col-md-4">
-                <label for="origen">Origin:</label>
-                <select class="form-control" @bind="selectedOrigen">
-                    <option value="">Select Origin</option>
-                    @foreach (var origen in origenes)
-                    {
-                        <option value="@origen.OrigenId">@origen.origen</option>
-                    }
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <label for="destino">Destination:</label>
-                <select class="form-control" @bind="selectedDestino">
-                    <option value="">Select Destination</option>
-                    @foreach (var destino in destinos)
-                    {
-                        <option value="@destino.DestinoId">@destino.destino</option>
-                    }
-                </select>
-            </div>
-
-            <div class="col-md-4">
-                <label for="claseVuelo">Flight Class:</label>
-                <select class="form-control" @bind="selectedClaseVuelo">
-                    <option value="">Select Class</option>
-                    @foreach (var clase in clasesVuelo)
-                    {
-                        <option value="@clase.ClaseVueloId">@clase.descripcionClase</option>
-                    }
-                </select>
-            </div>
-        </div>
-
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="input-group">
-                    <span class="input-group-text">US$</span>
-                    <input type="number" class="form-control" @bind="maxBudget" placeholder="Input max budget" />
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            @foreach (var flight in GetFilteredFlightDeals())
-            {
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100">
-                        <img src="@flight.ImageUrl" class="card-img-top flight-img" alt="Flight Image">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@flight.Origin to @flight.Destination</h5>
-                            <p class="card-text">
-                                @flight.StartDate.ToString("dd/MM/yyyy") - @flight.EndDate.ToString("dd/MM/yyyy")<br />
-                                From <strong>@flight.Price.ToString("C", CultureInfo.GetCultureInfo("en-US"))</strong><br />
-                                Seen: @flight.SeenDuration ago<br />
-                                @flight.TripType / @flight.Class
-                            </p>
-                            <button class="btn btn-secondary">Book Now </button>
-                        </div>
-                    </div>
-                </div>
-            }
-        </div>
-   
-</AuthorizeView>
 
 @code {
-    private List<Origen> origenes = new List<Origen>();
-    private List<Destino> destinos = new List<Destino>();
-    private List<ClaseVuelo> clasesVuelo = new List<ClaseVuelo>();
-    private List<Hora> horas = new List<Hora>();
+    public Vuelo Vuelo { get; set; } = new Vuelo();
+    public List<Vuelo> vueloList { get; set; } = new List<Vuelo>();
+    public Origen Origen { get; set; } = new Origen();
+    public Destino Destino { get; set; } = new Destino();
 
-    private int? selectedOrigen;
-    private int? selectedDestino;
-    private int? selectedClaseVuelo;
-    private decimal? maxBudget;
-
-    // Sample flight deals (you would replace this with dynamic data fetching logic)
-    private List<FlightDeal> flightDeals = new List<FlightDeal>
-    {
-        new FlightDeal
-        {
-            Origin = "Buenos Aires (EZE)",
-            Destination = "Punta Cana (PUJ)",
-            StartDate = new DateTime(2024, 12, 16),
-            EndDate = new DateTime(2025, 1, 1),
-            Price = 431,
-            SeenDuration = "44 minutes",
-            TripType = "Round-trip",
-            Class = "Economy",
-            ImageUrl="/Imagenes/PuntaCana.jpeg"
-        },
-        new FlightDeal
-        {
-            Origin = "Santo Domingo (SDQ)",
-            Destination = "Bogota (BOG)",
-            StartDate = new DateTime(2024, 12, 1),
-            EndDate = new DateTime(2025, 1, 8),
-            Price = 141,
-            SeenDuration = "3 hours",
-            TripType = "Round-trip",
-            Class = "Economy",
-            ImageUrl = "/Imagenes/Bogota.jpg"
-        },
-        new FlightDeal
-        {
-            Origin = "Lima Peru (LIM)",
-            Destination = "Punta Cana (PUJ)",
-            StartDate = new DateTime(2024, 12, 11),
-            EndDate = new DateTime(2024, 12, 17),
-            Price = 225,
-            SeenDuration = "14 hours",
-            TripType = "Round-trip",
-            Class = "Economy",
-            ImageUrl = "/Imagenes/Dorado-park.jpg"
-        },
-        new FlightDeal
-        {
-            Origin = "Punta Cana (PUJ)",
-            Destination = "Mexico City(NLU)",
-            StartDate = new DateTime(2024, 12, 10),
-            EndDate = new DateTime(2025, 1, 8),
-            Price = 91,
-            SeenDuration = "3 hours",
-            TripType = "Round-trip",
-            Class = "Economy",
-            ImageUrl = "/Imagenes/Mexico.jpeg"
-        }
-    };
-
-    // Placeholder for fetching data from a service or API
     protected override async Task OnInitializedAsync()
     {
-        // Replace with real data fetching
-        origenes = await FetchOrigenData();
-        destinos = await FetchDestinoData();
-        clasesVuelo = await FetchClaseVueloData();
+        vueloList = await vueloService.Listar(v => v.VueloId > 0);
     }
-
-    private List<FlightDeal> GetFilteredFlightDeals()
-    {
-        return flightDeals.Where(flight =>
-            (selectedOrigen == null || flight.Origin.Contains(origenes.FirstOrDefault(o => o.OrigenId == selectedOrigen)?.origen ?? "")) &&
-            (selectedDestino == null || flight.Destination.Contains(destinos.FirstOrDefault(d => d.DestinoId == selectedDestino)?.destino ?? "")) &&
-            (selectedClaseVuelo == null || flight.Class.Contains(clasesVuelo.FirstOrDefault(c => c.ClaseVueloId == selectedClaseVuelo)?.descripcionClase ?? "")) &&
-            (maxBudget == null || flight.Price <= maxBudget)
-        ).ToList();
-    }
-
-    private async Task<List<Origen>> FetchOrigenData()
-    {
-        // Replace with actual data fetch logic (e.g., from an API or database)
-        return new List<Origen>
-        {
-            new Origen { OrigenId = 1, origen = "Buenos Aires (EZE)" },
-            new Origen { OrigenId = 2, origen = "Santo Domingo (SDQ)" },
-            new Origen { OrigenId = 3, origen = "Lima (LIM)" },
-            new Origen { OrigenId = 4, origen = "Mexico City(NLU)"}
-        };
-    }
-
-    private async Task<List<Destino>> FetchDestinoData()
-    {
-        // Replace with actual data fetch logic (e.g., from an API or database)
-        return new List<Destino>
-        {
-            new Destino { DestinoId = 1, destino = "Punta Cana (PUJ)" },
-            new Destino { DestinoId = 2, destino = "Bogota (BOG)" },
-            new Destino { DestinoId = 3, destino = "Mexico City (NLU)" },
-            new Destino {DestinoId = 4, destino = "Santo Domingo (SDQ)" }
-        };
-    }
-
-    private async Task<List<ClaseVuelo>> FetchClaseVueloData()
-    {
-        // Replace with actual data fetch logic (e.g., from an API or database)
-        return new List<ClaseVuelo>
-        {
-            new ClaseVuelo { ClaseVueloId = 1, descripcionClase = "Economy" },
-            new ClaseVuelo { ClaseVueloId = 2, descripcionClase = "Business" },
-            new ClaseVuelo { ClaseVueloId = 3, descripcionClase = "First Class" }
-        };
-    }
-
-    public class FlightDeal
-    {
-        public string Origin { get; set; }
-        public string Destination { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime EndDate { get; set; }
-        public decimal Price { get; set; }
-        public string SeenDuration { get; set; }
-        public string TripType { get; set; }
-        public string Class { get; set; }
-        public string ImageUrl { get; set; }
-    }
-
-   
 }

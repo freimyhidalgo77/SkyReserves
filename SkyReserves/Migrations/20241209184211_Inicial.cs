@@ -234,10 +234,10 @@ namespace SkyReserves.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Reserva",
+                name: "Vuelo",
                 columns: table => new
                 {
-                    ReservaId = table.Column<int>(type: "int", nullable: false)
+                    VueloId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrigenId = table.Column<int>(type: "int", nullable: false),
                     DestinoId = table.Column<int>(type: "int", nullable: false),
@@ -245,15 +245,15 @@ namespace SkyReserves.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reserva", x => x.ReservaId);
+                    table.PrimaryKey("PK_Vuelo", x => x.VueloId);
                     table.ForeignKey(
-                        name: "FK_Reserva_Destino_DestinoId",
+                        name: "FK_Vuelo_Destino_DestinoId",
                         column: x => x.DestinoId,
                         principalTable: "Destino",
                         principalColumn: "DestinoId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Reserva_Origen_OrigenId",
+                        name: "FK_Vuelo_Origen_OrigenId",
                         column: x => x.OrigenId,
                         principalTable: "Origen",
                         principalColumn: "OrigenId",
@@ -377,13 +377,13 @@ namespace SkyReserves.Migrations
                 column: "AccesibilidadId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reserva_DestinoId",
-                table: "Reserva",
+                name: "IX_Vuelo_DestinoId",
+                table: "Vuelo",
                 column: "DestinoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reserva_OrigenId",
-                table: "Reserva",
+                name: "IX_Vuelo_OrigenId",
+                table: "Vuelo",
                 column: "OrigenId");
 
             migrationBuilder.CreateIndex(
@@ -428,10 +428,10 @@ namespace SkyReserves.Migrations
                 name: "PasaporteDetalles");
 
             migrationBuilder.DropTable(
-                name: "Reserva");
+                name: "UserAccount");
 
             migrationBuilder.DropTable(
-                name: "UserAccount");
+                name: "Vuelo");
 
             migrationBuilder.DropTable(
                 name: "VuelosEspeciales");

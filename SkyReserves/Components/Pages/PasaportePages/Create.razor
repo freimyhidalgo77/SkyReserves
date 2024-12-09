@@ -177,7 +177,7 @@
         }
 
         Pasaporte.PasaporteDetalle.Add(detalle);
-        NuevoDetalle = new PasaporteDetalle(); // Reiniciar detalle
+        NuevoDetalle = new PasaporteDetalle();
         DetalleMensaje = string.Empty;
         await Task.CompletedTask;
     }
@@ -193,6 +193,6 @@
         await pasaporteService.Guardar(Pasaporte);
         Toast.Notify(new(ToastType.Success, "Éxito", "Pasaporte registrado correctamente"));
         await Task.Delay(4000);
-        navigation.NavigateTo("/Pasaporte/Index");
+        navigation.NavigateTo("/Pasaporte/Confirmado");
     }
 }

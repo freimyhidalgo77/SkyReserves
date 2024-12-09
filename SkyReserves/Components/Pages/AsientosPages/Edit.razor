@@ -25,7 +25,7 @@
                 <!-- Fila -->
                 <div class="mb-3">
                     <label for="Fila" class="form-label"><strong>Fila</strong></label>
-                    <InputNumber class="form-control" @bind-Value="asiento.Fila" />
+                    <InputText class="form-control" @bind-Value="asiento.Fila" />
                     <ValidationMessage For="@(() => asiento.Fila)" />
                 </div>
 
@@ -47,8 +47,9 @@
 
         <div class="card-footer">
             <div class="d-flex justify-content-between">
-                <a href="/Asiento/Index" class="btn btn-secondary text-white">Cancelar</a>
-                <button type="submit" class="btn btn-success">Confirmar</button>
+                <a href="/Asiento/Index" class="btn btn-secondary  bi bi-arrow-90deg-left text-white">Cancelar</a>
+                <a href="/Asiento/Confirmado" class="btn btn-secondary bi bi-arrow-90deg-right  text-white">Continuar</a>
+
             </div>
         </div>
     </div>

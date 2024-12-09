@@ -1,0 +1,115 @@
+﻿@page "/Vuelo/Index"
+@rendermode InteractiveServer
+@inject VueloService vueloService
+@inject OrigenService origenService
+@inject DestinoService destinoService
+<link rel="stylesheet" href="/Estilos/ClaseV.css" />
+
+<PageTitle>Reserva Vuelo</PageTitle>
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary  bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+        <a href="/logout" class="btn btn-outline-danger text-nowrap common-btn w-30">
+            Cerrar sesión
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h3><strong>Reservas de Vuelo</strong></h3>
+        </div>
+
+        <!-- Search and Filter Section -->
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                        <option value="" disabled>Seleccionar</option>
+                        <option value="VueloId">Vuelo Id</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="input-group">
+                        <InputText id="ValorFiltro" @bind-Value="ValorFiltro" class="form-control" placeholder="Buscar" />
+                        
+                    </div>
+                </div>
+
+                <button @onclick="Buscar" class="btn btn-secondary bi bi-search mt-3 w-30" type="button"> Buscar</button>
+                <a href="/Vuelo/Create" class="btn btn-success bi bi-plus-square-fill mt-3 ms-2 w-30"> Crear vuelo</a>
+            </div>
+
+            <!-- Table to Display Vuelo List -->
+            <div class="table-responsive">
+                <table class="table table-hover mt-3">
+                    <thead class="table table-striped text-center text-black">
+                        <tr>
+                            <th>Reserva ID</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>Pasajeros</th>
+                            <th>Editar</th>
+                            <th>Eliminar</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var vuelo in vueloList)
+                        {
+                            <tr>
+                                <td class="text-center">@vuelo.VueloId</td>
+                                <td class="text-center">@vuelo.Origen?.origen</td>
+                                <td class="text-center">@vuelo?.Destino?.destino</td>
+                                <td class="text-center">@vuelo?.NumeroPasajeros</td>
+                                
+                                <td class="text-center">
+                                    <a href="/Vuelo/Edit/@vuelo?.VueloId" class="btn btn-outline-dark bi bi-pencil-square" style="background-color: purple; color: white; border: none"></a>
+                                </td>
+                                
+                                <td class="text-center">
+                                    <a href="/Vuelo/Delete/@vuelo?.VueloId" class="btn btn-outline-dark bi bi-trash" style="background-color: purple; color: white; border: none"></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="card-footer text-center">
+            <p><strong>Total de Vuelos creados: </strong>@vueloList?.Count</p>
+        </div>
+    </div>
+</div>
+
+@code {
+    public Vuelo Vuelo { get; set; } = new Vuelo();
+    public List<Vuelo> vueloList { get; set; } = new List<Vuelo>();
+    public string filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        
+        vueloList = await vueloService.Listar(v => v.VueloId > 0);
+    }
+
+    public void Buscar()
+    {
+        if (string.IsNullOrEmpty(filtro) || string.IsNullOrEmpty(ValorFiltro))
+        {
+            return; 
+        }
+
+        if (filtro == "VueloId")
+        {
+            vueloList = vueloList.Where(v => v.VueloId.ToString().Contains(ValorFiltro)).ToList();
+        }
+    }
+}

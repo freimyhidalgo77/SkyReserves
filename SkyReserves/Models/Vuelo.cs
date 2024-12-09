@@ -3,11 +3,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace SkyReserves.Models
 {
-    public class Reserva
+    public class Vuelo
     {
 
         [Key]
-        public int ReservaId { get; set; }
+        public int VueloId { get; set; }
 
         [ForeignKey("Origen")]
         public int OrigenId { get; set; }

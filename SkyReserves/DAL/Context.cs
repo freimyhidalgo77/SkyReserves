@@ -16,7 +16,7 @@ public class Context : DbContext
     public DbSet<Pago> Pago { get; set; }
     public DbSet<Pasaporte> Pasaportes { get; set; }
     public DbSet<PasaporteDetalle> PasaporteDetalles { get; set; }
-    public DbSet<Reserva> Reserva { get; set; }
+    public DbSet<Vuelo> Vuelo { get; set; }
     public DbSet<VuelosEspeciales> VuelosEspeciales { get; set; }
     public DbSet<FlightDeal> FlightDeals { get; set; }
    
@@ -104,6 +104,8 @@ public class Context : DbContext
                   ImageUrl = "/Imagenes/Mexico.jpeg",
                   Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
               }
+
+                
 
         );
     }
