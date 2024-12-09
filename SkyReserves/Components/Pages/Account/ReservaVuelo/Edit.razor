@@ -1,0 +1,118 @@
+﻿@page "/Reserva/Edit/{ReservaId:int}"
+@inject OrigenService origenService
+@inject DestinoService destinoService
+@inject ReservaService reservaService
+@inject NavigationManager navigation
+@inject ToastService Toast
+
+<PageTitle>Modificar Vuelo</PageTitle>
+
+<EditForm Model="Reserva" OnValidSubmit="ModificarRuta">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h1><strong>Modificar Vuelo</strong></h1>
+            </div>
+            <div class="card-body">
+                <label class="form-label" for="VueloId"><strong>Reserva ID:</strong></label>
+                <InputNumber id="VueloId" class="form-control" @bind-Value="Reserva.ReservaId" readonly></InputNumber>
+
+                <label class="form-label" for="Origen"><strong>Origen</strong></label>
+                <InputSelect id="Origen" class="form-control" @bind-Value="Reserva.OrigenId">
+                    <option value="0" disabled selected>Seleccione un origen de vuelo</option>
+                    @foreach (var origen in OrigenList)
+                    {
+                        <option value="@origen.OrigenId">@origen.origen</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Reserva.OrigenId)" />
+
+
+                <label class="form-label" for="Destino"><strong>Destino</strong></label>
+                <InputSelect id="Destino" class="form-control" @bind-Value="Reserva.DestinoId">
+                    <option value="0" disabled selected>Seleccione un destino de vuelo</option>
+                    @foreach (var destino in DestinoList)
+                    {
+                        <option value="@destino.DestinoId">@destino.destino</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Reserva.DestinoId)" />
+
+                <label class="form-label" for="NumeroPasajeros"><strong>Número de Pasajeros</strong></label>
+                <div class="input-group">
+                    <button class="btn btn-outline-secondary" type="button" @onclick="DecrementarPasajeros">-</button>
+                    <InputNumber id="NumeroPasajeros" class="form-control" @bind-Value="Reserva.NumeroPasajeros" min="1" />
+                    <button class="btn btn-outline-secondary" type="button" @onclick="IncrementarPasajeros">+</button>
+                </div>
+                <ValidationMessage For="@(() => Reserva.NumeroPasajeros)" />
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="VolverAtras"> Volver</button>
+                <button type="submit" class="btn btn-primary">Modificar Reserva</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter] public int ReservaId { get; set; }
+    private Reserva Reserva { get; set; } = new Reserva();
+    private List<Origen> OrigenList { get; set; } = new List<Origen>();
+    private List<Destino> DestinoList { get; set; } = new List<Destino>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Reserva = await reservaService.Buscar(ReservaId);
+        if (Reserva == null)
+        {
+            Toast.Notify(new(ToastType.Danger, "Reserva no encontrada", "La reserva solicitada no existe."));
+            navigation.NavigateTo("/Vuelo/Index");
+            return;
+        }
+
+        OrigenList = await origenService.Listar(o => o.OrigenId > 0);
+        if (OrigenList == null || OrigenList.Count == 0)
+        {
+            Toast.Notify(new(ToastType.Danger, "No se encontraron orígenes", "No hay orígenes disponibles para la reserva."));
+            navigation.NavigateTo("/Reserva/Index");
+            return;
+        }
+
+        DestinoList = await destinoService.Listar(d => d.DestinoId > 0);
+        if (DestinoList == null || DestinoList.Count == 0)
+        {
+            Toast.Notify(new(ToastType.Danger, "No se encontraron destinos", "No hay destinos disponibles para la reserva."));
+            navigation.NavigateTo("/Reserva/Index");
+            return;
+        }
+    }
+
+
+    private async Task ModificarRuta()
+    {
+        // Aquí va tu lógica para modificar la reserva
+        await reservaService.Modificar(Reserva);
+        Toast.Notify(new(ToastType.Success, "Reserva modificada", "La reserva fue modificada con éxito."));
+        navigation.NavigateTo("/Reserva/Index");
+    }
+
+    private void VolverAtras()
+    {
+        navigation.NavigateTo("/Reserva/Index");
+    }
+
+    private void IncrementarPasajeros()
+    {
+        Reserva.NumeroPasajeros++;
+    }
+
+    private void DecrementarPasajeros()
+    {
+        if (Reserva.NumeroPasajeros > 1)
+        {
+            Reserva.NumeroPasajeros--;
+        }
+    }
+}

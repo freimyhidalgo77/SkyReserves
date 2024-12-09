@@ -21,7 +21,7 @@ namespace SkyReserves.Service
             return await context.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> Modificar(Reserva reservaId)
+        public async Task<bool> Modificar(Reserva reservaId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             context.Reserva.Update(reservaId);
@@ -60,6 +60,16 @@ namespace SkyReserves.Service
                 .Where(criterio)
                 .ToListAsync();
         }
+
+
+        public async Task<Reserva?> BuscarReserva(int origenId, int destinoId)
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            return await context.Reserva
+                .FirstOrDefaultAsync(v => v.OrigenId == origenId && v.DestinoId == destinoId);
+        }
+
+
 
     }
 }

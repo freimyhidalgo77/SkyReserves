@@ -1,6 +1,9 @@
 ﻿@page "/MenuPrincipal"
+@page "/MenuPrincipal/{ReservaID:int}"
 @using System.Globalization
 @using SkyReserves.Models
+@inject OrigenService origenService
+@inject DestinoService destinoService
 @inject NavigationManager Navigation
 <link rel="stylesheet" href="/Estilos/Cierre.css" />
 
@@ -21,86 +24,78 @@
         </div>
     </div>
 
-        <div class="row mb-3">
-            <h2 class="text-center mb-2">Ofertas de vuelos populares en Arajet</h2>
-            <div class="col-md-4">
-                <label for="origen">Origin:</label>
-                <select class="form-control" @bind="selectedOrigen">
-                    <option value="">Select Origin</option>
-                    @foreach (var origen in origenes)
-                    {
-                        <option value="@origen.OrigenId">@origen.origen</option>
-                    }
-                </select>
-            </div>
+    <div class="row">
+        @foreach (var flight in GetFilteredFlightDeals())
+        {
+            <div class="col-md-3 mb-4">
+                <div class="card h-100">
+                    <img src="@flight.ImageUrl" class="card-img-top flight-img" alt="Flight Image">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title">@flight.Origin to @flight.Destination</h5>
+                        <p class="card-text">
+                            @flight.StartDate.ToString("dd/MM/yyyy") - @flight.EndDate.ToString("dd/MM/yyyy")<br />
+                            From <strong>@flight.Price.ToString("C", CultureInfo.GetCultureInfo("en-US"))</strong><br />
+                            Seen: @flight.SeenDuration ago<br />
+                            @flight.TripType / @flight.Class
+                        </p>
 
-            <div class="col-md-4">
-                <label for="destino">Destination:</label>
-                <select class="form-control" @bind="selectedDestino">
-                    <option value="">Select Destination</option>
-                    @foreach (var destino in destinos)
-                    {
-                        <option value="@destino.DestinoId">@destino.destino</option>
-                    }
-                </select>
-            </div>
+                        <!-- InputSelect para seleccionar origen -->
+                        <label class="form-label" for="Origen"><strong>Origen</strong></label>
+                        <InputSelect id="Origen" class="form-control" @bind-Value="Reserva.Origen">
+                            <option value="0" disabled selected>Seleccione un origen de vuelo</option>
+                            @foreach (var origen in origenes)
+                            {
+                                <option value="@origen.OrigenId">@origen.origen</option>
+                            }
+                        </InputSelect>
 
-            <div class="col-md-4">
-                <label for="claseVuelo">Flight Class:</label>
-                <select class="form-control" @bind="selectedClaseVuelo">
-                    <option value="">Select Class</option>
-                    @foreach (var clase in clasesVuelo)
-                    {
-                        <option value="@clase.ClaseVueloId">@clase.descripcionClase</option>
-                    }
-                </select>
-            </div>
-        </div>
+                        <!-- InputSelect para seleccionar destino -->
+                        <label class="form-label" for="Destino"><strong>Destino</strong></label>
+                        <InputSelect id="Destino" class="form-control" @bind-Value="Reserva.Destino">
+                            <option value="0" disabled selected>Seleccione un destino de vuelo</option>
+                            @foreach (var destino in destinos)
+                            {
+                                <option value="@destino.DestinoId">@destino.destino</option>
+                            }
+                        </InputSelect>
 
-        <div class="row mb-4">
-            <div class="col-md-4">
-                <div class="input-group">
-                    <span class="input-group-text">US$</span>
-                    <input type="number" class="form-control" @bind="maxBudget" placeholder="Input max budget" />
-                </div>
-            </div>
-        </div>
 
-        <div class="row">
-            @foreach (var flight in GetFilteredFlightDeals())
-            {
-                <div class="col-md-3 mb-4">
-                    <div class="card h-100">
-                        <img src="@flight.ImageUrl" class="card-img-top flight-img" alt="Flight Image">
-                        <div class="card-body d-flex flex-column">
-                            <h5 class="card-title">@flight.Origin to @flight.Destination</h5>
-                            <p class="card-text">
-                                @flight.StartDate.ToString("dd/MM/yyyy") - @flight.EndDate.ToString("dd/MM/yyyy")<br />
-                                From <strong>@flight.Price.ToString("C", CultureInfo.GetCultureInfo("en-US"))</strong><br />
-                                Seen: @flight.SeenDuration ago<br />
-                                @flight.TripType / @flight.Class
-                            </p>
-                            <button class="btn btn-secondary">Book Now </button>
-                        </div>
+                        <td class="text-center">
+                            <a href="/Reserva/Edit/@Reserva.ReservaId" class="btn btn-secondary">Book</a>
+                        </td>
+
+
                     </div>
                 </div>
-            }
-        </div>
-   
+            </div>
+        }
+    </div>
 </AuthorizeView>
 
 @code {
+
+    [Parameter]
+    public int ReservaID { get; set; }
     private List<Origen> origenes = new List<Origen>();
     private List<Destino> destinos = new List<Destino>();
     private List<ClaseVuelo> clasesVuelo = new List<ClaseVuelo>();
-    private List<Hora> horas = new List<Hora>();
+    private Reserva Reserva { get; set; } = new Reserva();
 
-    private int? selectedOrigen;
-    private int? selectedDestino;
-    private int? selectedClaseVuelo;
-    private decimal? maxBudget;
 
-    // Sample flight deals (you would replace this with dynamic data fetching logic)
+    protected override async Task OnInitializedAsync()
+         {
+         origenes = await FetchOrigenData();
+         destinos = await FetchDestinoData();
+     }
+
+
+   /* protected override async Task OnInitializedAsync()
+    {
+        origenes = await origenService.Listar(c=>c.OrigenId > 0);
+        destinos = await FetchDestinoData();
+    }*/
+
+    // Lista de vuelos simulados
     private List<FlightDeal> flightDeals = new List<FlightDeal>
     {
         new FlightDeal
@@ -153,28 +148,14 @@
         }
     };
 
-    // Placeholder for fetching data from a service or API
-    protected override async Task OnInitializedAsync()
-    {
-        // Replace with real data fetching
-        origenes = await FetchOrigenData();
-        destinos = await FetchDestinoData();
-        clasesVuelo = await FetchClaseVueloData();
-    }
 
     private List<FlightDeal> GetFilteredFlightDeals()
     {
-        return flightDeals.Where(flight =>
-            (selectedOrigen == null || flight.Origin.Contains(origenes.FirstOrDefault(o => o.OrigenId == selectedOrigen)?.origen ?? "")) &&
-            (selectedDestino == null || flight.Destination.Contains(destinos.FirstOrDefault(d => d.DestinoId == selectedDestino)?.destino ?? "")) &&
-            (selectedClaseVuelo == null || flight.Class.Contains(clasesVuelo.FirstOrDefault(c => c.ClaseVueloId == selectedClaseVuelo)?.descripcionClase ?? "")) &&
-            (maxBudget == null || flight.Price <= maxBudget)
-        ).ToList();
+        return flightDeals;
     }
 
     private async Task<List<Origen>> FetchOrigenData()
     {
-        // Replace with actual data fetch logic (e.g., from an API or database)
         return new List<Origen>
         {
             new Origen { OrigenId = 1, origen = "Buenos Aires (EZE)" },
@@ -186,24 +167,12 @@
 
     private async Task<List<Destino>> FetchDestinoData()
     {
-        // Replace with actual data fetch logic (e.g., from an API or database)
         return new List<Destino>
         {
             new Destino { DestinoId = 1, destino = "Punta Cana (PUJ)" },
             new Destino { DestinoId = 2, destino = "Bogota (BOG)" },
             new Destino { DestinoId = 3, destino = "Mexico City (NLU)" },
             new Destino {DestinoId = 4, destino = "Santo Domingo (SDQ)" }
-        };
-    }
-
-    private async Task<List<ClaseVuelo>> FetchClaseVueloData()
-    {
-        // Replace with actual data fetch logic (e.g., from an API or database)
-        return new List<ClaseVuelo>
-        {
-            new ClaseVuelo { ClaseVueloId = 1, descripcionClase = "Economy" },
-            new ClaseVuelo { ClaseVueloId = 2, descripcionClase = "Business" },
-            new ClaseVuelo { ClaseVueloId = 3, descripcionClase = "First Class" }
         };
     }
 
@@ -220,5 +189,15 @@
         public string ImageUrl { get; set; }
     }
 
-   
+    public class Origen
+    {
+        public int OrigenId { get; set; }
+        public string origen { get; set; }
+    }
+
+    public class Destino
+    {
+        public int DestinoId { get; set; }
+        public string destino { get; set; }
+    }
 }
