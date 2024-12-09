@@ -1,0 +1,75 @@
+﻿@page "/Destino/Delete/{DestinoId:int}"
+@rendermode InteractiveServer
+@inject DestinoService destinoService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Destino/Destino.css" />
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<PageTitle>Eliminar Destino de Vuelo</PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Destino de Vuelo:</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <h5><strong>¿Seguro que deseas eliminar este destino de vuelo?</strong></h5>
+
+            <table class="mt-4 table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Destino Vuelo ID:</th>
+                        <td>@destino?.DestinoId</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Destino:</th>
+                        <td>@destino?.destino</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="card-footer">
+            <button type="button" class="btn btn-secondary text-white bi bi-arrow-left" @onclick="Volver"> Volver</button>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="EliminarDestino"> Eliminar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int DestinoId { get; set; }
+    public Destino destino { get; set; } = new Destino();
+
+    protected override async Task OnInitializedAsync()
+    {
+        destino = await destinoService.Buscar(DestinoId);
+    }
+
+    public async Task EliminarDestino()
+    {
+        if (destino != null)
+        {
+            var eliminado = await destinoService.Eliminar(DestinoId);
+            if (eliminado)
+            {
+                Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "El destino de vuelo ha sido eliminado correctamente."));
+                await Task.Delay(4000);
+                navigation.NavigateTo("/Destino/Index");
+            }
+            else
+            {
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se pudo eliminar el destino de vuelo."));
+            }
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Destino/Index");
+    }
+}

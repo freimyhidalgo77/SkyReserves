@@ -9,23 +9,23 @@ namespace SkyReserves.Models
 
         public int PasaporteId { get; set; }
 
-        [Required(ErrorMessage = "Favor ingrese el pais de residencia.")]
-        public string? PaisResidencia { get; set; }
+        [Required(ErrorMessage = "Favor ingrese el nombre de pila.")]
+        public string? NombrePila { get; set; }
 
-        [Required(ErrorMessage = "Favor ingrese el numero de paaaporte.")]
-        public string? NumeroPasaporte { get; set; }
+        [Required(ErrorMessage = "Favor ingrese el apellido.")]
+        public string? Apellido { get; set; }
 
-        [Required(ErrorMessage = "Favor ingrese este dato .")]
-        public string? EmitidoPor { get; set; }
+        [Required(ErrorMessage = "Favor ingrese la fecha de nacimiento.")]
+        public DateTime FechaNacimiento { get; set; }
 
-        [Required(ErrorMessage = "Favor ingrese la fecha de expiracion.")]
-        public DateTime FechaExpiracion { get; set; }
+        [Required(ErrorMessage = "Favor ingrese el género.")]
+        public string? Genero { get; set; }
 
-        [Required(ErrorMessage = "Favor introduzca su pais de nacimientro.")]
-        public string? PaisNacimiento { get; set; }
+        [Required(ErrorMessage = "Favor ingrese la accesibilidad.")]
+        public string? AccesibilidadId { get; set; }
 
-        [Required(ErrorMessage = "Favor introdiuzca su ciudad de nacimiento.")]
-        public string? CiudadNacimiento { get; set; }
+        [Required(ErrorMessage = "Favor ingrese la nacionalidad.")]
+        public string? Nacionalidad { get; set; }
 
         [ForeignKey("PasaporteId")]
         public ICollection<PasaporteDetalle> PasaporteDetalle { get; set; } = new List<PasaporteDetalle>();

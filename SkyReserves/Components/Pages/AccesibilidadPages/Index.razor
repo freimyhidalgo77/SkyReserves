@@ -1,0 +1,118 @@
+﻿@page "/Accesibilidad/Index"
+@rendermode InteractiveServer
+@inject AccesibilidadService accesibilidadService
+<link rel="stylesheet" href="/Style/Accesibilidad.css" />
+
+<PageTitle>Accesibilidad</PageTitle>
+
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+        <a href="/logout" class="btn btn-outline-danger text-nowrap common-btn w-30">
+            Cerrar sesión
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Accesibilidades Para Pasajeros</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                        <option value="" disabled>Seleccionar</option>
+                        <option value="AccesibilidadId">Accesibilidad ID</option>
+                        <option value="Descripcion">Descripción</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="input-group">
+                        <InputText id="valorFiltro" @bind-Value="ValorFiltro" class="form-control" placeholder="Buscar" />
+                    </div>
+                </div>
+            </div>
+
+            <a href="Accesibilidad/Create" class="btn btn-success bi bi-plus-square-fill mt-3 w-30"> Crear</a>
+            <button @onclick="Buscar" class="btn btn-secondary bi bi-search mt-3 w-30" type="button"> Buscar</button>
+
+            <table class="table table-hover mt-3">
+                <thead class="table table-striped text-center text-black">
+                    <tr>
+                        <th>Accesibilidad ID</th>
+                        <th>Descripci&oacute;n</th>
+                        <th>Editar</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var accesibilidad in accesibilidadList)
+                    {
+                        <tr>
+                            <td class="text-center">@accesibilidad.AccesibilidadId</td>
+                            <td class="text-center">@accesibilidad.Descripcion</td>
+                            <td class="text-center">
+                                <a href="/Accesibilidad/Edit/@accesibilidad.AccesibilidadId" class="btn btn-outline-dark bi bi-pencil-square"></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="/Accesibilidad/Delete/@accesibilidad.AccesibilidadId" class="btn btn-outline-dark bi bi-trash"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@code {
+    Accesibilidad Accesibilidad { get; set; } = new Accesibilidad();
+    List<Accesibilidad> accesibilidadList { get; set; } = new List<Accesibilidad>();
+    List<Accesibilidad> accesibilidadListCompleta { get; set; } = new List<Accesibilidad>();
+    public string filtro { get; set; } = string.Empty;
+    public string ValorFiltro { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        accesibilidadListCompleta = await accesibilidadService.Listar(o => o.AccesibilidadId > 0);
+        accesibilidadList = accesibilidadListCompleta;
+    }
+
+    public void Buscar()
+    {
+        if (string.IsNullOrWhiteSpace(filtro) || string.IsNullOrWhiteSpace(ValorFiltro))
+        {
+            accesibilidadList = accesibilidadListCompleta;
+            return;
+        }
+
+        switch (filtro)
+        {
+            case "AccesibilidadId":
+                if (int.TryParse(ValorFiltro, out int id))
+                {
+                    accesibilidadList = accesibilidadListCompleta
+                        .Where(a => a.AccesibilidadId == id)
+                        .ToList();
+                }
+                break;
+
+            case "Descripcion":
+                accesibilidadList = accesibilidadListCompleta
+                    .Where(a => a.Descripcion != null && a.Descripcion.Contains(ValorFiltro, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+                break;
+
+            default:
+                accesibilidadList = accesibilidadListCompleta;
+                break;
+        }
+    }
+}

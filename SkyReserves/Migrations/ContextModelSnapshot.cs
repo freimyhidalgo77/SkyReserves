@@ -57,9 +57,6 @@ namespace SkyReserves.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("VueloId")
-                        .HasColumnType("int");
-
                     b.HasKey("AsientoId");
 
                     b.ToTable("Asientos");
@@ -68,19 +65,157 @@ namespace SkyReserves.Migrations
                         new
                         {
                             AsientoId = 1,
-                            Existencia = 5,
+                            Existencia = 1,
                             Fila = "1",
-                            Letra = "A",
-                            VueloId = 1
+                            Letra = "A"
                         },
                         new
                         {
                             AsientoId = 2,
-                            Existencia = 5,
+                            Existencia = 1,
                             Fila = "2",
-                            Letra = "B",
-                            VueloId = 1
+                            Letra = "B"
+                        },
+                        new
+                        {
+                            AsientoId = 3,
+                            Existencia = 1,
+                            Fila = "1",
+                            Letra = "C"
+                        },
+                        new
+                        {
+                            AsientoId = 4,
+                            Existencia = 1,
+                            Fila = "1",
+                            Letra = "D"
+                        },
+                        new
+                        {
+                            AsientoId = 5,
+                            Existencia = 1,
+                            Fila = "1",
+                            Letra = "E"
+                        },
+                        new
+                        {
+                            AsientoId = 6,
+                            Existencia = 1,
+                            Fila = "1",
+                            Letra = "F"
+                        },
+                        new
+                        {
+                            AsientoId = 7,
+                            Existencia = 1,
+                            Fila = "2",
+                            Letra = "A"
+                        },
+                        new
+                        {
+                            AsientoId = 8,
+                            Existencia = 1,
+                            Fila = "2",
+                            Letra = "B"
+                        },
+                        new
+                        {
+                            AsientoId = 9,
+                            Existencia = 1,
+                            Fila = "2",
+                            Letra = "C"
+                        },
+                        new
+                        {
+                            AsientoId = 10,
+                            Existencia = 1,
+                            Fila = "2",
+                            Letra = "D"
+                        },
+                        new
+                        {
+                            AsientoId = 11,
+                            Existencia = 1,
+                            Fila = "2",
+                            Letra = "E"
+                        },
+                        new
+                        {
+                            AsientoId = 12,
+                            Existencia = 1,
+                            Fila = "2",
+                            Letra = "F"
+                        },
+                        new
+                        {
+                            AsientoId = 13,
+                            Existencia = 1,
+                            Fila = "3",
+                            Letra = "A"
+                        },
+                        new
+                        {
+                            AsientoId = 14,
+                            Existencia = 1,
+                            Fila = "3",
+                            Letra = "B"
+                        },
+                        new
+                        {
+                            AsientoId = 15,
+                            Existencia = 1,
+                            Fila = "3",
+                            Letra = "C"
+                        },
+                        new
+                        {
+                            AsientoId = 16,
+                            Existencia = 1,
+                            Fila = "3",
+                            Letra = "D"
+                        },
+                        new
+                        {
+                            AsientoId = 17,
+                            Existencia = 1,
+                            Fila = "3",
+                            Letra = "E"
+                        },
+                        new
+                        {
+                            AsientoId = 18,
+                            Existencia = 1,
+                            Fila = "3",
+                            Letra = "F"
                         });
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.AsientoDetalle", b =>
+                {
+                    b.Property<int>("AsientoDetalleID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("AsientoDetalleID"));
+
+                    b.Property<int>("AsientoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Existencia")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Fila")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Letra")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AsientoDetalleID");
+
+                    b.HasIndex("AsientoId");
+
+                    b.ToTable("AsientoDetalle");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.ClaseVuelo", b =>
@@ -90,6 +225,9 @@ namespace SkyReserves.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ClaseVueloId"));
+
+                    b.Property<double>("Monto")
+                        .HasColumnType("float");
 
                     b.Property<string>("descripcionClase")
                         .IsRequired()
@@ -158,6 +296,93 @@ namespace SkyReserves.Migrations
                     b.ToTable("Destino");
                 });
 
+            modelBuilder.Entity("SkyReserves.Models.FlightDeal", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("FlightDeals");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Timer.png "
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Clase.jpeg"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Accesibilidad.png"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Bogota.jpg"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.",
+                            ImageUrl = "/Imagenes/Mexico.jpeg"
+                        });
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.Generos", b =>
+                {
+                    b.Property<int>("GenerosId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("GenerosId"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GenerosId");
+
+                    b.ToTable("Generos");
+
+                    b.HasData(
+                        new
+                        {
+                            GenerosId = 1,
+                            Nombre = "Masculino"
+                        },
+                        new
+                        {
+                            GenerosId = 2,
+                            Nombre = "Femenino"
+                        },
+                        new
+                        {
+                            GenerosId = 3,
+                            Nombre = "Prefiero no decirlo"
+                        });
+                });
+
             modelBuilder.Entity("SkyReserves.Models.Hora", b =>
                 {
                     b.Property<int>("HoraID")
@@ -166,8 +391,16 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("HoraID"));
 
-                    b.Property<double>("horaViaje")
-                        .HasColumnType("float");
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<TimeSpan>("HoraFin")
+                        .HasColumnType("time");
+
+                    b.Property<TimeSpan>("HoraInicio")
+                        .HasColumnType("time");
 
                     b.HasKey("HoraID");
 
@@ -216,19 +449,24 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PagoId"));
 
-                    b.Property<string>("EstadoPago")
+                    b.Property<string>("CVV")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
-                    b.Property<DateTime>("FechaPago")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("MetodoPago")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("ReservaId")
+                    b.Property<int>("ClaseVueloId")
                         .HasColumnType("int");
+
+                    b.Property<string>("FechaVencimiento")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<double>("MontoPagar")
+                        .HasColumnType("float");
+
+                    b.Property<string>("TarjetaNumero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("PagoId");
 
@@ -243,15 +481,48 @@ namespace SkyReserves.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PasaporteId"));
 
-                    b.Property<string>("CiudadNacimiento")
+                    b.Property<string>("AccesibilidadId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("EmitidoPor")
+                    b.Property<string>("Apellido")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("FechaExpiracion")
+                    b.Property<DateTime>("FechaNacimiento")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Genero")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nacionalidad")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("NombrePila")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("PasaporteId");
+
+                    b.ToTable("Pasaportes");
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.PasaporteDetalle", b =>
+                {
+                    b.Property<int>("PasaporteId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CiudadNatal")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExpendidoPor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaVencimiento")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("NumeroPasaporte")
@@ -268,43 +539,7 @@ namespace SkyReserves.Migrations
 
                     b.HasKey("PasaporteId");
 
-                    b.ToTable("Pasaportes");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.PasaporteDetalle", b =>
-                {
-                    b.Property<int>("PasaporteId")
-                        .HasColumnType("int");
-
-                    b.HasKey("PasaporteId");
-
                     b.ToTable("PasaporteDetalles");
-                });
-
-            modelBuilder.Entity("SkyReserves.Models.Reserva", b =>
-                {
-                    b.Property<int>("ReservaId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ReservaId"));
-
-                    b.Property<int>("DestinoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumeroPasajeros")
-                        .HasColumnType("int");
-
-                    b.Property<int>("OrigenId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ReservaId");
-
-                    b.HasIndex("DestinoId");
-
-                    b.HasIndex("OrigenId");
-
-                    b.ToTable("Reserva");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.UserAccount", b =>
@@ -334,7 +569,7 @@ namespace SkyReserves.Migrations
                             Id = 1,
                             Password = "Arajet",
                             Role = "Admin",
-                            UserName = "Araject@gmail.com"
+                            UserName = "Arajet@gmail.com"
                         },
                         new
                         {
@@ -343,6 +578,32 @@ namespace SkyReserves.Migrations
                             Role = "User",
                             UserName = "Cliente@gmail.com"
                         });
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.Vuelo", b =>
+                {
+                    b.Property<int>("VueloId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("VueloId"));
+
+                    b.Property<int>("DestinoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("NumeroPasajeros")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OrigenId")
+                        .HasColumnType("int");
+
+                    b.HasKey("VueloId");
+
+                    b.HasIndex("DestinoId");
+
+                    b.HasIndex("OrigenId");
+
+                    b.ToTable("Vuelo");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.VuelosEspeciales", b =>
@@ -371,6 +632,17 @@ namespace SkyReserves.Migrations
                     b.ToTable("VuelosEspeciales");
                 });
 
+            modelBuilder.Entity("SkyReserves.Models.AsientoDetalle", b =>
+                {
+                    b.HasOne("SkyReserves.Models.Asiento", "Asiento")
+                        .WithMany("AsientoDetalle")
+                        .HasForeignKey("AsientoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Asiento");
+                });
+
             modelBuilder.Entity("SkyReserves.Models.Cliente", b =>
                 {
                     b.HasOne("SkyReserves.Models.Accesibilidad", "Accesibilidad")
@@ -393,7 +665,7 @@ namespace SkyReserves.Migrations
                     b.Navigation("Pasaporte");
                 });
 
-            modelBuilder.Entity("SkyReserves.Models.Reserva", b =>
+            modelBuilder.Entity("SkyReserves.Models.Vuelo", b =>
                 {
                     b.HasOne("SkyReserves.Models.Destino", "Destino")
                         .WithMany()
@@ -429,6 +701,11 @@ namespace SkyReserves.Migrations
                     b.Navigation("Destino");
 
                     b.Navigation("Origen");
+                });
+
+            modelBuilder.Entity("SkyReserves.Models.Asiento", b =>
+                {
+                    b.Navigation("AsientoDetalle");
                 });
 
             modelBuilder.Entity("SkyReserves.Models.Pasaporte", b =>

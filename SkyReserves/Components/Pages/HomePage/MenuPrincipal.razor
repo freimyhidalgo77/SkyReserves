@@ -1,0 +1,79 @@
+﻿@page "/MenuPrincipal"
+@rendermode InteractiveServer
+@inject VueloService vueloService
+@inject OrigenService origenService
+@inject DestinoService destinoService
+
+<link rel="stylesheet" href="/Estilos/Asiento.css" />
+
+<PageTitle>Listado de Vuelos</PageTitle>
+
+
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary bi bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Lista de Vuelos</strong></h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover mt-3">
+                    <thead class="table table-striped text-center text-black">
+                        <tr>
+                            <th>ID del Vuelo</th>
+                            <th>Origen</th>
+                            <th>Destino</th>
+                            <th>N&uacute;mero de Pasajeros</th>
+                            <th>Acción</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (vueloList != null && vueloList.Any())
+                        {
+                            @foreach (var vuelo in vueloList)
+                            {
+                                <tr>
+                                    <td class="text-center">@vuelo.VueloId</td>
+                                    <td class="text-center">@vuelo.Origen?.origen </td>
+                                    <td class="text-center">@vuelo.Destino?.destino</td>
+                                    <td class="text-center">@vuelo.NumeroPasajeros</td>
+                                    <td class="text-center">
+                                        <a href="/Vuelo/Edit/@vuelo.VueloId" class="btn btn-outline-dark bi bi-check2-circle">
+                                            Ver Detalles
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">No hay vuelos registrados.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    public Vuelo Vuelo { get; set; } = new Vuelo();
+    public List<Vuelo> vueloList { get; set; } = new List<Vuelo>();
+    public Origen Origen { get; set; } = new Origen();
+    public Destino Destino { get; set; } = new Destino();
+
+    protected override async Task OnInitializedAsync()
+    {
+        vueloList = await vueloService.Listar(v => v.VueloId > 0);
+    }
+}

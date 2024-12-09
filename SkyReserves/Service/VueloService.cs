@@ -5,33 +5,33 @@ using System.Resources;
 
 namespace SkyReserves.Service
 {
-    public class ReservaService(IDbContextFactory<Context> DbFactory)
+    public class VueloService(IDbContextFactory<Context> DbFactory)
     {
 
         private async Task<bool> Existe(int reservaId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Reserva.AnyAsync(e => e.ReservaId == reservaId);
+            return await context.Vuelo.AnyAsync(e => e.VueloId == reservaId);
         }
 
-        private async Task<bool> Insertar(Reserva reservaId)
+        private async Task<bool> Insertar(Vuelo reservaId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            context.Reserva.Add(reservaId);
+            context.Vuelo.Add(reservaId);
             return await context.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> Modificar(Reserva reservaId)
+        public async Task<bool> Modificar(Vuelo reservaId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            context.Reserva.Update(reservaId);
+            context.Vuelo.Update(reservaId);
             var modificado = await context.SaveChangesAsync() > 0;
             return modificado;
         }
 
-        public async Task<bool> Guardar(Reserva reserva)
+        public async Task<bool> Guardar(Vuelo reserva)
         {
-            if (!await Existe(reserva.ReservaId))
+            if (!await Existe(reserva.VueloId))
                 return await Insertar(reserva);
             else
                 return await Modificar(reserva);
@@ -40,26 +40,37 @@ namespace SkyReserves.Service
         public async Task<bool> Eliminar(int reservaId)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Reserva
-                .Where(e => e.ReservaId == reservaId)
+            return await context.Vuelo
+				.Where(e => e.VueloId == reservaId)
                 .ExecuteDeleteAsync() > 0;
         }
 
-        public async Task<Reserva> Buscar(int id)
+        public async Task<Vuelo> Buscar(int id)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Reserva
-                .FirstOrDefaultAsync(e => e.ReservaId == id);
+            return await context.Vuelo
+                .FirstOrDefaultAsync(e => e.VueloId == id);
         }
 
-        public async Task<List<Reserva>> Listar(Expression<Func<Reserva, bool>> criterio)
+        public async Task<List<Vuelo>> Listar(Expression<Func<Vuelo, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
-            return await context.Reserva
+            return await context.Vuelo
+                 .Include(v => v.Origen) // Incluye la entidad relacionada Origen
+                .Include(v => v.Destino) // Incluye la entidad relacionada Destino
                 .AsNoTracking()
                 .Where(criterio)
                 .ToListAsync();
         }
+
+
+        public async Task<Vuelo?> BuscarVuelo(int origenId, int destinoId)
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            return await context.Vuelo
+                .FirstOrDefaultAsync(v => v.OrigenId == origenId && v.DestinoId == destinoId);
+        }
+
 
     }
 }

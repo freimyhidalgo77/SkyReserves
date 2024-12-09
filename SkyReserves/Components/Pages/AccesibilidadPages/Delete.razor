@@ -1,0 +1,79 @@
+﻿@page "/Accesibilidad/Delete/{AccesibilidadId:int}"
+@rendermode InteractiveServer
+@inject AccesibilidadService accesibilidadService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Accesibilidad.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<PageTitle>Eliminar Accesibilidad</PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Accesibilidad:</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <h5><strong>¿Seguro que deseas eliminar esta accesibilidad?</strong></h5>
+
+            <table class="mt-4 table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Accesibilidad ID:</th>
+                        <td>@accesibilidad?.AccesibilidadId</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Descripción:</th>
+                        <td>@accesibilidad?.Descripcion</td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+
+        <div class="card-footer">
+            <button type="button" class="btn btn-secondary text-white bi bi-arrow-left" @onclick="Volver"> Volver</button>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarAccecibilidad">Eliminar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int AccesibilidadId { get; set; }
+    public Accesibilidad? accesibilidad { get; set; }
+    public string mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        accesibilidad = await accesibilidadService.Buscar(AccesibilidadId);
+    }
+
+    public async Task ElimnarAccecibilidad()
+    {
+        if (accesibilidad != null)
+        {
+            var eliminado = await accesibilidadService.Eliminar(AccesibilidadId);
+
+            if (eliminado)
+            {
+                Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "La accesibilidad ha sido eliminada correctamente."));
+                await Task.Delay(4000);
+                navigation.NavigateTo("/Accesibilidad/Index");
+            }
+            else
+            {
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se pudo eliminar la accesibilidad."));
+            }
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Accesibilidad/Index");
+    }
+}

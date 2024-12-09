@@ -1,0 +1,62 @@
+﻿@page "/Asiento/Index"
+@using SkyReserves.Models
+@using SkyReserves.Service
+@inject AsientoService asientoService
+@inject NavigationManager navigation
+
+<link rel="stylesheet" href="/Estilos/Asiento.css" />
+
+<PageTitle>Lista de Asientos Disponibles</PageTitle>
+
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary bi bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Lista de Asientos Disponibles</strong></h5>
+        </div>
+            <table class="table table-hover mt-3">
+                <thead class="table table-striped text-center text-black">
+                    <tr>
+                        <th>ID de Asiento</th>
+                        <th>Fila</th>
+                        <th>Letra</th>
+                        <th>Existencia</th>
+                        <th>Confirmar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var asiento in asientos)
+                    {
+                        <tr>
+                            <td class="text-center">@asiento.AsientoId</td>
+                            <td class="text-center">@asiento.Fila</td>
+                            <td class="text-center">@asiento.Letra</td>
+                            <td class="text-center">@asiento.Existencia</td>
+                            <td class="text-center">
+                            <a href="/Asiento/Edit/@asiento.AsientoId" class="btn btn-outline-dark bi bi-check2-circle"></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+@code {
+    public List<Asiento> asientos = new List<Asiento>();
+  
+
+    protected override async Task OnInitializedAsync()
+    {
+    
+        asientos = await asientoService.Listar(a => true);
+    }
+
+    
+}

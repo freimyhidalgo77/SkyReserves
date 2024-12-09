@@ -1,0 +1,89 @@
+﻿@page "/Destino/Create"
+@rendermode InteractiveServer
+@inject DestinoService destinoService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Destino/Destino.css" />
+
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<PageTitle>Crear Vuelo de Destino</PageTitle>
+<EditForm Model="Destino" OnValidSubmit="Crear" FormName="crearDestinoForm">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5><strong>Crear Destino de Vuelo</strong></h5>
+            </div>
+
+            <div class="card-body">
+                <!-- Destino ID -->
+                <div class="mb-3">
+                    <label for="DestinoId" class="form-label"><strong>Destino ID:</strong></label>
+                    <InputNumber id="DestinoId" class="form-control" @bind-Value="Destino.DestinoId" readonly />
+                </div>
+
+                <!-- Destino del Vuelo -->
+                <div class="mb-3">
+                    <label for="Destino" class="form-label"><strong>Destino del Vuelo</strong></label>
+                    <InputText id="Destino" class="form-control" @bind-Value="Destino.destino" />
+                    <ValidationMessage For="@(() => Destino.destino)" />
+                </div>
+
+                <!-- Display error message if any -->
+                @if (!string.IsNullOrEmpty(Mensaje))
+                {
+                    <div class="alert alert-warning mt-3" role="alert">
+                        @Mensaje
+                    </div>
+                }
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Crear</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    public Destino Destino { get; set; } = new Destino();
+    public List<Destino> destinoLits { get; set; } = new List<Destino>();
+    public string Mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        destinoLits = await destinoService.Listar(d => d.DestinoId > 0);
+    }
+
+    public async Task<bool> Validar()
+    {
+        var destinoExiste = await destinoService.BuscarDestino(Destino.destino);
+        if (destinoExiste != null)
+        {
+            Toast.Notify(new(ToastType.Warning, "Error al crear el destino de vuelo", "Este destino ya existe!"));
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task Crear()
+    {
+        if (await Validar())
+        {
+            Toast.Notify(new(ToastType.Success, "Destino de vuelo Guardado", "El destino de vuelo se ha guardado con éxito!"));
+            await destinoService.Guardar(Destino);
+            await Task.Delay(4000);
+            Destino = new Destino();
+            navigation.NavigateTo("/Destino/Index");
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Destino/Index");
+    }
+}

@@ -1,3 +1,4 @@
+using BlazorBootstrap;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using SkyReserves.Components;
@@ -15,7 +16,7 @@ builder.Services.AddDbContextFactory<Context>(o => o.UseSqlServer(ConStr));
 
 builder.Services.AddScoped<AccesibilidadService>();
 builder.Services.AddScoped<AsientoService>();
-builder.Services.AddScoped<ReservaService>();
+builder.Services.AddScoped<VueloService>();
 builder.Services.AddScoped<ClaseVueloService>();
 builder.Services.AddScoped<ClienteService>();
 builder.Services.AddScoped<NacionalidadService>();
@@ -25,9 +26,11 @@ builder.Services.AddScoped<PagoService>();
 builder.Services.AddScoped<HoraService>();
 builder.Services.AddScoped<PasaporteService>();
 builder.Services.AddScoped<PasaporteDetalleService>();
-builder.Services.AddScoped<ReservaService>();
+builder.Services.AddScoped<VueloService>();
 builder.Services.AddScoped<VuelosEspecialesService>();
-
+builder.Services.AddScoped<FlightDealService>();
+builder.Services.AddSingleton<ToastService>();
+builder.Services.AddBlazorBootstrap();
 
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
     .AddCookie(options =>

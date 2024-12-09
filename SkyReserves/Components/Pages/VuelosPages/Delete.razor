@@ -1,0 +1,104 @@
+﻿@page "/Vuelo/Delete/{VueloID:int}"
+@rendermode InteractiveServer
+@inject VueloService vueloService
+@inject NavigationManager navigation
+@inject OrigenService origenService
+@inject DestinoService destinoService
+@inject ToastService Toast
+
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+<link rel="stylesheet" href="/Estilos/ClaseV.css" />
+
+<PageTitle>Eliminar Vuelo</PageTitle>
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Vuelo:</strong></h5>
+        </div>
+
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(mensaje))
+            {
+                <h5 class="text-danger">@mensaje</h5>
+            }
+            else
+            {
+                <h5><strong>¿Seguro que desea eliminar este vuelo?</strong></h5>
+
+                <table class="mt-4 table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Vuelo ID:</th>
+                            <td>@Vuelo.VueloId</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Origen:</th>
+                            <td>@OrigenDescripcion</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Destino:</th>
+                            <td>@DestinoDescripcion</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Número de Pasajeros:</th>
+                            <td>@Vuelo.NumeroPasajeros</td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+        </div>
+
+        <div class="card-footer">
+            <a href="/Vuelo/Index" class="btn btn-secondary text-white bi bi-arrow-left"> Volver</a>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="Elimnar"> Eliminar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int VueloID { get; set; }
+
+    public Vuelo Vuelo { get; set; } = new Vuelo();
+    public string OrigenDescripcion { get; set; } = string.Empty;
+    public string DestinoDescripcion { get; set; } = string.Empty;
+    public string mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Vuelo = await vueloService.Buscar(VueloID);
+
+        if (Vuelo != null)
+        {
+            var origen = await origenService.Buscar(Vuelo.OrigenId);
+            var destino = await destinoService.Buscar(Vuelo.DestinoId);
+
+            OrigenDescripcion = origen?.origen ?? "Desconocido";
+            DestinoDescripcion = destino?.destino ?? "Desconocido";
+        }
+        else
+        {
+            mensaje = "No se encontró el vuelo.";
+        }
+    }
+
+    public async Task Elimnar()
+    {
+        if (Vuelo != null)
+        {
+            var eliminado = await vueloService.Eliminar(VueloID);
+            if (eliminado)
+            {
+                Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "El vuelo ha sido eliminado correctamente."));
+                await Task.Delay(4000);
+                navigation.NavigateTo("/Vuelo/Index");
+            }
+            else
+            {
+                mensaje = "No se pudo eliminar el vuelo.";
+            }
+        }
+    }
+}

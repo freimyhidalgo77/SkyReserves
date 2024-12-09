@@ -1,0 +1,91 @@
+﻿﻿html, body {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+
+body {
+    height: 100vh;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    background-image: url("/Imagenes/Arajet.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    justify-content: center;
+}
+
+
+.corner-label a {
+    color: #007bff;
+    text-decoration: none;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: mediumpurple;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+    font-size: 14px;
+}
+
+    .corner-label a:hover {
+        text-decoration: underline;
+    }
+
+.btn {
+    width: auto;
+    padding: 16px;
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1em;
+    margin-bottom: 10px;
+}
+
+    .btn:hover {
+        background-color: #9b59b6;
+    }
+
+
+.common-btn {
+    width: auto; /* Ajusta según sea necesario */
+    padding: 10px 16px; /* Igual que los estilos del botón 'btn' */
+    background-color: #8e44ad;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1.1em;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+    .common-btn:hover {
+        background-color: #9b59b6;
+    }
+
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.card-text {
+    margin-bottom: 1rem; /* Espaciado entre texto y botón */
+}
+
+.flight-img {
+    max-height: 200px;
+    object-fit: cover; /* Asegura que la imagen encaje sin deformarse */
+}

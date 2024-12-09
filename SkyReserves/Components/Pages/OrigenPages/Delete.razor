@@ -1,0 +1,88 @@
+﻿@page "/Origen/Delete/{OrigenId:int}"
+@using BlazorBootstrap
+@rendermode InteractiveServer
+@inject OrigenService origenService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Origen/Origen.css" />
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<PageTitle>Eliminar Origen de Vuelo</PageTitle>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Origen de Vuelo:</strong></h5>
+        </div>
+
+        <div class="card-body">
+            @if (origen != null)
+            {
+                <h5><strong>¿Seguro que deseas eliminar este origen de vuelo?</strong></h5>
+
+                <table class="mt-4 table">
+                    <tbody>
+                        <tr>
+                            <th scope="row">Origen ID:</th>
+                            <td>@origen.OrigenId</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Origen:</th>
+                            <td>@origen.origen</td>
+                        </tr>
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <p class="text-danger">No se encontró el origen de vuelo.</p>
+            }
+        </div>
+
+        <div class="card-footer">
+            <button type="button" class="btn btn-secondary text-white bi bi-arrow-left" @onclick="Volver"> Volver</button>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar"> Eliminar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int OrigenId { get; set; }
+    public Origen origen { get; set; } = new Origen();
+
+    protected override async Task OnInitializedAsync()
+    {
+        origen = await origenService.Buscar(OrigenId);
+        if (origen == null)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se encontró el origen de vuelo."));
+            navigation.NavigateTo("/Origen/Index");
+        }
+    }
+
+    private async Task Eliminar()
+    {
+        if (origen != null)
+        {
+            var eliminado = await origenService.Eliminar(OrigenId);
+            if (eliminado)
+            {
+                Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "El origen de vuelo ha sido eliminado correctamente."));
+                await Task.Delay(4000);
+                navigation.NavigateTo("/Origen/Index");
+            }
+            else
+            {
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se pudo eliminar el origen de vuelo."));
+            }
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Origen/Index");
+    }
+}
+

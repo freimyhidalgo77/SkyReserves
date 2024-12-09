@@ -1,0 +1,80 @@
+﻿@page "/Asiento/Edit/{AsientoId}"
+@using SkyReserves.Models
+@using SkyReserves.Service
+@inject AsientoService asientoService
+@inject NavigationManager navigation
+<link rel="stylesheet" href="/Estilos/ClaseV.css" />
+
+<PageTitle>Editar Asiento</PageTitle>
+
+<div class="container mt-4">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5 class="card-title"><strong>Editar Asiento</strong></h5>
+        </div>
+        <div class="card-body">
+            <EditForm Model="asiento">
+                <DataAnnotationsValidator />
+
+                <!-- Asiento ID (Readonly) -->
+                <div class="mb-3">
+                    <label for="AsientoId" class="form-label"><strong>Asiento ID</strong></label>
+                    <InputNumber class="form-control" @bind-Value="asiento.AsientoId" readonly />
+                </div>
+
+                <!-- Fila -->
+                <div class="mb-3">
+                    <label for="Fila" class="form-label"><strong>Fila</strong></label>
+                    <InputText class="form-control" @bind-Value="asiento.Fila" />
+                    <ValidationMessage For="@(() => asiento.Fila)" />
+                </div>
+
+                <!-- Letra -->
+                <div class="mb-3">
+                    <label for="Letra" class="form-label"><strong>Letra</strong></label>
+                    <InputText class="form-control" @bind-Value="asiento.Letra" />
+                    <ValidationMessage For="@(() => asiento.Letra)" />
+                </div>
+
+                <!-- Existencia -->
+                <div class="mb-3">
+                    <label for="Existencia" class="form-label"><strong>Existencia</strong></label>
+                    <InputNumber class="form-control" @bind-Value="asiento.Existencia" />
+                    <ValidationMessage For="@(() => asiento.Existencia)" />
+                </div>
+            </EditForm>
+        </div>
+
+        <div class="card-footer">
+            <div class="d-flex justify-content-between">
+                <a href="/Asiento/Index" class="btn btn-secondary  bi bi-arrow-90deg-left text-white">Cancelar</a>
+                <a href="/Asiento/Confirmado" class="btn btn-secondary bi bi-arrow-90deg-right  text-white">Continuar</a>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public string AsientoId { get; set; }
+
+    private Asiento asiento = new Asiento();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (int.TryParse(AsientoId, out var asientoIdInt))
+        {
+            asiento = await asientoService.Buscar(asientoIdInt);
+            if (asiento == null)
+            {
+                navigation.NavigateTo("/Asiento/Index");
+            }
+        }
+        else
+        {
+            navigation.NavigateTo("/Asiento/Index");
+        }
+    }
+
+    
+}

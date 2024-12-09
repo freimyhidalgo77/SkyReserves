@@ -1,0 +1,144 @@
+﻿@page "/Pago/Create"
+@rendermode InteractiveServer
+@inject ClaseVueloService claseVueloService
+@inject PagoService pagoService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Estilos/ClaseV.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+
+<PageTitle>Pagar Clase de Vuelo</PageTitle>
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<EditForm Model="Pago" OnValidSubmit="ProcesarPago" FormName="PagoForm">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5 class="card-title"><strong>Formulario de Pago</strong></h5>
+            </div>
+
+            <div class="card-body">
+                @* Seleccionar Clase de Vuelo *@
+                <div class="mb-3">
+                    <label for="ClaseVueloId" class="form-label"><strong>Clase de Vuelo</strong></label>
+                    <InputSelect @bind-Value="Pago.ClaseVueloId" class="form-control" @onchange="ActualizarMonto">
+                        <option value="">Seleccione una clase de vuelo</option>
+                        @if (clasesDeVuelo.Any())
+                        {
+                            @foreach (var clase in clasesDeVuelo)
+                            {
+                                <option value="@clase.ClaseVueloId">@clase.descripcionClase - @clase.Monto</option>
+                            }
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Pago.ClaseVueloId)" />
+                </div>
+
+                @* Monto a Pagar *@
+                <div class="mb-3">
+                    <label for="Monto" class="form-label"><strong>Monto a Pagar</strong></label>
+                    <InputNumber class="form-control" @bind-Value="Pago.MontoPagar"/>
+                </div>
+
+                @* Información de la tarjeta *@
+                <div class="mb-3">
+                    <label for="TarjetaNumero" class="form-label"><strong>Número de Tarjeta</strong></label>
+                    <InputText class="form-control" @bind-Value="Pago.TarjetaNumero" />
+                    <ValidationMessage For="@(() => Pago.TarjetaNumero)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="FechaVencimiento" class="form-label"><strong>Fecha de Vencimiento</strong></label>
+                    <InputText class="form-control" @bind-Value="Pago.FechaVencimiento" placeholder="MM/AA" />
+                    <ValidationMessage For="@(() => Pago.FechaVencimiento)" />
+                </div>
+
+                <div class="mb-3">
+                    <label for="CVV" class="form-label"><strong>CVV</strong></label>
+                    <InputText class="form-control" @bind-Value="Pago.CVV" maxlength="4" />
+                    <ValidationMessage For="@(() => Pago.CVV)" />
+                </div>
+            </div>
+
+            <div class="card-footer">
+                <a href="/Pago/Index" class="btn btn-secondary text-white bi bi-arrow-90deg-left"> Volver</a>
+                <button type="submit" class="btn btn-success bi bi-credit-card"> Pagar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    private List<ClaseVuelo> clasesDeVuelo = new();
+    public Pago Pago { get; set; } = new Pago();
+
+    protected override async Task OnInitializedAsync()
+    {
+       
+        clasesDeVuelo = await claseVueloService.Listar();
+    }
+
+    private void ActualizarMonto()
+    {
+       
+        var claseSeleccionada = clasesDeVuelo.FirstOrDefault(c => c.ClaseVueloId == Pago.ClaseVueloId);
+        if (claseSeleccionada != null)
+        {
+            Pago.MontoPagar = claseSeleccionada.Monto;
+        }
+        else
+        {
+            Pago.MontoPagar = 0; 
+        }
+    }
+    public async Task ProcesarPago()
+    {
+        if (Pago.ClaseVueloId == 0)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "Por favor seleccione una clase de vuelo."));
+            return;
+        }
+
+        if (string.IsNullOrWhiteSpace(Pago.TarjetaNumero) ||
+            string.IsNullOrWhiteSpace(Pago.FechaVencimiento) ||
+            string.IsNullOrWhiteSpace(Pago.CVV))
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "Todos los campos de la tarjeta son obligatorios."));
+            return;
+        }
+
+        if (Pago.MontoPagar <= 0)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "El monto a pagar no es válido."));
+            return;
+        }
+
+        var claseSeleccionada = clasesDeVuelo.FirstOrDefault(c => c.ClaseVueloId == Pago.ClaseVueloId);
+
+       
+        if (claseSeleccionada != null)
+        {
+            if (Pago.MontoPagar < claseSeleccionada.Monto)
+            {
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "El monto a pagar no puede ser menor que el monto de la clase de vuelo seleccionada."));
+                return;
+            }
+
+            if (Pago.MontoPagar > claseSeleccionada.Monto)
+            {
+                Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "El monto a pagar no puede ser mayor que el monto de la clase de vuelo seleccionada."));
+                return;
+            }
+        }
+
+        
+        await pagoService.GuardarPago(Pago);
+
+        Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "Pago realizado correctamente."));
+        await Task.Delay(4000);
+        navigation.NavigateTo("/Pago/Procesado");
+    }
+
+
+}

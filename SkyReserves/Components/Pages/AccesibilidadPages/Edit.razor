@@ -1,0 +1,92 @@
+﻿@page "/Accesibilidad/Edit/{AccesibilidadId:int}"
+@rendermode InteractiveServer
+@inject AccesibilidadService accesibilidadService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Accesibilidad.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+
+<PageTitle>Modificar accesibilidad</PageTitle>
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<EditForm Model="Accesibilidad" OnValidSubmit="Modificar">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5 class="card-title"><strong>Modificar Accesibilidad</strong></h5>
+            </div>
+
+            <div class="card-body">
+                <!-- ID de la Accesibilidad -->
+                <div class="mb-3">
+                    <label for="AccesibilidadId" class="form-label"><strong>ID de Accesibilidad</strong></label>
+                    <InputNumber id="AccesibilidadId" class="form-control" @bind-Value="Accesibilidad.AccesibilidadId" readonly />
+                </div>
+
+                <!-- Descripción de la Accesibilidad -->
+                <div class="mb-3">
+                    <label for="Descripcion" class="form-label"><strong>Descripción</strong></label>
+                    <InputText id="Descripcion" class="form-control" @bind-Value="Accesibilidad.Descripcion" />
+                    <ValidationMessage For="@(() => Accesibilidad.Descripcion)" />
+                </div>
+
+            </div>
+
+            <div class="card-footer">
+               
+                <button type="button" class="btn btn-secondary text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+
+              
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modificar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int AccesibilidadId { get; set; }
+
+    public Accesibilidad Accesibilidad { get; set; } = new Accesibilidad();
+    public string Mensaje { get; set; } = string.Empty;
+
+   
+    protected override async Task OnInitializedAsync()
+    {
+        Accesibilidad = await accesibilidadService.Buscar(AccesibilidadId);
+    }
+
+    
+    public async Task<bool> Validar()
+    {
+        var accesibilidadExiste = await accesibilidadService.BuscarAccesibilidad(Accesibilidad.Descripcion);
+        if (accesibilidadExiste != null)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Warning, "Error al modificar la accesibilidad", "Esta accesibilidad ya existe. Cambie la accesibilidad para pasajeros."));
+            return false;
+        }
+
+        return true;
+    }
+
+    
+    public async Task Modificar()
+    {
+        if (await Validar())
+        {
+            await accesibilidadService.Guardar(Accesibilidad);
+            Toast.Notify(new ToastMessage(ToastType.Success, "Accesibilidad Modificada", "La accesibilidad se ha modificado con éxito."));
+            await Task.Delay(4000);
+            Accesibilidad = new Accesibilidad(); 
+            navigation.NavigateTo("/Accesibilidad/Index");
+        }
+    }
+
+    
+    public void Volver()
+    {
+        navigation.NavigateTo("/Accesibilidad/Index");
+    }
+}

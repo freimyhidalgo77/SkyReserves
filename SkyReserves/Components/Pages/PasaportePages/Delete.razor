@@ -1,0 +1,111 @@
+﻿@page "/Pasaporte/Delete/{id:int}"
+@rendermode InteractiveServer
+@inject PasaporteService pasaporteService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+<link rel="stylesheet" href="/Estilos/Pasaporte.css" />
+
+<PageTitle>Eliminar Pasaporte</PageTitle>
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Pasaporte</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <h5><strong>¿Seguro que desea eliminar el pasaporte?</strong></h5>
+
+            <table class="mt-4 table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Pasaporte Id:</th>
+                        <td>@pasaporte.PasaporteId</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Nombre:</th>
+                        <td>@pasaporte.NombrePila</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Apellido:</th>
+                        <td>@pasaporte.Apellido</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Fecha de Nacimiento:</th>
+                        <td>@pasaporte.FechaNacimiento.ToString("dd/MM/yyyy")</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">G&eacute;nero:</th>
+                        <td>@pasaporte.Genero</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Accesibilidad:</th>
+                        <td>@pasaporte.AccesibilidadId</td>
+                    </tr>
+
+                    <tr>
+                        <th scope="row">Nacionalidad:</th>
+                        <td>@pasaporte.Nacionalidad</td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+
+            @if (pasaporte.PasaporteDetalle.Any())
+            {
+                <div class="border border-success p-2 mt-2">
+                    <h5><strong>Detalles del Pasaporte:</strong></h5>
+                    @foreach (var detalle in pasaporte.PasaporteDetalle)
+                    {
+                        <ul>
+                            <li>Pa&iacute;s Residencia: @detalle.PaisResidencia</li>
+                            <li>N&uacute;mero Pasaporte: @detalle.NumeroPasaporte</li>
+                            <li>Expendido Por: @detalle.ExpendidoPor</li>
+                            <li>Fecha de Vencimiento: @detalle.FechaVencimiento.ToString("dd/MM/yyyy")</li>
+                        </ul>
+                    }
+                </div>
+            }
+        </div>
+
+        <div class="card-footer">
+            <a href="/Pasaporte/Index" class="btn btn-secondary text-white bi bi-arrow-left"> Volver</a>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar"> Eliminar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter] public int id { get; set; }
+    public Pasaporte pasaporte { get; set; } = new Pasaporte();
+    public List<Generos> generos { get; set; } = new List<Generos>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        pasaporte = await pasaporteService.ObtenerPorId(id);
+        generos = await pasaporteService.ObtenerGeneros(); 
+
+    }
+
+    private async Task Eliminar()
+    {
+        var eliminado = await pasaporteService.Eliminar(id);
+
+        if (eliminado)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "Se ha Eliminado el Pasaporte"));
+            await Task.Delay(4000);
+            navigation.NavigateTo("/Pasaporte/Index");
+        }
+        else
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "No se ha Eliminado el Pasaporte"));
+        }
+    }
+}

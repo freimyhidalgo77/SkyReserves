@@ -1,0 +1,84 @@
+﻿@page "/Pago/Delete/{PagoId:int}"
+@using BlazorBootstrap
+@using SkyReserves.Models
+@using SkyReserves.Service
+@rendermode InteractiveServer
+@inject PagoService pagoService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Estilos/ClaseV.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+
+<PageTitle>Eliminar Pago</PageTitle>
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Pago</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <h5><strong>¿Seguro que desea eliminar este pago?</strong></h5>
+
+            <table class="mt-4 table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Pago ID:</th>
+                        <td>@pago.PagoId</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Monto:</th>
+                        <td>@pago.MontoPagar.ToString("N2") USD</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Número de Tarjeta:</th>
+                        <td>@pago.TarjetaNumero</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Fecha de Vencimiento:</th>
+                        <td>@pago.FechaVencimiento</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer">
+            <a href="/Pago/Index" class="btn btn-secondary text-white bi bi-arrow-left"> Volver</a>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar"> Eliminar</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int PagoId { get; set; }
+    public Pago pago { get; set; } = new Pago();
+
+    protected override async Task OnInitializedAsync()
+    {
+        pago = await pagoService.Buscar(PagoId);
+    }
+
+    private async Task Eliminar()
+    {
+        if (pago == null)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "El pago no fue encontrado."));
+            return;
+        }
+
+        var eliminado = await pagoService.Eliminar(PagoId);
+
+        if (eliminado)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "El pago ha sido eliminado correctamente."));
+            await Task.Delay(4000);
+            navigation.NavigateTo("/Pago/Index");
+        }
+        else
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se pudo eliminar el pago."));
+        }
+    }
+}

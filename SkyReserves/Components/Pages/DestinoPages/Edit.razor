@@ -1,0 +1,83 @@
+﻿@page "/Destino/Edit/{DestinoId:int}"
+@rendermode InteractiveServer
+@inject DestinoService destinoService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Destino/Destino.css" />
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<PageTitle>Modificar vuelo de Destino</PageTitle>
+
+<EditForm Model="Destino" OnValidSubmit="ModificarDestino">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h5><strong>Modificar destino de Vuelo</strong></h5>
+            </div>
+
+            <div class="card-body">
+                @* Origen ID - Readonly *@
+                <div class="mb-3">
+                    <label for="OrigenId" class="form-label"><strong>Origen ID:</strong></label>
+                    <InputNumber id="OrigenId" class="form-control" @bind-Value="Destino.DestinoId" readonly />
+                </div>
+
+                @* Destino - Editable input field *@
+                <div class="mb-3">
+                    <label for="Destino" class="form-label"><strong>Destino del Vuelo</strong></label>
+                    <InputText id="Destino" class="form-control" @bind-Value="Destino.destino" />
+                    <ValidationMessage For="@(() => Destino.destino)" />
+                </div>
+
+                @* Add any other necessary fields here *@
+            </div>
+
+            <div class="card-footer">
+                @* Back Button *@
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+                @* Submit Button *@
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modificar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int DestinoId { get; set; }
+    public Destino Destino { get; set; } = new Destino();
+    public string Mensaje { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Destino = await destinoService.Buscar(DestinoId);
+    }
+
+    public async Task<bool> Validar()
+    {
+        var destinoExiste = await destinoService.BuscarDestino(Destino.destino);
+        if (destinoExiste != null)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Warning, "Error al modificar el destino de vuelo", "Este destino ya existe, cambie el destino de vuelo"));
+            return false;
+        }
+        return true;
+    }
+
+    public async Task ModificarDestino()
+    {
+        if (await Validar())
+        {
+            await destinoService.Guardar(Destino);
+            Toast.Notify(new ToastMessage(ToastType.Primary, "Destino de vuelo Modificado", "El destino de vuelo se ha modificado con éxito!"));
+            await Task.Delay(4000);
+            navigation.NavigateTo("/Destino/Index");
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Destino/Index");
+    }
+}

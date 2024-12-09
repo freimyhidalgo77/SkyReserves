@@ -1,0 +1,81 @@
+﻿@page "/Hora/Delete/{HoraId:int}"
+@using BlazorBootstrap
+@using SkyReserves.Models
+@using SkyReserves.Service
+@rendermode InteractiveServer
+@inject HoraService horaService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Estilos/Horas.css" />
+<link rel="stylesheet" href="/Estilos/Toast.css" />
+
+<PageTitle>Eliminar Hora</PageTitle>
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header text-center">
+            <h5><strong>Eliminar Hora:</strong></h5>
+        </div>
+
+        <div class="card-body">
+            <h5><strong>¿Seguro que desea eliminar este horario?</strong></h5>
+
+            <table class="mt-4 table">
+                <tbody>
+                    <tr>
+                        <th scope="row">Hora ID:</th>
+                        <td>@hora.HoraID</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Descripción:</th>
+                        <td>@hora.Descripcion</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Hora Inicio:</th>
+                        <td>@hora.HoraInicio.ToString(@"hh\:mm")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Hora Fin:</th>
+                        <td>@hora.HoraFin.ToString(@"hh\:mm")</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Duración:</th>
+                        <td>@hora.Duracion.ToString("0.00") horas</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card-footer">
+            <a href="/Hora/Index" class="btn btn-secondary text-white bi bi-arrow-left"> Volver</a>
+            <button type="button" class="btn btn-danger bi bi-trash" @onclick="Eliminar"> Eliminar</button>
+        </div>
+    </div>
+</div>
+@code {
+    [Parameter]
+    public int HoraId { get; set; }
+    public Hora hora { get; set; } = new Hora();
+
+    protected override async Task OnInitializedAsync()
+    {
+        hora = await horaService.Buscar(HoraId);
+    }
+
+    private async Task Eliminar()
+    {
+        var eliminado = await horaService.Eliminar(HoraId);
+
+        if (eliminado)
+        {
+            Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "El horario ha sido eliminado correctamente."));
+            await Task.Delay(4000);
+            navigation.NavigateTo("/Hora/Index");
+        }
+        else
+        {
+            Toast.Notify(new ToastMessage(ToastType.Danger, "Error", "No se pudo eliminar el horario."));
+        }
+    }
+}

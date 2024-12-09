@@ -20,7 +20,7 @@ namespace SkyReserves.Service
             return await context.SaveChangesAsync() > 0;
         }
 
-        private async Task<bool> Modificar(ClaseVuelo claseVuelo)
+       public async Task<bool> Modificar(ClaseVuelo claseVuelo)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             context.ClaseVuelo.Update(claseVuelo);
@@ -59,6 +59,13 @@ namespace SkyReserves.Service
                 .Where(criterio)
                 .ToListAsync();
         }
+
+        public async Task<List<ClaseVuelo>> Listar()
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            return await context.ClaseVuelo.ToListAsync();
+        }
+
 
     }
 }
