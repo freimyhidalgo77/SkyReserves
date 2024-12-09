@@ -4,7 +4,7 @@
 @rendermode InteractiveServer
 @inject HoraService horaService
 @inject NavigationManager navigation
-<link rel="stylesheet" href="/Estilos/ClaseVuelo.css" />
+<link rel="stylesheet" href="/Estilos/ClaseV.css" />
 
 <PageTitle>Horas de Vuelos</PageTitle>
 
@@ -87,7 +87,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        // Cargar todas las horas al iniciar
+       
         horas = await horaService.Listar(a => true);
     }
 
@@ -111,7 +111,6 @@
         }
         else
         {
-            // Si no hay filtro, cargar todas las horas
             horas = await horaService.Listar(a => true);
         }
     }

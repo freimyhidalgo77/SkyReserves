@@ -1,78 +1,73 @@
 ﻿@page "/Accesibilidad/Index"
 @rendermode InteractiveServer
 @inject AccesibilidadService accesibilidadService
-<link rel="stylesheet" href="/Style/AccesibilidadIndex.css" />
+<link rel="stylesheet" href="/Style/Accesibilidad.css" />
 
 <PageTitle>Accesibilidad</PageTitle>
 
+<div class="container mt-4">
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+        <a href="/logout" class="btn btn-outline-danger text-nowrap common-btn w-30">
+            Cerrar sesión
+        </a>
+    </div>
+</div>
 
 <div class="container">
-    <div class="card shadow">
-        <div class="card-header text-center">
-            <h3><strong>Accesibilidades Para Pasajeros</strong></h3>
+    <div class="card shadow-lg">
+        <div class="card-header text-black text-center">
+            <h5><strong>Accesibilidades Para Pasajeros</strong></h5>
         </div>
 
-        <div class="row mb-3 align-items-end">
-            <div class="col-md-3">
-                <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
-                <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
-                    <option value="" disabled>Seleccionar</option>
-                    <option value="AccesibilidadId">Accesibilidad ID</option>
-                    <option value="Descripcion"> Descripcion</option>
-                </InputSelect>
-            </div>
-
+        <div class="card-body">
+            <div class="row mb-3">
                 <div class="col-md-6">
-                    <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
+                    <label for="filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                        <option value="" disabled>Seleccionar</option>
+                        <option value="AccesibilidadId">Accesibilidad ID</option>
+                        <option value="Descripcion">Descripción</option>
+                    </InputSelect>
+                </div>
+
+                <div class="col-md-6 d-flex align-items-end">
                     <div class="input-group">
-                        <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
-                        <button @onclick="Buscar" class="btn btn-success" type="button">
-                            <span class="bi bi-search"></span> Buscar
-                        </button>
-                        <a href="/Accesibilidad/Create" class="btn btn-success bi bi-plus-square"> Crear</a>
+                        <InputText id="valorFiltro" @bind-Value="ValorFiltro" class="form-control" placeholder="Buscar" />
                     </div>
                 </div>
             </div>
 
-          
-        <div class="table-responsive">
-            <table class="table table-light table-bordered">
-                <thead class="table table-striped text-center table-bordered mt-3">
+            <a href="Accesibilidad/Create" class="btn btn-success bi bi-plus-square-fill mt-3 w-30"> Crear</a>
+            <button @onclick="Buscar" class="btn btn-secondary bi bi-search mt-3 w-30" type="button"> Buscar</button>
+
+            <table class="table table-hover mt-3">
+                <thead class="table table-striped text-center text-black">
                     <tr>
                         <th>Accesibilidad ID</th>
-                        <th>Descripción</th>
+                        <th>Descripci&oacute;n</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @if (accesibilidadList != null && accesibilidadList.Any())
-                    {
-                        @foreach (var accesibilidad in accesibilidadList)
-                        {
-                            <tr>
-                                <td class="text-center">@accesibilidad.AccesibilidadId</td>
-                                <td class="text-center">@accesibilidad.Descripcion</td>
-                                <td class="text-center">
-                                    <a href="/Accesibilidad/Edit/@accesibilidad.AccesibilidadId" class="btn btn-outline-warning bi bi-pencil-square"></a>
-                                </td>
-                                <td class="text-center">
-                                    <a href="/Accesibilidad/Delete/@accesibilidad.AccesibilidadId" class="btn btn-outline-danger bi bi-trash"></a>
-                                </td>
-                            </tr>
-                        }
-                    }
-                    else
+                    @foreach (var accesibilidad in accesibilidadList)
                     {
                         <tr>
-                            <td colspan="4" class="text-center">No se encontraron resultados.</td>
+                            <td class="text-center">@accesibilidad.AccesibilidadId</td>
+                            <td class="text-center">@accesibilidad.Descripcion</td>
+                            <td class="text-center">
+                                <a href="/Accesibilidad/Edit/@accesibilidad.AccesibilidadId" class="btn btn-outline-dark bi bi-pencil-square"></a>
+                            </td>
+                            <td class="text-center">
+                                <a href="/Accesibilidad/Delete/@accesibilidad.AccesibilidadId" class="btn btn-outline-dark bi bi-trash"></a>
+                            </td>
                         </tr>
                     }
                 </tbody>
             </table>
-        <div class="card-footer">
-            <p><strong>Total de Accesibilidades: </strong>@accesibilidadList?.Count</p>
-            </div>
         </div>
     </div>
 </div>

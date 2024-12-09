@@ -1,29 +1,36 @@
-﻿﻿
-@page "/Origen/Create"
+﻿@page "/Origen/Create"
 @inject OrigenService origenService
 @inject NavigationManager navigation
 @rendermode InteractiveServer
 @inject ToastService Toast
-<link rel="stylesheet" href="/Style/Origen/OrigenCreate.css" />
+<link rel="stylesheet" href="/Style/Origen/Origen.css" />
 
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
-<PageTitle>Crear vuelo de Origen</PageTitle>
+<PageTitle>Crear Vuelo de Origen</PageTitle>
+
 <EditForm Model="Origen" OnValidSubmit="Crear" FormName="crearOrigenForm">
     <DataAnnotationsValidator />
+
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
-                <h1><strong>Crear Vuelo de Origen</strong></h1>
+                <h5><strong>Crear Vuelo de Origen</strong></h5>
             </div>
             <div class="card-body">
 
-                <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
-                <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly />
+                <!-- Origen ID -->
+                <div class="mb-3">
+                    <label for="OrigenId" class="form-label"><strong>Origen ID</strong></label>
+                    <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly />
+                </div>
 
-                <label class="form-label" for="origen"><strong>Origen del Vuelo</strong></label>
-                <InputText id="origen" class="form-control" @bind-Value="Origen.origen"></InputText>
-                <ValidationMessage For="@(()=> Origen.origen)"></ValidationMessage>
+                <!-- Origen del Vuelo -->
+                <div class="mb-3">
+                    <label for="origen" class="form-label"><strong>Origen del Vuelo</strong></label>
+                    <InputText id="origen" class="form-control" @bind-Value="Origen.origen" />
+                    <ValidationMessage For="@(() => Origen.origen)" />
+                </div>
 
             </div>
 
@@ -36,8 +43,6 @@
 </EditForm>
 
 @code {
-
-    
     public Origen Origen { get; set; } = new Origen();
     public List<Origen> origenList { get; set; } = new List<Origen>();
     public string Mensaje { get; set; } = string.Empty;
@@ -59,12 +64,10 @@
         return true;
     }
 
-
     public async Task Crear()
     {
         if (await Validar())
         {
-
             Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardado", "El origen de vuelo se ha guardado con exito!"));
             await origenService.Guardar(Origen);
             await Task.Delay(4000);
@@ -73,10 +76,8 @@
         }
     }
 
-   
     public void Volver()
     {
-        
         navigation.NavigateTo("/Origen/Index");
     }
 }

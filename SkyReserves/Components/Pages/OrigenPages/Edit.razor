@@ -3,12 +3,12 @@
 @inject OrigenService origenService
 @inject NavigationManager navigation
 @inject ToastService Toast
-<link rel="stylesheet" href="/Style/Origen/OrigenCreate.css" />
+<link rel="stylesheet" href="/Style/Origen/Origen.css" />
 
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
+<PageTitle>Modificar vuelo de Destino</PageTitle>
 
-<PageTitle>Modificar vuelo de Destino </PageTitle>
 <EditForm Model="Origen" OnValidSubmit="ModificarOrigen">
     <DataAnnotationsValidator />
     <div class="container">
@@ -18,16 +18,22 @@
             </div>
             <div class="card-body">
 
-                <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
-                <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly></InputNumber>
+                <!-- Origen ID -->
+                <div class="mb-3">
+                    <label for="OrigenId" class="form-label"><strong>Origen ID:</strong></label>
+                    <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly />
+                </div>
 
-
-                <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
-                <InputText id="Fecha" class="form-control" @bind-Value="Origen.origen"></InputText>
-                <ValidationMessage For="@(() => Origen.origen)" />
+                <!-- Origen del Vuelo -->
+                <div class="mb-3">
+                    <label for="Fecha" class="form-label"><strong>Origen del Vuelo</strong></label>
+                    <InputText id="Fecha" class="form-control" @bind-Value="Origen.origen" />
+                    <ValidationMessage For="@(() => Origen.origen)" />
+                </div>
 
             </div>
 
+            <!-- Footer with buttons -->
             <div class="card-footer">
                 <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
                 <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modificar</button>
@@ -36,55 +42,47 @@
     </div>
 </EditForm>
 
-
-
 @code {
-
-
     [Parameter]
     public int OrigenId { get; set; }
+
     public Origen Origen { get; set; } = new Origen();
-    public List<Origen> destinoList { get; set; } = new List<Origen>();
     public string Mensaje { get; set; } = string.Empty;
 
-
-
+    // Load the Origen based on the ID provided in the URL
     protected override async Task OnInitializedAsync()
     {
         Origen = await origenService.Buscar(OrigenId);
-
     }
 
+    // Validate if the origen already exists
     public async Task<bool> Validar()
     {
         var origenExiste = await origenService.BuscarOrigen(Origen.origen);
         if (origenExiste != null)
         {
-            Toast.Notify(new(ToastType.Warning, "Error al crear el origen de vuelo", "Este origen ya existe cambie el origen de vuelo"));
+            Toast.Notify(new ToastMessage(ToastType.Warning, "Error", "Este origen ya existe, cambie el origen de vuelo"));
             return false;
         }
-
         return true;
     }
 
-
+    // Method to modify the Origen if validation passes
     public async Task ModificarOrigen()
     {
         if (await Validar())
         {
-
-            Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardada", "El origen de vuelo se ha Modificado con exito!"));
+            Toast.Notify(new ToastMessage(ToastType.Success, "Éxito", "El origen de vuelo ha sido modificado con éxito"));
             await origenService.Guardar(Origen);
             await Task.Delay(4000);
-            Origen = new Origen();
-            navigation.NavigateTo("/Origen/Index");
+            Origen = new Origen(); // Reset form after success
+            navigation.NavigateTo("/Origen/Index"); // Navigate to the index page after success
         }
     }
 
-
+    // Navigate back to the list page
     public void Volver()
     {
         navigation.NavigateTo("/Origen/Index");
     }
-
 }

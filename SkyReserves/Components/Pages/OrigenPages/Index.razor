@@ -1,46 +1,55 @@
-﻿﻿
-@page "/Origen/Index"
+﻿@page "/Origen/Index"
 @rendermode InteractiveServer
 @inject OrigenService origenService
-<link rel="stylesheet" href="/Style/Origen/OrigenIndex.css" />
-
-
+<link rel="stylesheet" href="/Style/Origen/OrigenInd.css" />
 
 <PageTitle>Origen</PageTitle>
+
+<div class="container mt-4">
+
+    <div class="header-buttons d-flex justify-content-end align-items-center mb-4">
+        <a href="/AdminDashboard" class="btn btn-outline-primary bi-arrow-90deg-left text-nowrap me-3 common-btn w-30">
+            Volver
+        </a>
+        <a href="/logout" class="btn btn-outline-danger text-nowrap common-btn w-30">
+            Cerrar sesi&oacute;n
+        </a>
+    </div>
+</div>
+
 <div class="container">
     <div class="card shadow-lg">
-        <div class="card-header text-center">
-            <h3><strong>Origenes de vuelo </strong></h3>
+        <div class="card-header text-black text-center">
+            <h5><strong>Origenes de Vuelo</strong></h5>
         </div>
 
-        <!-- Header -->
-        <div class="row mb-3 align-items-end">
-            <div class="col-md-3">
-                <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
-                <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
-                    <option value="" disabled>Seleccionar</option>
-                    <option value="OrigenID">Origen ID</option>
-                    <option value="OrigenVuelo">Origen de Vuelo</option>
-                </InputSelect>
-            </div>
+        <div class="card-body">
+           
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label for="Filtro" class="form-label"><strong>Filtrar por:</strong></label>
+                    <InputSelect id="filtro" class="form-select" @bind-Value="filtro">
+                        <option value="" disabled>Seleccionar</option>
+                        <option value="OrigenID">Origen ID</option>
+                        <option value="OrigenVuelo">Origen de Vuelo</option>
+                    </InputSelect>
+                </div>
 
-            <div class="col-md-6">
-                <label for="ValorFiltro" class="form-label"><strong>Búsqueda:</strong></label>
-                <div class="input-group">
-                    <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
-                    <button @onclick="Buscar" class="btn btn-success" type="button">
-                        <span class="bi bi-search"></span> Buscar
-                    </button>
-                    <a href="/Origen/Create" class="btn btn-success bi bi-plus-square"> Crear</a>
+                <div class="col-md-6 d-flex align-items-end">
+                    <div class="input-group">
+                        <input @bind="ValorFiltro" class="form-control" placeholder="Buscar" />
+                     
+                    </div>
                 </div>
             </div>
-        </div>
 
+         
+            <a href="Origen/Create" class="btn btn-success bi bi-plus-square-fill mt-3 w-30"> Crear</a>
+            <button @onclick="Buscar" class="btn btn-secondary bi bi-search mt-3 w-30" type="button"> Buscar</button>
 
-        <!-- Body -->
-        <div class="table-responsive">
-            <table class="table table-light table-bordered">
-                <thead class="table table-striped text-center table-bordered mt-3">
+           
+            <table class="table table-hover mt-3">
+                <thead class="table table-striped text-center text-black">
                     <tr>
                         <th>Origen ID</th>
                         <th>Origen de Vuelo</th>
@@ -49,54 +58,48 @@
                     </tr>
                 </thead>
                 <tbody>
-
                     @foreach (var origen in origenList)
                     {
                         <tr>
                             <td class="text-center">@origen.OrigenId</td>
                             <td class="text-center">@origen.origen</td>
                             <td class="text-center">
-                                <a href="/Origen/Edit/@origen.OrigenId" class="btn btn-outline-warning bi bi-pencil-square"></a>
+                                <a href="/Origen/Edit/@origen.OrigenId" class="btn btn-outline-dark bi bi-pencil-square"></a>
                             </td>
-
                             <td class="text-center">
-                                <a href="/Origen/Delete/@origen.OrigenId" class="btn btn-outline-danger bi bi-trash"></a>
+                                <a href="/Origen/Delete/@origen.OrigenId" class="btn btn-outline-dark bi bi-trash"></a>
                             </td>
                         </tr>
                     }
                 </tbody>
             </table>
-            <div class="card-footer">
+
+        
+            <div class="card-footer text-center">
                 <p><strong>Total de Origenes de vuelos creados: </strong>@origenList?.Count</p>
             </div>
         </div>
     </div>
 </div>
 
-
-
-
 @code {
-
-
     Origen Origen { get; set; } = new Origen();
     List<Origen> origenList { get; set; } = new List<Origen>();
     List<Origen> origenFiltro { get; set; } = new List<Origen>();
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
 
-
     protected override async Task OnInitializedAsync()
     {
         origenFiltro = await origenService.Listar(o => o.OrigenId > 0);
         origenList = origenFiltro;
-
     }
+
     public void Buscar()
     {
         if (string.IsNullOrWhiteSpace(filtro) || string.IsNullOrWhiteSpace(ValorFiltro))
         {
-            origenList = origenFiltro; 
+            origenList = origenFiltro;
             return;
         }
 
@@ -122,5 +125,4 @@
                 break;
         }
     }
-
 }
