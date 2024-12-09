@@ -54,7 +54,7 @@
                         <th>Apellido</th>
                         <th>Nacionalidad</th>
                         <th>Fecha de Nacimiento</th>
-                        <th>Género</th>
+                        <th>G&eacute;nero</th>
                         <th>Accesibilidad</th>
                         <th>Editar</th>
                         <th>Eliminar</th>
@@ -69,8 +69,8 @@
                             <td class="text-center">@pasaporte.Apellido</td>
                             <td class="text-center">@pasaporte.Nacionalidad</td>
                             <td class="text-center">@pasaporte.FechaNacimiento.ToShortDateString()</td>
-                            <td class="text-center">@GetGeneroNombre(int.Parse(pasaporte.Genero))</td> <!-- Aquí obtienes el nombre del género -->
-                            <td class="text-center">@pasaporte.Accesibilidad</td>
+                            <td class="text-center">@GetGeneroNombre(int.Parse(pasaporte.Genero))</td> 
+                            <td class="text-center">@pasaporte.AccesibilidadId</td>
 
 
                             <td class="text-center">
@@ -90,18 +90,18 @@
 @code {
     public List<Pasaporte> pasaportes = new List<Pasaporte>();
     public List<Generos> generos = new List<Generos>();
-      <!-- Lista de géneros -->
+ 
     public string filtro = "id";
     public string valorFiltro = "";
 
     protected override async Task OnInitializedAsync()
     {
-        // Cargar los pasaportes y géneros al inicializar
+        
         pasaportes = await pasaporteService.Listar(a => true);
-        generos = await pasaporteService.ObtenerGeneros();  // Asegúrate de tener un servicio para obtener los géneros
+        generos = await pasaporteService.ObtenerGeneros();  
     }
 
-    // Método para obtener el nombre del género
+   
     private string GetGeneroNombre(int generoId)
     {
         var genero = generos.FirstOrDefault(g => g.GenerosId == generoId);

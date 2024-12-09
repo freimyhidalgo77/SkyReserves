@@ -1,0 +1,75 @@
+﻿﻿
+@page "/Origen/Delete/{OrigenId:int}"
+@rendermode InteractiveServer
+@inject OrigenService origenService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Origen/OrigenCreate.css" />
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+<PageTitle>Origen de vuelo</PageTitle>
+<div class="container">
+	<div class="card shadow-lg">
+		<div class="card-header">
+			<h3><strong>Eliminar origen de vuelos</strong></h3>
+		</div>
+		<div class="card-body">
+			<h5><strong>Est&aacute;s seguro que deseas eliminar este vuelo destino de vuelo?</strong></h5>
+			<div class="mb-1">
+				<p><strong>Destino vuelo ID:</strong>@origen?.OrigenId</p>
+			</div>
+			<div class="mb-1">
+				<p><strong>Destino:</strong>@origen?.origen</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="card-footer">
+		<button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
+		<button type="submit" class="btn btn-purple text-white bi bi-trash" @onclick="ElimnarOrigen"> Eliminar</button>
+
+	</div>
+</div>
+
+
+@code {
+
+
+	[Parameter]
+	public int OrigenId { get; set; }
+	public List<Origen> origenList { get; set; } = new List<Origen>();
+	public Origen origen { get; set; } = new Origen();
+	public string mensaje { get; set; } = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		origen = await origenService.Buscar(OrigenId);
+	}
+
+
+	public async Task ElimnarOrigen()
+	{
+		if (origen != null)
+		{
+			var eliminado = await origenService.Eliminar(OrigenId);
+			if (eliminado)
+
+			{
+				await Task.Delay(4000);
+				navigation.NavigateTo("/Origen/Index");
+				Toast.Notify(new(ToastType.Danger, "Origen Eliminado", "El origen se ha eliminado con exito!"));
+			}
+			else
+			{
+				Toast.Notify(new(ToastType.Warning, "Error al eliminar el origen!", "El origen no pudo eliminarse"));
+			}
+		}
+
+	}
+
+	public void Volver()
+	{
+		navigation.NavigateTo("/Origen/Index");
+	}
+}

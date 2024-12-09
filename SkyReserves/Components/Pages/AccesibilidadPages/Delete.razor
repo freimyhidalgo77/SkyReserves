@@ -1,0 +1,80 @@
+﻿@page "/Accesibilidad/Delete/{AccesibilidadId:int}"
+@rendermode InteractiveServer
+@inject AccesibilidadService accesibilidadService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Accesibilidad.css?v=1.0" />
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+
+
+<PageTitle>Accesibilidad Pasajero</PageTitle>
+
+
+<div class="container"> 
+	<div class="card shadow-lg">
+		<div class="card-header">
+			<h3><strong>Eliminar accesibilidad</strong></h3>
+		</div>
+		<div class="card-body">
+			<h5><strong>Est&aacute;s seguro que deseas eliminar esta accesibilidad?</strong></h5>
+			<div class="mb-1">
+				<p><strong>Accesibilidad ID:</strong>@accesibilidad?.AccesibilidadId</p>
+			</div>
+			<div class="mb-1">
+				<p><strong>Descripcion:</strong>@accesibilidad?.Descripcion</p>
+			</div>
+		</div>
+	</div>
+
+	<div class="card-footer">
+		<button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+		<button type="button" class="btn btn-danger bi bi-trash" @onclick="ElimnarAccecibilidad">Eliminar</button>
+		
+	</div>
+</div>
+
+
+
+@code {
+
+
+	[Parameter]
+	public int AccesibilidadId { get; set; }
+	public List<Accesibilidad> accesibilidadList { get; set; } = new List<Accesibilidad>();
+	public Accesibilidad? accesibilidad;
+	public string mensaje { get; set; } = string.Empty;
+
+	protected override async Task OnInitializedAsync()
+	{
+		accesibilidad = await accesibilidadService.Buscar(AccesibilidadId);
+	}
+
+
+
+	public async Task ElimnarAccecibilidad()
+	{
+		if (accesibilidad != null)
+		{
+			Toast.Notify(new(ToastType.Danger, "Accesibilidad Eliminada", "La accesibilidad se ha eliminado con exito!"));
+			var eliminado = await accesibilidadService.Eliminar(AccesibilidadId);
+			if (eliminado)
+			{ 
+				await Task.Delay(4000);
+				navigation.NavigateTo("/Accesibilidad/Index");
+				
+			}
+			else
+			{
+				mensaje = "No se pudo eliminar el cliente";
+			}
+		}
+
+	}
+
+	public void Volver()
+	{
+		navigation.NavigateTo("/Accesibilidad/Index");
+	}
+}

@@ -1,0 +1,90 @@
+﻿@page "/Accesibilidad/Edit/{AccesibilidadId:int}"
+@rendermode InteractiveServer
+@inject AccesibilidadService accesibilidadService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/AccesibilidadEdit.css" />
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+
+<PageTitle>Modificar vuelo de Destino </PageTitle>
+
+
+<EditForm Model="Accesibilidad" OnValidSubmit="Modificar">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h1><strong>Modificar accesibilidad</strong></h1>
+            </div>
+            <div class="card-body">
+
+                <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
+                <InputNumber id="OrigenId" class="form-control" @bind-Value="Accesibilidad.AccesibilidadId" readonly></InputNumber>
+
+
+                <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
+                <InputText id="Fecha" class="form-control" @bind-Value="Accesibilidad.Descripcion"></InputText>
+                <ValidationMessage For="@(() => Accesibilidad.Descripcion)" />
+
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modifcar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+@code {
+
+    [Parameter]
+    public int AccesibilidadId { get; set; }
+    public Accesibilidad Accesibilidad { get; set; } = new Accesibilidad();
+    public List<Destino> destinoList { get; set; } = new List<Destino>();
+    public string Mensaje { get; set; } = string.Empty;
+    
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Accesibilidad = await accesibilidadService.Buscar(AccesibilidadId);
+
+    }
+
+    public async Task<bool> Validar()
+    {
+        var accesibilidadExiste = await accesibilidadService.BuscarAccesibilidad(Accesibilidad.Descripcion);
+        if (accesibilidadExiste != null)
+        {
+            Toast.Notify(new(ToastType.Warning, "Error al modificar la accesibilidad", "Esta accesibilidad ya existe cambie la accesibilidad para pasajeros"));
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public async Task Modificar()
+    {
+        if (await Validar())
+        {
+
+            Toast.Notify(new(ToastType.Primary, "Accesibilidad Modificada", "La accesibilidad se ha modificado con exito!"));
+            await accesibilidadService.Guardar(Accesibilidad);
+            await Task.Delay(4000);
+            Accesibilidad = new Accesibilidad();
+            navigation.NavigateTo("/Accesibilidad/Index");
+        }
+    }
+
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Accesibilidad/Index");
+    }
+
+}

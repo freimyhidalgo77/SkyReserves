@@ -9,9 +9,11 @@
 <PageTitle>Editar Clase de Vuelo</PageTitle>
 <Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
 
+
+
 <EditForm Model="ClaseVuelo" OnValidSubmit="Modificar">
     <DataAnnotationsValidator />
-
+  
     <div class="container">
         <div class="card shadow-lg">
             <div class="card-header text-center">
@@ -57,6 +59,7 @@
         </div>
     </div>
 </EditForm>
+
 
 @code {
     [Parameter]

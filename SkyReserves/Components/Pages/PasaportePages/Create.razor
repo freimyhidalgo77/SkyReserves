@@ -64,9 +64,15 @@
 
                 @* Accesibilidad *@
                 <div class="mb-3">
-                    <label for="Accesibilidad" class="form-label"><strong>Accesibilidad</strong></label>
-                    <InputText class="form-control" @bind-Value="Pasaporte.Accesibilidad"></InputText>
-                    <ValidationMessage For="@(() => Pasaporte.Accesibilidad)" />
+                    <label for="AccesibilidadId" class="form-label"><strong>Accesibilidad</strong></label>
+                    <InputSelect id="AccesibilidadId" class="form-control" @bind-Value="Pasaporte.AccesibilidadId">
+                        <option value="">Seleccione una accesibilidad</option>
+                        @foreach (var accesibilidad in Accesibilidades)
+                        {
+                            <option value="@accesibilidad.AccesibilidadId">@accesibilidad.Descripcion</option>
+                        }
+                    </InputSelect>
+                    <ValidationMessage For="@(() => Pasaporte.AccesibilidadId)" />
                 </div>
 
                 @* Nacionalidad *@
@@ -147,12 +153,13 @@
     public string DetalleMensaje { get; set; } = string.Empty;
     public bool MostrarDetalles { get; set; } = false;
 
+    public List<Accesibilidad> Accesibilidades { get; set; } = new List<Accesibilidad>();
+
     protected override async Task OnInitializedAsync()
     {
-        
         generos = await pasaporteService.ObtenerGeneros();
+        Accesibilidades = await pasaporteService.ObtenerAccesibilidades();
     }
-
     private async Task AgregarDetalle(PasaporteDetalle detalle)
     {
         if (string.IsNullOrWhiteSpace(detalle.PaisResidencia) ||

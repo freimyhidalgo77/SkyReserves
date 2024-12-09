@@ -1,0 +1,90 @@
+﻿@page "/Origen/Edit/{OrigenId:int}"
+@rendermode InteractiveServer
+@inject OrigenService origenService
+@inject NavigationManager navigation
+@inject ToastService Toast
+<link rel="stylesheet" href="/Style/Origen/OrigenCreate.css" />
+
+<Toasts class="p-3" AutoHide="true" Delay="4000" Placement="ToastsPlacement.TopRight" />
+
+
+<PageTitle>Modificar vuelo de Destino </PageTitle>
+<EditForm Model="Origen" OnValidSubmit="ModificarOrigen">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h1><strong>Modificar origen de Vuelo</strong></h1>
+            </div>
+            <div class="card-body">
+
+                <label class="form-label" for="OrigenId"><strong>Origen ID:</strong></label>
+                <InputNumber id="OrigenId" class="form-control" @bind-Value="Origen.OrigenId" readonly></InputNumber>
+
+
+                <label class="form-label" for="Fecha"><strong>Origen del Vuelo</strong></label>
+                <InputText id="Fecha" class="form-control" @bind-Value="Origen.origen"></InputText>
+                <ValidationMessage For="@(() => Origen.origen)" />
+
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill"> Modificar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+
+
+@code {
+
+
+    [Parameter]
+    public int OrigenId { get; set; }
+    public Origen Origen { get; set; } = new Origen();
+    public List<Origen> destinoList { get; set; } = new List<Origen>();
+    public string Mensaje { get; set; } = string.Empty;
+
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        Origen = await origenService.Buscar(OrigenId);
+
+    }
+
+    public async Task<bool> Validar()
+    {
+        var origenExiste = await origenService.BuscarOrigen(Origen.origen);
+        if (origenExiste != null)
+        {
+            Toast.Notify(new(ToastType.Warning, "Error al crear el origen de vuelo", "Este origen ya existe cambie el origen de vuelo"));
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public async Task ModificarOrigen()
+    {
+        if (await Validar())
+        {
+
+            Toast.Notify(new(ToastType.Success, "Origen de vuelo Guardada", "El origen de vuelo se ha Modificado con exito!"));
+            await origenService.Guardar(Origen);
+            await Task.Delay(4000);
+            Origen = new Origen();
+            navigation.NavigateTo("/Origen/Index");
+        }
+    }
+
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Origen/Index");
+    }
+
+}
