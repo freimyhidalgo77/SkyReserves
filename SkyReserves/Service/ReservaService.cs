@@ -68,8 +68,11 @@ namespace SkyReserves.Service
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.Reserva
                 .Include(t => t.AsientoDetalle)
+                .Include(t =>t.ClaseVueloDetalle)
                 .FirstOrDefaultAsync(t => t.ReservaId == Id);
         }
+
+     
 
 
 

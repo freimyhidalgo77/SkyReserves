@@ -40,7 +40,7 @@ namespace SkyReserves.Service
 
         
             return await context.AsientoDetalles
-                .Where(a => a.ReservaId == reservaId)  
+                .Where(a => a.ReservaId == reservaId) 
                 .Include(a => a.Asiento)  
                 .ToListAsync();  
         }

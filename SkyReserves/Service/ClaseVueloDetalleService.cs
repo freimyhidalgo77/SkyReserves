@@ -16,13 +16,13 @@ namespace SkyReserves.Service
             return await context.ClaseVuelo.Where(criterio).ToListAsync();
         }
 
-        public async Task<List<ClaseVueloDetalle>> ListarClaseVueloDetalle(Expression<Func<ClaseVueloDetalle, bool>> criterio)
+       /* public async Task<List<ClaseVueloDetalle>> ListarClaseVueloDetalle(Expression<Func<ClaseVueloDetalle, bool>> criterio)
         {
             await using var context = await DbFactory.CreateDbContextAsync();
             return await context.ClaseVueloDetalle
                 .Where(criterio)
                 .ToListAsync();
-        }
+        }*/
 
 
     }
