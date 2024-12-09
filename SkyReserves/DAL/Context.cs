@@ -33,11 +33,34 @@ public class Context : DbContext
             new UserAccount { Id = 2, UserName = "Cliente@gmail.com", Password = "Cliente", Role = "User" }
         );
 
-        // Datos iniciales para Asiento
         modelBuilder.Entity<Asiento>().HasData(
-            new Asiento { AsientoId = 1, VueloId = 1, Fila = "1", Letra = "A", Existencia = 5 },
-            new Asiento { AsientoId = 2, VueloId = 1, Fila = "2", Letra = "B", Existencia = 5 }
+            new Asiento { AsientoId = 1, Fila = "1", Letra = "A", Existencia = 1 },
+            new Asiento { AsientoId = 2, Fila = "2", Letra = "B", Existencia = 1 },
+
+            new Asiento { AsientoId = 3, Fila = "1", Letra = "C", Existencia = 1 },
+            new Asiento { AsientoId = 4, Fila = "1", Letra = "D", Existencia = 1 },
+            new Asiento { AsientoId = 5, Fila = "1", Letra = "E", Existencia = 1 },
+            new Asiento { AsientoId = 6, Fila = "1", Letra = "F", Existencia = 1 },
+
+    
+            new Asiento { AsientoId = 7, Fila = "2", Letra = "A", Existencia = 1 },
+            new Asiento { AsientoId = 8, Fila = "2", Letra = "B", Existencia = 1 },
+            new Asiento { AsientoId = 9, Fila = "2", Letra = "C", Existencia = 1 },
+            new Asiento { AsientoId = 10, Fila = "2", Letra = "D", Existencia = 1 },
+            new Asiento { AsientoId = 11, Fila = "2", Letra = "E", Existencia = 1 },
+            new Asiento { AsientoId = 12, Fila = "2", Letra = "F", Existencia = 1 },
+
+
+            new Asiento { AsientoId = 13, Fila = "3", Letra = "A", Existencia = 1 },
+            new Asiento { AsientoId = 14, Fila = "3", Letra = "B", Existencia = 1 },
+            new Asiento { AsientoId = 15, Fila = "3", Letra = "C", Existencia = 1 },
+            new Asiento { AsientoId = 16, Fila = "3", Letra = "D", Existencia = 1 },
+            new Asiento { AsientoId = 17, Fila = "3", Letra = "E", Existencia = 1 },
+            new Asiento { AsientoId = 18, Fila = "3", Letra = "F", Existencia = 1 }
+
+
         );
+
 
         modelBuilder.Entity<Generos>().HasData(
 
@@ -66,7 +89,21 @@ public class Context : DbContext
                 Id = 3,
                 ImageUrl = "/Imagenes/Accesibilidad.png",
                 Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
-            }
+            },
+
+             new FlightDeal
+             {
+                 Id = 4,
+                 ImageUrl = "/Imagenes/Bogota.jpg",
+                 Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
+             },
+
+              new FlightDeal
+              {
+                  Id = 5,
+                  ImageUrl = "/Imagenes/Mexico.jpeg",
+                  Description = "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente."
+              }
 
         );
     }
