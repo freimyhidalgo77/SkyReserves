@@ -32,7 +32,6 @@ namespace SkyReserves.Migrations
                 {
                     AsientoId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    VueloId = table.Column<int>(type: "int", nullable: false),
                     Fila = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Letra = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Existencia = table.Column<int>(type: "int", nullable: false)
@@ -213,6 +212,28 @@ namespace SkyReserves.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "AsientoDetalle",
+                columns: table => new
+                {
+                    AsientoDetalleID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    AsientoId = table.Column<int>(type: "int", nullable: false),
+                    Fila = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Letra = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Existencia = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AsientoDetalle", x => x.AsientoDetalleID);
+                    table.ForeignKey(
+                        name: "FK_AsientoDetalle_Asientos_AsientoId",
+                        column: x => x.AsientoId,
+                        principalTable: "Asientos",
+                        principalColumn: "AsientoId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Reserva",
                 columns: table => new
                 {
@@ -291,11 +312,27 @@ namespace SkyReserves.Migrations
 
             migrationBuilder.InsertData(
                 table: "Asientos",
-                columns: new[] { "AsientoId", "Existencia", "Fila", "Letra", "VueloId" },
+                columns: new[] { "AsientoId", "Existencia", "Fila", "Letra" },
                 values: new object[,]
                 {
-                    { 1, 5, "1", "A", 1 },
-                    { 2, 5, "2", "B", 1 }
+                    { 1, 1, "1", "A" },
+                    { 2, 1, "2", "B" },
+                    { 3, 1, "1", "C" },
+                    { 4, 1, "1", "D" },
+                    { 5, 1, "1", "E" },
+                    { 6, 1, "1", "F" },
+                    { 7, 1, "2", "A" },
+                    { 8, 1, "2", "B" },
+                    { 9, 1, "2", "C" },
+                    { 10, 1, "2", "D" },
+                    { 11, 1, "2", "E" },
+                    { 12, 1, "2", "F" },
+                    { 13, 1, "3", "A" },
+                    { 14, 1, "3", "B" },
+                    { 15, 1, "3", "C" },
+                    { 16, 1, "3", "D" },
+                    { 17, 1, "3", "E" },
+                    { 18, 1, "3", "F" }
                 });
 
             migrationBuilder.InsertData(
@@ -305,7 +342,9 @@ namespace SkyReserves.Migrations
                 {
                     { 1, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Timer.png " },
                     { 2, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Clase.jpeg" },
-                    { 3, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Accesibilidad.png" }
+                    { 3, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Accesibilidad.png" },
+                    { 4, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Bogota.jpg" },
+                    { 5, "Como administrador, aquí podrás gestionar la configuración: crear, editar o eliminar de manera eficiente.", "/Imagenes/Mexico.jpeg" }
                 });
 
             migrationBuilder.InsertData(
@@ -326,6 +365,11 @@ namespace SkyReserves.Migrations
                     { 1, "Arajet", "Admin", "Arajet@gmail.com" },
                     { 2, "Cliente", "User", "Cliente@gmail.com" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AsientoDetalle_AsientoId",
+                table: "AsientoDetalle",
+                column: "AsientoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Clientes_AccesibilidadId",
@@ -357,7 +401,7 @@ namespace SkyReserves.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "Asientos");
+                name: "AsientoDetalle");
 
             migrationBuilder.DropTable(
                 name: "ClaseVuelo");
@@ -391,6 +435,9 @@ namespace SkyReserves.Migrations
 
             migrationBuilder.DropTable(
                 name: "VuelosEspeciales");
+
+            migrationBuilder.DropTable(
+                name: "Asientos");
 
             migrationBuilder.DropTable(
                 name: "Accesibilidad");
