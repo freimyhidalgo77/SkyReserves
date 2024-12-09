@@ -7,7 +7,7 @@
 @inject NavigationManager Navigation
 <link rel="stylesheet" href="/Estilos/Cierre.css" />
 
-<PageTitle> Men&uacute; Principal </PageTitle>
+<PageTitle>Menú Principal</PageTitle>
 
 <AuthorizeView Roles="Admin,User">
     <div class="container mt-4">
@@ -19,7 +19,7 @@
 
             <!-- Botón Cerrar Sesión -->
             <a href="/logout" class="common-btn text-nowrap">
-                Cerrar sesi&oacute;n
+                Cerrar sesión
             </a>
         </div>
     </div>
@@ -41,7 +41,7 @@
 
                         <!-- InputSelect para seleccionar origen -->
                         <label class="form-label" for="Origen"><strong>Origen</strong></label>
-                        <InputSelect id="Origen" class="form-control" @bind-Value="Reserva.Origen">
+                        <InputSelect id="Origen" class="form-control" @bind-Value="Reserva.OrigenId">
                             <option value="0" disabled selected>Seleccione un origen de vuelo</option>
                             @foreach (var origen in origenes)
                             {
@@ -51,7 +51,7 @@
 
                         <!-- InputSelect para seleccionar destino -->
                         <label class="form-label" for="Destino"><strong>Destino</strong></label>
-                        <InputSelect id="Destino" class="form-control" @bind-Value="Reserva.Destino">
+                        <InputSelect id="Destino" class="form-control" @bind-Value="Reserva.DestinoId">
                             <option value="0" disabled selected>Seleccione un destino de vuelo</option>
                             @foreach (var destino in destinos)
                             {
@@ -59,12 +59,8 @@
                             }
                         </InputSelect>
 
-
-                        <td class="text-center">
-                            <a href="/Reserva/Edit/@Reserva.ReservaId" class="btn btn-secondary">Book</a>
-                        </td>
-
-
+                        <!-- Botón para redirigir a la página de editar reserva -->
+                        <a href="/Reserva/Edit/@flight.ReservaId" class="btn btn-warning mt-auto">Book</a>
                     </div>
                 </div>
             </div>
@@ -73,7 +69,6 @@
 </AuthorizeView>
 
 @code {
-
     [Parameter]
     public int ReservaID { get; set; }
     private List<Origen> origenes = new List<Origen>();
@@ -81,19 +76,11 @@
     private List<ClaseVuelo> clasesVuelo = new List<ClaseVuelo>();
     private Reserva Reserva { get; set; } = new Reserva();
 
-
     protected override async Task OnInitializedAsync()
-         {
-         origenes = await FetchOrigenData();
-         destinos = await FetchDestinoData();
-     }
-
-
-   /* protected override async Task OnInitializedAsync()
     {
-        origenes = await origenService.Listar(c=>c.OrigenId > 0);
+        origenes = await FetchOrigenData();
         destinos = await FetchDestinoData();
-    }*/
+    }
 
     // Lista de vuelos simulados
     private List<FlightDeal> flightDeals = new List<FlightDeal>
@@ -148,7 +135,6 @@
         }
     };
 
-
     private List<FlightDeal> GetFilteredFlightDeals()
     {
         return flightDeals;
@@ -187,6 +173,7 @@
         public string TripType { get; set; }
         public string Class { get; set; }
         public string ImageUrl { get; set; }
+        public int ReservaId { get; set; }  // Esto es necesario para hacer la redirección
     }
 
     public class Origen

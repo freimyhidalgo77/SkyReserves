@@ -54,7 +54,7 @@
                         @foreach (var vuelo in reservaList)
                         {
                             <tr>
-                                <td class="text-center">@vuelo.</td>
+                                <td class="text-center">@vuelo.ReservaId</td>
                                 <td class="text-center">@vuelo.Origen?.origen</td>
                                 <td class="text-center">@vuelo?.Destino?.destino</td>
                                 <td class="text-center">@vuelo?.NumeroPasajeros</td>
@@ -62,7 +62,7 @@
                                     <a href="/Reserva/Create/@vuelo?.ReservaId" class="btn btn-morado bi bi-check-square" style="background-color: purple; color: white; border: none"></a>
                                 </td>
                                 <td class="text-center">
-                                    <a href="/Vuelo/Edit/@vuelo?.ReservaId" class="btn btn-morado bi bi-pencil-square" style="background-color: purple; color: white; border: none"></a>
+                                    <a href="/Reserva/Edit/@vuelo?.ReservaId" class="btn btn-morado bi bi-pencil-square" style="background-color: purple; color: white; border: none"></a>
                                 </td>
                                 <td class="text-center">
                                     <a href="/Vuelo/Details/@vuelo?.ReservaId" class="btn btn-morado bi bi-check-square" style="background-color: purple; color: white; border: none"></a>
@@ -89,6 +89,7 @@
     public Origen Origen { get; set; } = new Origen();
     public Destino Destino { get; set; } = new Destino();
     public List<Origen> origenLits { get; set; } = new List<Origen>();
+    public List<Destino> destinoList { get; set; } = new List<Destino>();
 
     public string filtro { get; set; } = string.Empty;
     public string ValorFiltro { get; set; } = string.Empty;
@@ -96,7 +97,10 @@
     protected override async Task OnInitializedAsync()
     {
         reservaList = await reservaService.Listar(o => o.ReservaId > 0);
-   
+        origenLits = await origenService.Listar(o => o.OrigenId > 0);
+        destinoList = await destinoService.Listar(o => o.DestinoId > 0);
+
+
     }
 
     public void Buscar()
