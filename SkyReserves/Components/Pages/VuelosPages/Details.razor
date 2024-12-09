@@ -1,0 +1,67 @@
+﻿@page "/Vuelo/Details/{VueloId:int}"
+@inject VueloService vueloService
+@inject OrigenService origenService
+@inject DestinoService destinoService
+@inject NavigationManager navigation
+
+<PageTitle>Detalles del Vuelo</PageTitle>
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h3><strong>Detalles del Vuelo</strong></h3>
+        </div>
+        <div class="card-body">
+            <h5><strong>Información del vuelo seleccionado:</strong></h5>
+            @if (Vuelo != null)
+            {
+                <div class="mb-1">
+                    <p class="mb-0"><strong>Vuelo ID:</strong> @Vuelo.VueloID</p>
+                </div>
+                <div class="mb-1">
+                    <p class="mb-0"><strong>Origen:</strong> @OrigenDescripcion</p>
+                </div>
+                <div class="mb-1">
+                    <p class="mb-0"><strong>Destino:</strong> @DestinoDescripcion</p>
+                </div>
+                <div class="mb-1">
+                    <p class="mb-0"><strong>Número de Pasajeros:</strong> @Vuelo.NumeroPasajeros</p>
+                </div>
+            }
+            else
+            {
+                <p class="text-danger">No se encontraron datos para este vuelo.</p>
+                Q
+            }
+        </div>
+        <div class="card-footer">
+            <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver"> Volver</button>
+        </div>
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public int VueloId { get; set; }
+
+    public Vuelo Vuelo { get; set; } = new Vuelo();
+    public string OrigenDescripcion { get; set; } = string.Empty;
+    public string DestinoDescripcion { get; set; } = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Vuelo = await vueloService.Buscar(VueloId);
+        if (Vuelo != null)
+        {
+            var origen = await origenService.Buscar(Vuelo.OrigenId);
+            var destino = await destinoService.Buscar(Vuelo.DestinoId);
+
+            OrigenDescripcion = origen?.origen ?? "Desconocido";
+            DestinoDescripcion = destino?.destino ?? "Desconocido";
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Vuelo/Index");
+    }
+}

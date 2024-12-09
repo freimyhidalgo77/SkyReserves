@@ -1,0 +1,154 @@
+﻿@page "/Vuelo/Edit/{VueloId:int}"
+@rendermode InteractiveServer
+@inject OrigenService origenService
+@inject DestinoService destinoService
+@inject VueloService vueloService
+@inject NavigationManager navigation
+@inject ToastService Toast
+
+<PageTitle>Modificar Vuelo</PageTitle>
+
+<EditForm Model="Vuelo" OnValidSubmit="ModificarRuta">
+    <DataAnnotationsValidator />
+    <div class="container">
+        <div class="card shadow-lg">
+            <div class="card-header text-center">
+                <h1><strong>Modificar Vuelo</strong></h1>
+            </div>
+            <div class="card-body">
+                <label class="form-label" for="VueloId"><strong>Vuelo ID:</strong></label>
+                <InputNumber id="VueloId" class="form-control" @bind-Value="Vuelo.VueloID" readonly></InputNumber>
+
+                <label class="form-label" for="Origen"><strong>Origen</strong></label>
+                <InputSelect id="Origen" class="form-control" @bind-Value="Origen.OrigenId">
+                    <option value="0" disabled selected>Seleccione un origen de vuelo</option>
+                    @foreach (var origen in OrigenList)
+                    {
+                        <option value="@origen.OrigenId">@origen.origen</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Origen.OrigenId)" />
+
+                <label class="form-label" for="Destino"><strong>Destino</strong></label>
+                <InputSelect id="Destino" class="form-control" @bind-Value="Destino.DestinoId">
+                    <option value="0" disabled selected>Seleccione un destino de vuelo</option>
+                    @foreach (var destino in DestinoList)
+                    {
+                        <option value="@destino.DestinoId">@destino.destino</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@(() => Destino.DestinoId)" />
+
+                <label class="form-label" for="NumeroPasajeros"><strong>Número de Pasajeros</strong></label>
+                <div class="input-group">
+                    <button class="btn btn-outline-secondary" type="button" @onclick="DecrementarPasajeros">-</button>
+                    <InputNumber id="NumeroPasajeros" class="form-control" @bind-Value="Vuelo.NumeroPasajeros" min="1" />
+                    <button class="btn btn-outline-secondary" type="button" @onclick="IncrementarPasajeros">+</button>
+                </div>
+                <ValidationMessage For="@(() => Vuelo.NumeroPasajeros)" />
+            </div>
+
+            <div class="card-footer">
+                <button type="button" class="btn btn-info text-white bi bi-arrow-90deg-left" @onclick="Volver">Volver</button>
+                <button type="submit" class="btn btn-success text-white bi bi-floppy-fill">Modificar</button>
+            </div>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int VueloId { get; set; }
+
+    public Vuelo Vuelo { get; set; } = new Vuelo();
+    public List<Origen> OrigenList { get; set; } = new List<Origen>();
+    public List<Destino> DestinoList { get; set; } = new List<Destino>();
+    public Origen Origen { get; set; } = new Origen();
+    public Destino Destino { get; set; } = new Destino();
+    private const int LimitePasajeros = 16;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Vuelo = await vueloService.Buscar(VueloId);
+        OrigenList = await origenService.Listar(o => o.OrigenId > 0);
+        DestinoList = await destinoService.Listar(d => d.DestinoId > 0);
+
+        if (Vuelo != null)
+        {
+            Origen = OrigenList.FirstOrDefault(o => o.OrigenId == Vuelo.OrigenId) ?? new Origen();
+            Destino = DestinoList.FirstOrDefault(d => d.DestinoId == Vuelo.DestinoId) ?? new Destino();
+        }
+    }
+
+    private void IncrementarPasajeros()
+    {
+        if (Vuelo.NumeroPasajeros < LimitePasajeros)
+        {
+            Vuelo.NumeroPasajeros++;
+        }
+        else
+        {
+            Toast.Notify(new(ToastType.Warning, "Límite alcanzado", $"El límite de {LimitePasajeros} pasajeros ha sido alcanzado."));
+        }
+    }
+
+    private void DecrementarPasajeros()
+    {
+        if (Vuelo.NumeroPasajeros > 1)
+        {
+            Vuelo.NumeroPasajeros--;
+        }
+    }
+
+    public async Task<bool> Validar()
+    {
+        if (Origen.OrigenId == 0 || Destino.DestinoId == 0)
+        {
+            Toast.Notify(new(ToastType.Warning, "Origen o Destino Inválido", "Debe seleccionar un origen y un destino válido."));
+            return false;
+        }
+
+        var vueloExiste = await vueloService.BuscarVuelo(Origen.OrigenId, Destino.DestinoId);
+        if (vueloExiste != null && vueloExiste.VueloID != Vuelo.VueloID)
+        {
+            Toast.Notify(new(ToastType.Warning, "Ruta Duplicada", "Ya existe un vuelo con esta ruta."));
+            return false;
+        }
+
+        return true;
+    }
+
+    public async Task ModificarRuta()
+    {
+        if (!await Validar())
+        {
+            return;
+        }
+
+        try
+        {
+            Vuelo.OrigenId = Origen.OrigenId;
+            Vuelo.DestinoId = Destino.DestinoId;
+
+            var resultado = await vueloService.Modificar(Vuelo);
+            if (resultado)
+            {
+                Toast.Notify(new(ToastType.Success, "Vuelo Modificado", "El vuelo se ha modificado con éxito."));
+                navigation.NavigateTo("/Vuelo/Index");
+            }
+            else
+            {
+                Toast.Notify(new(ToastType.Danger, "Error al Modificar", "Hubo un problema al modificar el vuelo."));
+            }
+        }
+        catch (Exception ex)
+        {
+            Toast.Notify(new(ToastType.Danger, "Error inesperado", $"Ocurrió un error: {ex.Message}"));
+        }
+    }
+
+    public void Volver()
+    {
+        navigation.NavigateTo("/Vuelo/Index");
+    }
+}
