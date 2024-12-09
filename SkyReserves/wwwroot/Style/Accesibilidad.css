@@ -1,0 +1,86 @@
+﻿/* Estilo para el cuerpo de la página */
+body {
+    width: 100%;
+    height: 100vh; 
+    margin: 0; 
+    padding: 0;
+    display: flex;
+    align-items: center; 
+    justify-content: center; 
+    background-image: url("/ImagenesFondo/Accesibilidad.png");
+    background-repeat: no-repeat; 
+    background-size: cover; 
+    background-position: center;
+    background-attachment: fixed; 
+}
+
+/* Estilo para el contenedor principal */
+.container {
+    background-color: rgba(255, 255, 255, 0.8); 
+    width: 80%; 
+    max-width: 1200px; 
+    padding: 40px; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+    margin: 20px auto; 
+}
+
+/* Estilo para las tarjetas de formulario */
+.card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px; 
+}
+
+/* Estilo para el encabezado de la tarjeta */
+.card-header {
+    text-align: center; 
+    background-color: #f8f9fa; 
+    border-bottom: 1px solid #ddd; 
+    padding: 15px;
+}
+
+/* Estilo para el pie de la tarjeta */
+.card-footer {
+    background-color: #f8f9fa; 
+    text-align: center; 
+    padding: 10px;
+}
+
+/* Estilo de todos los botones */
+button {
+    margin-top: 10px;
+    font-size: 1rem; 
+}
+
+/* Estilo morado para todos los botones */
+.btn-info, .btn-success, .btn-primary, .btn-danger, .btn-warning, .btn-secondary, .btn-light, .btn-dark {
+    background-color: #5a2e92; 
+    border: none;
+    color: white; 
+}
+
+    .btn-info:hover, .btn-success:hover, .btn-primary:hover, .btn-danger:hover, .btn-warning:hover, .btn-secondary:hover, .btn-light:hover, .btn-dark:hover {
+        background-color: #4a2376; 
+    }
+
+/* Estilo para los campos del formulario */
+.form-control {
+    margin-bottom: 15px;
+    border-radius: 4px;
+    padding: 10px;
+    font-size: 1rem;
+}
+
+/* Estilo para la etiqueta */
+.form-label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* Estilo para los mensajes de validación */
+.validation-message {
+    color: red;
+    font-size: 0.875rem;
+}

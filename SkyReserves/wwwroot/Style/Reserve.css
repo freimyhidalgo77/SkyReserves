@@ -1,0 +1,40 @@
+﻿body {
+    width: 600px; /* Ancho fijo de 600px */
+    height: 600px; /* Alto fijo de 600px */
+    margin: 0 auto; /* Centra el body en la pantalla */
+    margin-top: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url("/ImagenesFondo/Boeing7378.png");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+}
+
+
+.container {
+    background-color: rgba(255, 255, 255, 0.8); 
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.card {
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo semi-transparente para las tarjetas */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.btn-morado {
+    background-color: #6a1b9a; /* Color morado */
+    border-color: #6a1b9a; /* Borde morado */
+    color: white; /* Color del texto */
+}
+
+    .btn-morado:hover {
+        background-color: #8e24aa; /* Color morado más claro al pasar el ratón */
+        border-color: #8e24aa; /* Borde morado más claro */
+    }
