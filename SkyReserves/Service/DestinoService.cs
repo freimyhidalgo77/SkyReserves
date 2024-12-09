@@ -59,5 +59,13 @@ namespace SkyReserves.Service
                 .ToListAsync();
         }
 
+        public async Task<Destino?> BuscarDestino(string destino)
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            return await context.Destino
+                .FirstOrDefaultAsync(e => e.destino == destino);
+        }
+
+
     }
 }

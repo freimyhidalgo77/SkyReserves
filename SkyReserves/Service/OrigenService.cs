@@ -60,5 +60,12 @@ namespace SkyReserves.Service
 
         }
 
+        public async Task<Origen?> BuscarOrigen(string origen)
+        {
+            await using var context = await DbFactory.CreateDbContextAsync();
+            return await context.Origen
+                .FirstOrDefaultAsync(e => e.origen == origen);
+        }
+
     }
 }
